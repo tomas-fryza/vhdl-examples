@@ -14,16 +14,16 @@
 * [Components and tools](#components-and-tools)
 * [References](#references)
 
-The repository contains VHDL lab exercises for bachelor course [*Digital Electronics*](https://www.vut.cz/en/students/courses/detail/268610) at Brno University of Technology, Czechia. [Nexys A7 Artix-7](https://store.digilentinc.com/nexys-a7-fpga-trainer-board-recommended-for-ece-curriculum/) FPGA board is used in the course.
+The repository contains VHDL lab exercises for bachelor course [*Digital Electronics*](https://www.vut.cz/en/students/courses/detail/290532) at Brno University of Technology, Czechia. [Nexys A7 Artix-7](https://store.digilentinc.com/nexys-a7-fpga-trainer-board-recommended-for-ece-curriculum/) FPGA board is used in the course.
 
 ![vhdl_course](docs/old_labs/_07-display_driver/images/nexys-lab.jpg)
 
 ## Installation
 
-* [Vivado Design Suite 2020.2](https://github.com/tomas-fryza/vhdl-course/wiki/List-of-versions) (tens of GBs)
-* [TerosHDL](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-TerosHDL-on-Windows-and-Linux) :+1: (tens of MBs)
+* Online [EDA Playground](https://edaplayground.com/) simulator (0 B)
 * [ghdl + GtkWave](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-ghdl-on-Windows-and-Linux) (several MBs)
-* [EDA Playground](https://edaplayground.com/) (online simulator, 0 Bytes)
+* [Vivado Design Suite 2025.2](https://github.com/tomas-fryza/vhdl-course/wiki/List-of-versions) (tens of GBs)
+* [TerosHDL](https://github.com/tomas-fryza/vhdl-course/wiki/How-to-install-TerosHDL-on-Windows-and-Linux) :+1: (tens of MBs)
 * [ModelSim](https://www.intel.com/content/www/us/en/software-kit/750666/modelsim-intel-fpgas-standard-edition-software-version-20-1-1.html) (several GBs)
 
 ## Labs
