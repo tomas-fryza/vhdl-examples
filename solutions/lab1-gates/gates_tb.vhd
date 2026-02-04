@@ -3,38 +3,38 @@ library ieee;
 
 -------------------------------------------------
 
-entity tb_gates is
+entity gates_tb is
 -- Entity of testbench is always empty
-end entity tb_gates;
+end entity gates_tb;
 
 -------------------------------------------------
 
-architecture testbench of tb_gates is
+architecture testbench of gates_tb is
     component gates is
         port (
-            a       : in    std_logic;
-            b       : in    std_logic;
-            and_out : out   std_logic;
-            or_out  : out   std_logic;
-            xor_out : out   std_logic
+            a     : in    std_logic;
+            b     : in    std_logic;
+            y_and : out   std_logic;
+            y_or  : out   std_logic;
+            y_xor : out   std_logic
         );
     end component;
 
     -- Testbench local signals
     signal sig_a, sig_b : std_logic;
-    signal sig_and_out  : std_logic;
-    signal sig_or_out   : std_logic;
-    signal sig_xor_out  : std_logic;
+    signal sig_and      : std_logic;
+    signal sig_or       : std_logic;
+    signal sig_xor      : std_logic;
 begin
 
     -- Instantiate the design under test (DUT)
     dut : component gates
         port map (
-            a       => sig_a,
-            b       => sig_b,
-            and_out => sig_and_out,
-            or_out  => sig_or_out,
-            xor_out => sig_xor_out
+            a     => sig_a,
+            b     => sig_b,
+            y_and => sig_and,
+            y_or  => sig_or,
+            y_xor => sig_xor
         );
 
     -- Test stimulus

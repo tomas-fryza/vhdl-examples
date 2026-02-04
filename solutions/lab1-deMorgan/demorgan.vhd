@@ -1,14 +1,12 @@
 -------------------------------------------------
 --! @brief Example to demonstrate De Morgan's Laws.
---! @version 1.3
---! @copyright (c) 2019-2025 Tomas Fryza, MIT license
+--! @version 1.4
+--! @copyright (c) 2019-2026 Tomas Fryza, MIT license
 --!
 --! This example implements the original logic function
 --! and its modified versions using De Morgan's Laws.
 --! By comparing the output signals for the expressions,
 --! the verification of the laws is confirmed.
---!
---! Developed using TerosHDL, Vivado 2020.2, and EDA Playground.
 -------------------------------------------------
 
 library ieee; -- Standard library
@@ -17,7 +15,7 @@ library ieee; -- Standard library
 
 -------------------------------------------------
 
-entity morgan is
+entity demorgan is
     port (
         c     : in    std_logic;
         b     : in    std_logic;
@@ -26,11 +24,11 @@ entity morgan is
         f_and : out   std_logic; --! (N)AND version
         f_or  : out   std_logic  --! (N)OR version
     );
-end entity morgan;
+end entity demorgan;
 
 -------------------------------------------------
 
-architecture behavioral of morgan is
+architecture behavioral of demorgan is
 begin
 
     -- Original logic function

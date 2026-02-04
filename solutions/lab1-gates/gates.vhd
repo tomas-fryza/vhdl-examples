@@ -1,13 +1,16 @@
 -------------------------------------------------
---! @brief VHDL example for basic logic gates.
---! @version 1.1
---! @copyright (c) 2019-2025 Tomas Fryza, MIT license
+--! @brief Basic logic gates (AND, OR, XOR)
+--! @version 1.2
+--! @copyright (c) 2019-2026 Tomas Fryza, MIT license
 --!
---! The entity 'gates' defines an interface for implementing
---! 2-input AND, OR, and XOR gates. The architecture
---! implements the behavior of these gates with specified delays.
---!
---! Developed using TerosHDL, Vivado 2020.2, and EDA Playground.
+--! This entity implements three basic combinational
+--! logic functions for two single-bit input signals
+--! A and B.
+--
+-- Outputs:
+--   y_and = A AND B
+--   y_or  = A OR  B
+--   y_xor = A XOR B
 -------------------------------------------------
 
 library ieee;
@@ -17,11 +20,11 @@ library ieee;
 
 entity gates is
     port (
-        a       : in    std_logic; --! First input
-        b       : in    std_logic; --! Second input
-        and_out : out   std_logic; --! Logic AND
-        or_out  : out   std_logic; --! Logic OR
-        xor_out : out   std_logic  --! Logic XOR
+        a     : in    std_logic; --! First input
+        b     : in    std_logic; --! Second input
+        y_and : out   std_logic; --! Logic AND
+        y_or  : out   std_logic; --! Logic OR
+        y_xor : out   std_logic  --! Logic XOR
     );
 end entity gates;
 
@@ -30,16 +33,8 @@ end entity gates;
 architecture behavioral of gates is
 begin
 
-    -- 2-input AND gate
-    and_out <= a and b;
-    -- and_out <= a and b after 3 ns;
-
-    -- 2-input OR gate
-    or_out <= a or b;
-    -- or_out <= a or b after 2 ns;
-
-    -- XOR gate
-    xor_out <= a xor b;
-    -- xor_out <= a xor b after 6 ns;
+    y_and <= a and b;
+    y_or <= a or b;
+    y_xor <= a xor b;
 
 end architecture behavioral;

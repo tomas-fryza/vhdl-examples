@@ -28,13 +28,13 @@
 ## Change top entity you want to simulate and GtkWave path
 ##############################################################
 
-TOP_ENTITY=tb_morgan
+TOP_ENTITY=morgan_tb
 
 # For Windows
-GTK=C:/APPZ/VHDL/gtkwave/bin
+# GTK=C:/APPZ/VHDL/gtkwave/bin
 
-# For Linux
-# GTK=/usr/bin
+# For Linux and macOS
+GTK=/usr/bin
 
 
 ##############################################################
@@ -55,4 +55,5 @@ ghdl -i --std=02 --ieee=standard *.vhd &&
 #	sed -i 's/^U/X/g; s/^-/X/g; s/^H/1/g; s/^L/0/g' dump.vcd && 
 	$GTK/gtkwave dump.vcd
 
-rm -f dump.vcd *.cf
+# To clean
+# rm -f dump.vcd *.cf *.o $TOP_ENTITY

@@ -1,12 +1,12 @@
-# Lab 2: Logic circuits
+# Lab 2: Binary comparator
 
 * [Pre-Lab preparation](#preparation)
 * [Part 1: Logic function minimization](#part1)
 * [Part 2: Binary comparator in VHDL language](#part2)
 * [Part 3: Assertion statements in VHDL testbench](#part3)
-* [Part 4: Implementing to FPGA](#part4)
 * [Challenges](#challenges)
 * [References](#references)
+<!--* [Part 4: Implementing to FPGA](#part4)-->
 
 ### Learning objectives
 
@@ -77,9 +77,9 @@ The K-map for the "equals" function is as follows:
    8. Define I/O ports of new module:
       * Port name: `a`, Direction: `in`, Bus: `check`, MSB: `1`, LSB: `0`
       * `b`, `in`, Bus: `check`, MSB: `1`, LSB: `0`
-      * `b_greater`, `out`
-      * `b_a_equal`, `out`
-      * `a_greater`, `out`
+      * `b_gt`, `out`
+      * `b_a_eq`, `out`
+      * `a_gt`, `out`
 
       > **Note:** The [entity](https://github.com/tomas-fryza/vhdl-examples/wiki/Entity) for a 2-bit binary comparator in `compare_2bit.vhd` therefore corresponds to the following table.
       >
@@ -87,9 +87,9 @@ The K-map for the "equals" function is as follows:
       > | :-: | :-: | :-- | :-- |
       > | `b`       | input  | [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-examples/wiki/Data-types) | Input bus b[1:0] |
       > | `a`       | input  | `std_logic_vector(1 downto 0)` | Input bus a[1:0] |
-      > | `b_greater` | output | `std_logic` | Output is `1` if b > a |
-      > | `b_a_equal` | output | `std_logic` | Output is `1` if b = a |
-      > | `a_greater` | output | `std_logic` | Output is `1` if b < a |
+      > | `b_gt` | output | `std_logic` | Output is `1` if b > a |
+      > | `b_a_eq` | output | `std_logic` | Output is `1` if b = a |
+      > | `a_gt` | output | `std_logic` | Output is `1` if b < a |
 
 2. In VHDL, define an [architecture](https://github.com/tomas-fryza/vhdl-examples/wiki/Architecture) for a 2-bit binary comparator. The combination logic can be written using low-level operators (`and`, `or`, etc.) as assignment statements using SoP or PoS logic. However, it is more efficient to use a higher notation with [conditional signal assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments).
 
@@ -99,22 +99,28 @@ The K-map for the "equals" function is as follows:
    -------------------------------------------------
    architecture behavioral of compare_2bit is
    begin
+     ---------------------------------------------
+     -- Method 1: Behavioral (recommended for design)
+     ---------------------------------------------
+     b_gt <= '1' when (b > a) else
+             '0';
 
-     -- MODIFY LOGIC FUNCTION FOR "B GREATER"
-     b_greater <= b(1) and a(1);
+     b_a_eq <= '1' when (b = a) else
+               '0';
 
-     b_a_equal <= '1' when (b = a) else
-                  '0';
+     a_gt <= '1' when (b < a) else
+             '0';
 
-     -- MODIFY LOGIC FUNCTION FOR "A GREATER"
-     a_greater <= b(0) or a(0);
+     ---------------------------------------------
+     -- Method 2: Gate-level implementation (for learning only)
+     -- This logic is derived from the truth table for
+     -- a 2-bit magnitude comparator.
+     ---------------------------------------------
 
    end architecture behavioral;
    ```
 
-   One function is provided, but you must complete the other two: write one as a VHDL assignment statement using SoP or PoS logic, and the second as a conditional signal assignment.
-
-3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `compare_2bit_tb` (same filename as tested entity with sufix or prefix `_tb`). Generate the testbench file by [online generator](https://vhdl.lapinoo.net/testbench/) or copy/paste it from the [EDA Playground template](https://www.edaplayground.com/x/5uu3). Complete the stimuli process by several test cases.
+3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `compare_2bit_tb` (same filename as tested entity with sufix or prefix `_tb`). Generate the testbench file by [online generator](https://vhdl.lapinoo.net/testbench/) Complete the stimuli process by several test cases.
 
    ```vhdl
    stimuli : process
@@ -129,6 +135,8 @@ The K-map for the "equals" function is as follows:
      wait;
    end process;
    ```
+
+4. Modify one function and use gate-level implementation in SoP or PoS logic. Simulate it.
 
 <a name="part3"></a>
 
@@ -169,11 +177,8 @@ The message is displayed to the console when the condition is NOT met, therefore
      b <= "00";
      a <= "00";
      wait for 100 ns;
-     assert (b_greater = '0') and
-            (b_a_equal = '1') and
-            (a_greater = '0')
-       report "Input combination b=0, a=0 FAILED"
-       severity error;
+     assert (b_gt = '0') and (b_a_eq = '1') and (a_gt = '0')
+       report "Input combination b=0, a=0 FAILED" severity error;
 
 
      -- WRITE OTHER TEST CASES AND ASSERTS HERE
@@ -189,6 +194,7 @@ The message is displayed to the console when the condition is NOT met, therefore
 
 1. In VHDL, write a testbench and verify the correct functionality of the comparator for all/selected input combinations.
 
+<!--
 <a name="part4"></a>
 
 ## Part 4: Implementing to FPGA
@@ -231,18 +237,21 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
    5. Test the functionality by toggling the switches and observing LEDs.
 
       ![design flow](images/FPGA-design-flow.png)
+-->
 
 <a name="challenges"></a>
 
 ## Challenges
 
-1. Extend your design to 4-bit comparator. (Hint: Use conditional signal assignments `when/else`.)
+1. Use conditional signal assignments `when/else` and extend your design to 4-bit comparator.
 
 2. Design a [*Prime number detector*](https://link.springer.com/chapter/10.1007/978-3-030-10552-5_1) that takes in values from 0 to 15.
 
    ![prime detector](images/digital-design-flow_prime.png)
 
+<!--
 3. Use onboard RGB LED and eight switches. Turn the green LED on only when exactly two of the first four switches are set to `1` and turn the red LED on when exactly three of the next four switches are set to `0`.
+-->
 
 <a name="references"></a>
 

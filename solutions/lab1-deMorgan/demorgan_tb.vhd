@@ -3,14 +3,14 @@ library ieee;
 
 --------------------------------------------------
 
-entity tb_morgan is
+entity demorgan_tb is
 -- Entity of testbench is always empty
-end entity tb_morgan;
+end entity demorgan_tb;
 
 --------------------------------------------------
 
-architecture testbench of tb_morgan is
-    component morgan is
+architecture testbench of demorgan_tb is
+    component demorgan is
         port (
             a     : in    std_logic;
             b     : in    std_logic;
@@ -22,24 +22,24 @@ architecture testbench of tb_morgan is
     end component;
 
     -- Testbench local signals
-    signal sig_c     : std_logic;
-    signal sig_b     : std_logic;
-    signal sig_a     : std_logic;
-    signal sig_f_org : std_logic;
-    signal sig_f_and : std_logic;
-    signal sig_f_or  : std_logic;
+    signal sig_c   : std_logic;
+    signal sig_b   : std_logic;
+    signal sig_a   : std_logic;
+    signal sig_org : std_logic;
+    signal sig_and : std_logic;
+    signal sig_or  : std_logic;
 begin
 
     -- Connecting local testbench signals to `morgan`
     -- component (Design Under Test)
-    dut : component morgan
+    dut : component demorgan
         port map (
             c     => sig_c,
             b     => sig_b,
             a     => sig_a,
-            f_org => sig_f_org,
-            f_and => sig_f_and,
-            f_or  => sig_f_or
+            f_org => sig_org,
+            f_and => sig_and,
+            f_or  => sig_or
         );
 
     ------------------------------------------------
