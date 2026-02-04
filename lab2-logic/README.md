@@ -75,21 +75,22 @@ The K-map for the "equals" function is as follows:
    6. Choose a default board: `Nexys A7-50T`
    7. Click **Finish** to create the project
    8. Define I/O ports of new module:
+
       * Port name: `a`, Direction: `in`, Bus: `check`, MSB: `1`, LSB: `0`
       * `b`, `in`, Bus: `check`, MSB: `1`, LSB: `0`
       * `b_gt`, `out`
       * `b_a_eq`, `out`
       * `a_gt`, `out`
 
-      > **Note:** The [entity](https://github.com/tomas-fryza/vhdl-examples/wiki/Entity) for a 2-bit binary comparator in `compare_2bit.vhd` therefore corresponds to the following table.
-      >
-      > | **Port name** | **Direction** | **Type** | **Description** |
-      > | :-: | :-: | :-- | :-- |
-      > | `b`       | input  | [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-examples/wiki/Data-types) | Input bus b[1:0] |
-      > | `a`       | input  | `std_logic_vector(1 downto 0)` | Input bus a[1:0] |
-      > | `b_gt` | output | `std_logic` | Output is `1` if b > a |
-      > | `b_a_eq` | output | `std_logic` | Output is `1` if b = a |
-      > | `a_gt` | output | `std_logic` | Output is `1` if b < a |
+      The [entity](https://github.com/tomas-fryza/vhdl-examples/wiki/Entity) for a 2-bit binary comparator in `compare_2bit.vhd` therefore corresponds to the following table.
+
+      | **Port name** | **Direction** | **Type** | **Description** |
+      | :-: | :-: | :-- | :-- |
+      | `b`       | input  | [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-examples/wiki/Data-types) | Input bus b[1:0] |
+      | `a`       | input  | `std_logic_vector(1 downto 0)` | Input bus a[1:0] |
+      | `b_gt` | output | `std_logic` | Output is `1` if b > a |
+      | `b_a_eq` | output | `std_logic` | Output is `1` if b = a |
+      | `a_gt` | output | `std_logic` | Output is `1` if b < a |
 
 2. In VHDL, define an [architecture](https://github.com/tomas-fryza/vhdl-examples/wiki/Architecture) for a 2-bit binary comparator. The combination logic can be written using low-level operators (`and`, `or`, etc.) as assignment statements using SoP or PoS logic. However, it is more efficient to use a higher notation with [conditional signal assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments).
 
@@ -102,14 +103,12 @@ The K-map for the "equals" function is as follows:
      ---------------------------------------------
      -- Method 1: Behavioral (recommended for design)
      ---------------------------------------------
-     b_gt <= '1' when (b > a) else
-             '0';
-
+     b_gt   <= '1' when (b > a) else
+               '0';
      b_a_eq <= '1' when (b = a) else
                '0';
-
-     a_gt <= '1' when (b < a) else
-             '0';
+     a_gt   <= '1' when (b < a) else
+               '0';
 
      ---------------------------------------------
      -- Method 2: Gate-level implementation (for learning only)
