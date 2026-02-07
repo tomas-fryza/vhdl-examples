@@ -1,4 +1,4 @@
-# Lab 1: Introduction to VHDL
+# Lab 1: Basic logic gates
 
 <!--
 ![Logo](../../logolink_eng.jpg)

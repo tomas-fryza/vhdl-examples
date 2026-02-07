@@ -20,7 +20,7 @@ This repository contains VHDL examples for the bachelor-level course [*Digital E
 
 ## Labs
 
-1. [Introduction to VHDL](lab1-gates)
+1. [Basic logic gates](lab1-gates)
 2. [Binary comparator](lab2-logic)
 3. [Seven-segment display decoder](lab3-segment)
 4. [Arithmetic-logic unit (ALU)](lab4-alu)

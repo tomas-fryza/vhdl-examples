@@ -34,7 +34,7 @@ architecture behavioral of gates is
 begin
 
     y_and <= a and b;
-    y_or <= a or b;
+    y_or  <= a or b;
     y_xor <= a xor b;
 
 end architecture behavioral;
