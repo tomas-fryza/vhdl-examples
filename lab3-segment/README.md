@@ -207,7 +207,7 @@ end architecture;
 
 ## Part 3: Top level VHDL code
 
-Utilize the top-level design to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display, and LEDs display the input combinations.
+Utilize the top-level design to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display,.
 
 1. Create a new VHDL design source `segment_top` in your project.
 2. Define I/O ports as follows.
@@ -215,7 +215,6 @@ Utilize the top-level design to instantiate a `bin2seg` component and implement 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
    | `sw`  | in  | `std_logic_vector(3 downto 0)` | Input data |
-   | `led` | out | `std_logic_vector(3 downto 0)` | Show data |
    | `seg` | out | `std_logic_vector(6 downto 0)` | Seven-segment cathodes CA..CG (active-low) |
    | `dp` | out | `std_logic` | Decimal point |
    | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
@@ -249,14 +248,13 @@ Utilize the top-level design to instantiate a `bin2seg` component and implement 
      -- Turn off decimal point
 
 
-     -- Display input value(s) on LEDs
-
-
      -- Set display position
 
 
    end architecture behavioral;
    ```
+
+4. Display input switch value on LEDs.
 
 <a name="part4"></a>
 
@@ -283,12 +281,6 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
         set_property PACKAGE_PIN M13 [get_ports {sw[2]}] ; # SW_2
         set_property PACKAGE_PIN R15 [get_ports {sw[3]}] ; # SW_3
         set_property IOSTANDARD LVCMOS33 [get_ports {sw[*]}]
-
-        set_property PACKAGE_PIN H17 [get_ports {led[0]}] ; # LED_0
-        set_property PACKAGE_PIN K15 [get_ports {led[1]}] ; # LED_1
-        set_property PACKAGE_PIN J13 [get_ports {led[2]}] ; # LED_2
-        set_property PACKAGE_PIN N14 [get_ports {led[3]}] ; # LED_3
-        set_property IOSTANDARD LVCMOS33 [get_ports {led[*]}]
 
         set_property PACKAGE_PIN T10 [get_ports {seg[6]}] ; # CA
         set_property PACKAGE_PIN R10 [get_ports {seg[5]}] ; # CB
