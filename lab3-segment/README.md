@@ -248,7 +248,7 @@ Utilize the top-level design to instantiate a `bin2seg` component and implement 
      -- Turn off decimal point
 
 
-     -- Set display position
+     -- Set digit position
 
 
    end architecture behavioral;
@@ -270,7 +270,7 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
 
 1. See [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out components you are using.
 
-2. The Nexys A7 board have hardwired connections between FPGA chip and the switches and LEDs. To use these devices, it is necessary to include in your project the correct pin assignments:
+2. The Nexys A7 board have hardwired connections between FPGA chip and the switches, LEDs, seven-segment displays, and others. To use these devices, it is necessary to include in your project the correct pin assignments:
 
    1. Create a new constraints source `nexys` (XDC file).
    2. Copy/paste default constraints from [Nexys-A7-50T-Master.xdc](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) to `nexys.xdc` file, uncomment used pins according to the `segment_top` entity or use the following minimal constrains:
@@ -310,7 +310,7 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
    3. Click on **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
    4. Click on **Program device** and select generated bitstream `YOUR-PROJECT-FOLDER/segment.runs/impl_1/segment_top.bit`.
 
-4. Test the functionality of the seven-segment display decoder by toggling the switches and observing the display and LEDs.
+4. Test the functionality of the seven-segment display decoder by toggling the switches and observing the display.
 
 5. Use **IMPLEMENTATION > Open Implemented Design > Schematic** to see the generated structure.
 
