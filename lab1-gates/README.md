@@ -14,6 +14,7 @@
 * [Part 1: VHDL and Vivado](#part1)
 * [Part 2: DeMorgans laws](#part2)
 * [Challenges](#challenges)
+* [Additional information](#infos)
 * [References](#references)
 
 ### Learning objectives
@@ -34,17 +35,6 @@
 <a name="part1"></a>
 
 ## Part 1: VHDL and Vivado
-
-[VHDL (VHSIC Hardware Description Language)](https://ieeexplore.ieee.org/document/8938196) is a programming language used to describe the behavior and structure of digital circuits. The acronym VHSIC (Very High Speed Integrated Circuits) in the language's name comes from the U.S. government program that funded early work on the standard. VHDL is a formal notation intended for use in all phases of the creation of electronic systems. Since it is both machine and human readable, it supports the design, development, verification, synthesis, and testing of hardware designs; the communication of hardware design data; and the maintenance, modification, and procurement of hardware.
-
- > **Note:** IEEE standards for VHDL language:
- > * IEEE Std 1076-1987
- > * IEEE Std 1076-1993
- > * IEEE Std 1076-2002
- > * IEEE Std 1076-2008
- > * IEEE Std 1076-2019
-
-[Vivado Design Suite](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vivado.html) is a comprehensive design environment developed by AMD (formerly Xilinx) for the design, analysis, and implementation of programmable logic devices, such as FPGAs (Field-Programmable Gate Arrays) and SoCs (System on Chips). It provides a set of tools and features for digital design, synthesis, simulation, and implementation of electronic systems.
 
 1. Run Vivado and create a new project:
 
@@ -85,6 +75,19 @@
    using **concurrent signal assignments** (`<=`).
 
    ```vhdl
+   library ieee;
+       use ieee.std_logic_1164.all;
+
+   entity gates is
+       port (
+           a     : in    std_logic;
+           b     : in    std_logic;
+           y_and : out   std_logic;
+           y_or  : out   std_logic;
+           y_xor : out   std_logic
+       );
+   end entity gates;
+
    architecture Behavioral of gates is
        -- Declaration part, can be empty
    begin
@@ -97,22 +100,6 @@
 
    > **Note:** *Concurrent* means that all assignments exist and operate at the same time, just like real hardware. There is **no execution order** between them.
 
-   > **Help:** The `std_logic` data type provides several values.
-   > 
-   > ```vhdl
-   > type std_logic is (
-   >     'U',  -- Uninitialized state used as a default value
-   >     'X',  -- Forcing unknown
-   >     '0',  -- Forcing zero. Transistor driven to GND
-   >     '1',  -- Forcing one. Transistor driven to VCC
-   >     'Z',  -- High impedance. 3-state buffer outputs
-   >     'W',  -- Weak unknown. Bus terminators
-   >     'L',  -- Weak zero. Pull down resistors
-   >     'H',  -- Weak one. Pull up resistors
-   >     '-'   -- Don't care state used for synthesis and advanced modeling
-   > );
-   > ```
-
 4. The primary approach to testing VHDL designs involves creating a **testbench**. A testbench is essentially a separate VHDL file that stimulates the design under test (DUT) with various input values and monitors its outputs to verify correct functionality. The testbench typically includes DUT component instantiation and stimulus generation.
 
    ![testench idea](images/testbench.png)
@@ -122,15 +109,45 @@
    Generate the testbench file using the [online generator](https://vhdl.lapinoo.net/testbench/), then copy and paste its contents into your `gates_tb.vhd` file. Afterwards, fill in the test cases within the `stimuli` process for all input combinations.
 
    ```vhdl
-       ...
+   library ieee;
+   use ieee.std_logic_1164.all;
+
+   entity tb_gates is
+   end tb_gates;
+
+   architecture tb of tb_gates is
+
+       component gates
+           port (a     : in std_logic;
+               b     : in std_logic;
+               y_and : out std_logic;
+               y_or  : out std_logic;
+               y_xor : out std_logic);
+       end component;
+
+       signal a     : std_logic;
+       signal b     : std_logic;
+       signal y_and : std_logic;
+       signal y_or  : std_logic;
+       signal y_xor : std_logic;
+
+   begin
+
+       dut : gates
+       port map (a     => a,
+                 b     => b,
+                 y_and => y_and,
+                 y_or  => y_or,
+                 y_xor => y_xor);
+
        stimuli : process
        begin
-           -- EDIT Adapt initialization as needed
+           -- ***EDIT*** Adapt initialization as needed
            b <= '0';
            a <= '0';
            wait for 100 ns;
 
-           -- EDIT Add stimuli here
+           -- ***EDIT*** Add stimuli here
 
 
            wait;
@@ -157,12 +174,6 @@
 
    # Reset the current project to its starting condition, clean out generated files
    reset_project
-
-   # Close the current project
-   close_project
-
-   # Exit Vivado
-   exit
    ```
 
    <!-- ![Reset simulation](images/screenshot_vivado_reset_simul.png)-->
@@ -216,16 +227,7 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
 
 ## Challenges
 
-1. You can also try several online graphics simulators, such as [CircuitVerse](https://circuitverse.org/), [Logicly](https://logic.ly/), [CircuitLab](https://www.circuitlab.com/), [simulatorIO](https://simulator.io/), [LogicEmu](https://lodev.org/logicemu/) to simulate logic circuits.
-
-2. In addition to the professional Vivado tool, which requires significant local disk storage, other simulation tools are available, including TerosHDL and ghdl.
-
-   TerosHDL is an open-source tool designed to streamline FPGA development by providing a unified workflow for simulation and synthesis using VHDL. GHDL is a free and open-source VHDL simulator that is a popular choice for hobbyists and students. It is a good option for learning VHDL and for simulating small-scale designs.
-
-   * Try to [install TerosHDL](https://github.com/tomas-fryza/vhdl-examples/wiki/How-to-install-TerosHDL-on-Windows-and-Linux) on Windows or Linux
-   * Try to [install ghdl](https://github.com/tomas-fryza/vhdl-examples/wiki/How-to-install-ghdl-on-Windows-and-Linux) on Windows or Linux
-
-3. Choose one of the distributive laws and verify, using VHDL, that both sides of the equation represent the same logic function.
+1. Choose one of the distributive laws and verify, using VHDL, that both sides of the equation represent the same logic function.
 
    First Distributive law:
 
@@ -235,18 +237,58 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
 
    ![Distributive law2](images/distributive2.png)
 
-<!--
-\begin{align*}
-   \textup{left}(c,b,a)  =&~a\cdot b + a\cdot c\\
-   \textup{right}(c,b,a) =&~a\cdot (b+c)\\
-\end{align*}
--->
-<!--
-\begin{align*}
-    \textup{left}(c,b,a)  =&~(a+b)\cdot (a+c)\\
-    \textup{right}(c,b,a) =&~a+ (b\cdot c)\\
-\end{align*}
--->
+   <!--
+   \begin{align*}
+      \textup{left}(c,b,a)  =&~a\cdot b + a\cdot c\\
+      \textup{right}(c,b,a) =&~a\cdot (b+c)\\
+   \end{align*}
+   -->
+   <!--
+   \begin{align*}
+      \textup{left}(c,b,a)  =&~(a+b)\cdot (a+c)\\
+      \textup{right}(c,b,a) =&~a+ (b\cdot c)\\
+   \end{align*}
+   -->
+
+2. You can also try several online graphics simulators, such as [CircuitVerse](https://circuitverse.org/), [Logicly](https://logic.ly/), [CircuitLab](https://www.circuitlab.com/), [simulatorIO](https://simulator.io/), [LogicEmu](https://lodev.org/logicemu/) to simulate logic circuits.
+
+3. In addition to the professional Vivado tool, which requires significant local disk storage, other simulation tools are available, including TerosHDL and ghdl.
+
+   TerosHDL is an open-source tool designed to streamline FPGA development by providing a unified workflow for simulation and synthesis using VHDL. GHDL is a free and open-source VHDL simulator that is a popular choice for hobbyists and students. It is a good option for learning VHDL and for simulating small-scale designs.
+
+   * Try to [install TerosHDL](https://github.com/tomas-fryza/vhdl-examples/wiki/How-to-install-TerosHDL-on-Windows-and-Linux) on Windows or Linux
+   * Try to [install ghdl](https://github.com/tomas-fryza/vhdl-examples/wiki/How-to-install-ghdl-on-Windows-and-Linux) on Windows or Linux
+
+<a name="infos"></a>
+
+## Additional information
+
+[VHDL (VHSIC Hardware Description Language)](https://ieeexplore.ieee.org/document/8938196) is a programming language used to describe the behavior and structure of digital circuits. The acronym VHSIC (Very High Speed Integrated Circuits) in the language's name comes from the U.S. government program that funded early work on the standard. VHDL is a formal notation intended for use in all phases of the creation of electronic systems. Since it is both machine and human readable, it supports the design, development, verification, synthesis, and testing of hardware designs; the communication of hardware design data; and the maintenance, modification, and procurement of hardware.
+
+ > **Note:** IEEE standards for VHDL language:
+ > * IEEE Std 1076-1987
+ > * IEEE Std 1076-1993
+ > * IEEE Std 1076-2002
+ > * IEEE Std 1076-2008
+ > * IEEE Std 1076-2019
+
+[Vivado Design Suite](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vivado.html) is a comprehensive design environment developed by AMD (formerly Xilinx) for the design, analysis, and implementation of programmable logic devices, such as FPGAs (Field-Programmable Gate Arrays) and SoCs (System on Chips). It provides a set of tools and features for digital design, synthesis, simulation, and implementation of electronic systems.
+
+**Help:** The `std_logic` data type provides several values.
+
+```vhdl
+type std_logic is (
+    'U',  -- Uninitialized state used as a default value
+    'X',  -- Forcing unknown
+    '0',  -- Forcing zero. Transistor driven to GND
+    '1',  -- Forcing one. Transistor driven to VCC
+    'Z',  -- High impedance. 3-state buffer outputs
+    'W',  -- Weak unknown. Bus terminators
+    'L',  -- Weak zero. Pull down resistors
+    'H',  -- Weak one. Pull up resistors
+    '-'   -- Don't care state used for synthesis and advanced modeling
+);
+```
 
 <a name="references"></a>
 
