@@ -8,11 +8,12 @@
 </p>
 -->
 
-* [Labs](#labs)
+<!--* [Labs](#labs)
 * [Installation](#installation)
 * [Components and tools](#components-and-tools)
 * [List of VHDL examples](#list-of-vhdl-examples)
 * [References](#references)
+-->
 
 This repository contains VHDL examples for the bachelor-level course [*Digital Electronics*](https://www.vut.cz/en/students/courses/detail/290532) at Brno University of Technology (Czechia), using the [Nexys A7 Artix-7](https://store.digilentinc.com/nexys-a7-fpga-trainer-board-recommended-for-ece-curriculum/) FPGA board.
 
