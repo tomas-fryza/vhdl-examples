@@ -56,4 +56,4 @@ ghdl -i --std=02 --ieee=standard *.vhd &&
 	$GTK/gtkwave dump.vcd
 
 # To clean
-# rm -f dump.vcd *.cf *.o $TOP_ENTITY
+rm -f dump.vcd *.cf *.o $TOP_ENTITY

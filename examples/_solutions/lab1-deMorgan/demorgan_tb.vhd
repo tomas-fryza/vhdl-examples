@@ -12,34 +12,34 @@ end entity demorgan_tb;
 architecture testbench of demorgan_tb is
     component demorgan is
         port (
-            a     : in    std_logic;
-            b     : in    std_logic;
-            c     : in    std_logic;
-            f_org : out   std_logic;
-            f_and : out   std_logic;
-            f_or  : out   std_logic
+            a      : in    std_logic;
+            b      : in    std_logic;
+            c      : in    std_logic;
+            f_org  : out   std_logic;
+            f_nand : out   std_logic;
+            f_nor  : out   std_logic
         );
     end component;
 
     -- Testbench local signals
-    signal sig_c   : std_logic;
-    signal sig_b   : std_logic;
-    signal sig_a   : std_logic;
-    signal sig_org : std_logic;
-    signal sig_and : std_logic;
-    signal sig_or  : std_logic;
+    signal sig_c    : std_logic;
+    signal sig_b    : std_logic;
+    signal sig_a    : std_logic;
+    signal sig_org  : std_logic;
+    signal sig_nand : std_logic;
+    signal sig_nor  : std_logic;
 begin
 
     -- Connecting local testbench signals to `morgan`
     -- component (Design Under Test)
     dut : component demorgan
         port map (
-            c     => sig_c,
-            b     => sig_b,
-            a     => sig_a,
-            f_org => sig_org,
-            f_and => sig_and,
-            f_or  => sig_or
+            c      => sig_c,
+            b      => sig_b,
+            a      => sig_a,
+            f_org  => sig_org,
+            f_nand => sig_nand,
+            f_nor  => sig_nor
         );
 
     ------------------------------------------------
