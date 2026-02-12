@@ -35,7 +35,21 @@ Digital systems are built from **logic gates**, which implement Boolean function
    * **OR**: Output is `1` when at least one input is `1`.
    * **XOR**: Output is `1` when inputs are different.
 
-   ![basic-logic-gates](images/gates.png)
+      ![basic-logic-gates](images/gates.png)
+
+De Morgan's laws are two fundamental rules in Boolean algebra that are used to simplify Boolean expressions:
+
+   * De Morgan's law for AND: The complement of the product of two operands is equal to the sum of the complements of the operands.
+   * De Morgan's law for OR: The complement of the sum of two operands is equal to the product of the complements of the operands.
+
+      ![demorgan](images/demorgan.png)
+
+   <!-- https://latexeditor.lagrida.com/ font size 16
+   \begin{align*}
+      \overline{a\cdot b} =&~ \overline{a} + \overline{b}\\
+      \overline{a+b} =&~ \overline{a}\cdot \overline{b}\\
+   \end{align*}
+   -->
 
 **Hardware Description Languages** (HDLs) are used to model, design, and simulate digital hardware systems by describing their structure and behavior. VHDL and Verilog are the two most widely used HDLs, both allowing engineers to create designs for digital circuits such as processors, controllers, and FPGA implementations. **VHDL** is strongly typed and more verbose, making it popular in academic, aerospace, and safety-critical applications, while **Verilog** has a C-like syntax and is often considered easier to learn and more concise. Both languages support parallel hardware behavior and timing, which distinguishes them from traditional software programming languages. Designs written in VHDL or Verilog can be simulated for verification and synthesized into real hardware.
 
@@ -217,20 +231,7 @@ Digital systems are built from **logic gates**, which implement Boolean function
 
 ## Part 2: De Morgan's laws
 
-De Morgan's laws are two fundamental rules in Boolean algebra that are used to simplify Boolean expressions. There are two versions of De Morgan's laws. De Morgan's law for AND: The complement of the product of two operands is equal to the sum of the complements of the operands. De Morgan's law for OR: The complement of the sum of two operands is equal to the product of the complements of the operands.
-
 1. Propose a 3-input logic function, use De Morgan's laws, and implement the function using only NAND or NOR operators.
-
-   > **Help:** De Morgan's laws are defined as follows:
-   >
-   > ![demorgan](images/demorgan.png)
-
-   <!-- https://latexeditor.lagrida.com/ font size 16
-   \begin{align*}
-      \overline{a\cdot b} =&~ \overline{a} + \overline{b}\\
-      \overline{a+b} =&~ \overline{a}\cdot \overline{b}\\
-   \end{align*}
-   -->
 
 2. Create a new Vivado project `deMorgan` and source file `demorgan.vhd` with the following I/O ports:
 
