@@ -68,6 +68,22 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
 
 ## Part 1: VHDL and Vivado
 
+Design a circuir that implements the following logic functions:
+
+   - one 2-input **AND** gate,
+   - one 2-input **OR** gate,
+   - one 2-input **XOR** gate.
+
+The module shall have two single-bit inputs `a`, `b` and three single-bit outputs `y_and`, `y_or`, `y_xor`.
+
+   - Use **combinational logic only**
+   - Use **concurrent signal assignments** (`<=`)
+   - Do not use clocks or sequential logic
+   - The design must be synthesizable
+   - All input combinations must be verified by simulation
+
+   ![schema of gates](images/schematic_gates.png)
+
 1. Run Vivado and create a new project:
 
    1. Project name: `gates`
@@ -114,15 +130,7 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
    );
    ```
 
-3. Complete the `architecture` sections so that it implements:
-
-   * a 2-input AND gate,
-   * a 2-input OR gate,
-   * a 2-input XOR gate,
-
-   using **concurrent signal assignments** (`<=`). Note: **Concurrent** means that all assignments exist and operate at the same time, just like real hardware. There is **no execution order** between them.
-
-   ![schema of gates](images/schematic_gates.png)
+3. Complete the `architecture` sections so that it implements output functions using **concurrent signal assignments** (`<=`). Note: **Concurrent** means that all assignments exist and operate at the same time, just like real hardware. There is **no execution order** between them.
 
    ```vhdl
    library ieee;
@@ -209,6 +217,8 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
 
    ![Vivado-simulation](images/vivado_simulation_crop.png)
 
+   Verify that the behavior corresponds exactly to the truth table above.
+
 7. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
 
    <!--![Vivado-rtl](images/vivado_rtl.png)-->
@@ -252,6 +262,7 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
 
 1. Implement XOR using only AND, OR, NOT.
 
+<!--
 2. Choose one of the distributive laws and verify, using VHDL, that both sides of the equation represent the same logic function.
 
    ![Distributive laws](images/distributive.png)
@@ -261,11 +272,12 @@ De Morgan's laws are two fundamental rules in Boolean algebra that are used to s
       (a\cdot b) + (a\cdot c) =& ~ a\cdot (b+c)\\
       (a+b)\cdot (a+c) =& ~ a+ (b\cdot c)\\
    \end{align*}
-   -->
+   ->
+-->
 
-3. If you want to use online [EDA Playground](https://www.edaplayground.com) tool, you will need Google account, Facebook account, or register your account on EDA Playground. You can also try several online graphics simulators, such as [CircuitVerse](https://circuitverse.org/), [Logicly](https://logic.ly/), [CircuitLab](https://www.circuitlab.com/), [simulatorIO](https://simulator.io/), [LogicEmu](https://lodev.org/logicemu/) to simulate logic circuits.
+2. If you want to use online [EDA Playground](https://www.edaplayground.com) tool, you will need Google account, Facebook account, or register your account on EDA Playground.
 
-4. In addition to the professional Vivado tool, which requires significant local disk storage, other simulation tools are available, including TerosHDL and ghdl.
+3. In addition to the professional Vivado tool, which requires significant local disk storage, other simulation tools are available, including TerosHDL and ghdl.
 
    [TerosHDL](https://terostechnology.github.io/terosHDLdoc/) is an open-source tool designed to streamline FPGA development by providing a unified workflow for simulation and synthesis using VHDL. [GHDL](https://github.com/ghdl/ghdl) is a free and open-source VHDL simulator that is a popular choice for hobbyists and students. It is a good option for learning VHDL and for simulating small-scale designs.
 
