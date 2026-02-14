@@ -1,7 +1,7 @@
-# Lab 2: Binary comparator
+# Laboratory 2: Binary comparator
 
 * [Task 1: Logic function minimization](#task1)
-* [Task 2: Binary comparator in VHDL](#task2)
+* [Task 2: 2-bit binary comparator](#task2)
 * [Task 3: Assertion statements](#task3)
 * [Optional tasks](#tasks)
 * [Questions](#questions)
@@ -53,15 +53,15 @@ After completing this laboratory, students will be able to:
    | 14 | 1 1 | 1 0 |  | 0 |  |
    | 15 | 1 1 | 1 1 |  | 1 |  |
 
-2. According to truth table, create K-maps for all functions functions.
+2. According to truth table, create K-maps for all functions.
 
    ![2-bit comparator Karnaugh maps](images/k-maps.png)
 
-3. Use K-maps to create simplified SoP and PoS forms of both "greater than" functions.
+3. Use K-maps to create simplified SoP and PoS forms of "B greater than A" function.
 
 <a name="task2"></a>
 
-## Task 2: Binary comparator in VHDL
+## Task 2: 2-bit binary comparator
 
 1. Run Vivado and create a new project:
 
@@ -117,7 +117,7 @@ After completing this laboratory, students will be able to:
    end architecture behavioral;
    ```
 
-3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `compare_2bit_tb`. [Generate the testbench](https://vhdl.lapinoo.net/testbench/) file, and complete the stimuli process by several test cases.
+3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `compare_2bit_tb`. [Generate the testbench](https://vhdl.lapinoo.net/testbench/) file, and complete the stimuli process by at least 5 input combinations.
 
    ```vhdl
    stimuli : process
@@ -192,6 +192,8 @@ Remember, the message is displayed to the console when the condition is NOT met,
    ```
 
 1. In VHDL, write a testbench, test at least 5 input combinations, and use assertions for each case. The simulation is considered successful if no assertion reports severity error or failure.
+
+2. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
 <a name="tasks"></a>
 

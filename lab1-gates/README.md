@@ -1,4 +1,4 @@
-# Lab 1: Basic logic gates
+# Laboratory 1: Basic logic gates
 
 <!--
 ![Logo](../../logolink_eng.jpg)
