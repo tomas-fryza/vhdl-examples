@@ -47,40 +47,33 @@ begin
         -- Test case is followed by the expected output
         -- value(s). If assert condition is false, then
         -- an error is reported to the console.
-        sig_b <= "00";
-        sig_a <= "00";
-        wait for 100 ns;
+        sig_b <= "00"; sig_a <= "00"; wait for 100 ns;
         assert (sig_b_gt = '0') and (sig_b_a_eq = '1') and (sig_a_gt = '0')
             report "Input combination b=0, a=0 FAILED" severity error;
 
         ------------------------------
-        -- WRITE OTHER TEST CASES AND ASSERTS HERE
-        sig_b <= "01";
-        sig_a <= "01";
-        wait for 100 ns;
+        sig_b <= "01"; sig_a <= "01"; wait for 100 ns;
         assert (sig_b_gt = '0') and (sig_b_a_eq = '1') and (sig_a_gt = '0')
             report "Input combination b=1, a=1 FAILED" severity error;
 
         ------------------------------
-        sig_b <= "10";
-        sig_a <= "11";
-        wait for 100 ns;
+        sig_b <= "10"; sig_a <= "11"; wait for 100 ns;
         assert (sig_b_gt = '0') and (sig_b_a_eq = '0') and (sig_a_gt = '1')
             report "Input combination b=2, a=3 FAILED" severity error;
 
         ------------------------------
-        sig_b <= "01";
-        sig_a <= "10";
-        wait for 100 ns;
+        sig_b <= "01"; sig_a <= "10"; wait for 100 ns;
         assert (sig_b_gt = '0') and (sig_b_a_eq = '0') and (sig_a_gt = '1')
             report "Input combination b=1, a=2 FAILED" severity error;
 
         ------------------------------
-        sig_b <= "10";
-        sig_a <= "01";
-        wait for 100 ns;
+        sig_b <= "10"; sig_a <= "01"; wait for 100 ns;
         assert (sig_b_gt = '1') and (sig_b_a_eq = '0') and (sig_a_gt = '0')
             report "Input combination b=2, a=1 FAILED" severity error;
+
+
+        -- TODO: Write other test cases and asserts here
+
 
         report "Stimulus process finished";
 

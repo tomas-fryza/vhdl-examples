@@ -46,7 +46,7 @@ begin
     --         '0';
 
     b_a_eq <= '1' when (b = a) else
-            '0';
+              '0';
 
     a_gt <= '1' when (b < a) else
             '0';

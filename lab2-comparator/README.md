@@ -63,6 +63,24 @@ After completing this laboratory, students will be able to:
 
 ## Task 2: 2-bit binary comparator
 
+Design a circuit that implements a **2-bit binary comparator**. The comparator shall compare two 2-bit unsigned inputs `a` and `b` and generate three mutually exclusive outputs `b_gt`, `b_a_eq`, `a_gt`.
+
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `b`       | input  | [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-examples/wiki/Data-types) | Input bus b[1:0] |
+   | `a`       | input  | `std_logic_vector(1 downto 0)` | Input bus a[1:0] |
+   | `b_gt` | output | `std_logic` | Output is `1` if b > a |
+   | `b_a_eq` | output | `std_logic` | Output is `1` if b = a |
+   | `a_gt` | output | `std_logic` | Output is `1` if b < a |
+
+   - Use 2-bit input busses `std_logic_vector(1 downto 0)`  
+   - Use **combinational logic only**
+   - Use **concurrent signal assignments** (`<=`)
+   - Do not use clocks or sequential logic
+   - The design must be synthesizable
+   - Only **one output may be HIGH at a time** (one-hot behavior)
+   - All 16 input combinations must be verified by simulation
+
 1. Run Vivado and create a new project:
 
    1. Project name: `comparator`
@@ -79,16 +97,6 @@ After completing this laboratory, students will be able to:
       * `b_gt`, `out`
       * `b_a_eq`, `out`
       * `a_gt`, `out`
-
-      The [entity](https://github.com/tomas-fryza/vhdl-examples/wiki/Entity) for a 2-bit binary comparator in `compare_2bit.vhd` therefore corresponds to the following table.
-
-      | **Port name** | **Direction** | **Type** | **Description** |
-      | :-: | :-: | :-- | :-- |
-      | `b`       | input  | [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-examples/wiki/Data-types) | Input bus b[1:0] |
-      | `a`       | input  | `std_logic_vector(1 downto 0)` | Input bus a[1:0] |
-      | `b_gt` | output | `std_logic` | Output is `1` if b > a |
-      | `b_a_eq` | output | `std_logic` | Output is `1` if b = a |
-      | `a_gt` | output | `std_logic` | Output is `1` if b < a |
 
 2. In VHDL, define an [architecture](https://github.com/tomas-fryza/vhdl-examples/wiki/Architecture) for a 2-bit binary comparator. The combination logic can be written using low-level operators (`and`, `or`, etc.) as assignment statements using SoP or PoS logic. However, it is more efficient to use a higher notation with [conditional signal assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments).
 
@@ -117,17 +125,16 @@ After completing this laboratory, students will be able to:
    end architecture behavioral;
    ```
 
-3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `compare_2bit_tb`. [Generate the testbench](https://vhdl.lapinoo.net/testbench/) file, and complete the stimuli process by at least 5 input combinations.
+3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `compare_2bit_tb`. [Generate the testbench](https://vhdl.lapinoo.net/testbench/) file, and complete the stimuli process by all input combinations.
 
    ```vhdl
    stimuli : process
    begin
-     -- EDIT Adapt initialization as needed
-     b <= "00";
-     a <= "00";
-     wait for 100 ns;
+     b <= "00"; a <= "00"; wait for 100 ns;
 
-     -- EDIT Add stimuli here
+
+     -- TODO: Write other test cases here
+
 
      wait;
    end process;
@@ -135,7 +142,7 @@ After completing this laboratory, students will be able to:
 
 4. In `architecture`, use method 2 and implement `b_gt` using minimized Boolean equation in SoP or PoS logic at gate-level. Simulate it. Compare waveform results with behavioral version.
 
-   Note that, the behavioral implementation is synthesizable and preferred in real designs because it is clearer, scalable, and less error-prone than manual Boolean equations.
+   > **Note:** The behavioral implementation is synthesizable and preferred in real designs because it is clearer, scalable, and less error-prone than manual Boolean equations.
 
 <a name="task3"></a>
 
@@ -171,16 +178,14 @@ Remember, the message is displayed to the console when the condition is NOT met,
      -- Report a note at the beginning of stimulus process
      report "Stimulus process started";
 
-     -- Test case is followed by the expected output value(s). If assert condition is false, then
-     -- an error is reported to the console.
-     b <= "00";
-     a <= "00";
-     wait for 100 ns;
+     -- Test case is followed by the expected output value(s). If assert
+     -- condition is false, then an error is reported to the console.
+     b <= "00"; a <= "00"; wait for 100 ns;
      assert (b_gt = '0') and (b_a_eq = '1') and (a_gt = '0')
-       report "Input combination b=0, a=0 FAILED" severity error;
+       report "[ERROR] Unexpected result" severity error;
 
 
-     -- WRITE OTHER TEST CASES AND ASSERTS HERE
+     -- TODO: Write other test cases and asserts here
 
 
      report "Stimulus process finished";
@@ -191,7 +196,7 @@ Remember, the message is displayed to the console when the condition is NOT met,
    end process p_stimulus;
    ```
 
-1. In VHDL, write a testbench, test at least 5 input combinations, and use assertions for each case. The simulation is considered successful if no assertion reports severity error or failure.
+1. In VHDL, extend your testbench, and use assertions for each case. The simulation is considered successful if no assertion reports severity error or failure.
 
 2. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
