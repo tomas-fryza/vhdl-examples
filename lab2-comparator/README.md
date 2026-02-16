@@ -12,8 +12,8 @@
 After completing this laboratory, students will be able to:
 
 * Use truth table, K-map, SoP/PoS forms of logic functions
-* Minimize logic functions
-* Understand signal assignments in VHDL
+* Work with multi-bit signals
+* Use relational operators (`>`, `<`, `=`)
 * Use VHDL assertion statements for testing
 
 ### Background
@@ -31,7 +31,7 @@ After completing this laboratory, students will be able to:
 1. Complete the truth table for 2-bit *Identity comparator* (B equals A), and two *Magnitude comparators* (B is greater than A, A is greater than B). Note that, such a digital device has four inputs and three outputs/functions but only **one output** should be HIGH at a time:
 
    - `b_gt`: Output is `1` when `b > a`
-   - `b_a_eq`: Output is `1` when `b == a`
+   - `b_a_eq`: Output is `1` when `b = a`
    - `a_gt`: Output is `1` when `b < a`
 
    | **Dec. equivalent** | **B[1:0]** | **A[1:0]** | **B is greater than A** | **B equals A** | **A is greater than B** |
@@ -215,6 +215,7 @@ Remember, the message is displayed to the console when the condition is NOT met,
 ## Questions
 
 1. What is the advantage of using K-maps instead of directly writing SoP expressions?
+
 2. Why is using relational operators preferred over manual Boolean equations?
 
 3. Why must only one comparator output be high at a time?
