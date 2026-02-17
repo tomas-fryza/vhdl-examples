@@ -236,9 +236,14 @@ The module shall have two single-bit inputs `a`, `b` and three single-bit output
    ```tcl
    # Close the current simulation session
    close_sim
+   # or
+   close_sim -force
 
    # Reset the current project to its starting condition, clean out generated files
    reset_project
+
+   # Closes the current open project
+   close_project
    ```
 
    <!-- ![Reset simulation](images/screenshot_vivado_reset_simul.png)-->
