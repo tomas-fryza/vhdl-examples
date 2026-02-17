@@ -86,6 +86,10 @@ The module shall have two single-bit inputs `a`, `b` and three single-bit output
 
 1. Run Vivado and create a new project:
 
+   > **Note:** When running for the first time, it is recommended to specify the project directory and target language in the **Tools > Settings...** menu.
+   >
+   > ![settings](images/vivado_vhdl.png)
+
    1. Project name: `gates`
    2. Project location: your working folder, such as `Documents`
    3. Project type: **RTL Project** (Note, the Register-Transfer Level refers to a level of abstraction used to describe how the data is transferred and processed inside hardware.)
@@ -217,7 +221,7 @@ The module shall have two single-bit inputs `a`, `b` and three single-bit output
 
 6. Use **Flow > Run Simulation > Run Behavioral Simulation** and run Vivado simulator. To see the whole simulated signals, it is recommended to select **View > Zoom Fit**.
 
-   ![Vivado-simulation](images/vivado_simulation_crop.png)
+   ![Vivado-simulation](images/vivado_simulation_zoom.png)
 
    Verify that the behavior corresponds exactly to the truth table above.
 
