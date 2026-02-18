@@ -34,26 +34,26 @@ After completing this laboratory, students will be able to:
    - `b_a_eq`: Output is `1` when `b = a`
    - `a_gt`: Output is `1` when `b < a`
 
-   | **Dec. equivalent** | **B[1:0]** | **A[1:0]** | **B is greater than A** | **B equals A** | **A is greater than B** |
-   | :-: | :-: | :-: | :-: | :-: | :-: |
-   |  0 | 0 0 | 0 0 | 0 | 1 | 0 |
-   |  1 | 0 0 | 0 1 | 0 | 0 | 1 |
-   |  2 | 0 0 | 1 0 | 0 | 0 | 1 |
-   |  3 | 0 0 | 1 1 | 0 | 0 | 1 |
-   |  4 | 0 1 | 0 0 |  | 0 |  |
-   |  5 | 0 1 | 0 1 |  | 1 |  |
-   |  6 | 0 1 | 1 0 |  | 0 |  |
-   |  7 | 0 1 | 1 1 |  | 0 |  |
-   |  8 | 1 0 | 0 0 |  | 0 |  |
-   |  9 | 1 0 | 0 1 |  | 0 |  |
-   | 10 | 1 0 | 1 0 |  | 1 |  |
-   | 11 | 1 0 | 1 1 |  | 0 |  |
-   | 12 | 1 1 | 0 0 |  | 0 |  |
-   | 13 | 1 1 | 0 1 |  | 0 |  |
-   | 14 | 1 1 | 1 0 |  | 0 |  |
-   | 15 | 1 1 | 1 1 |  | 1 |  |
+      | **Dec. equivalent** | **B[1:0]** | **A[1:0]** | **B is greater than A** | **B equals A** | **A is greater than B** |
+      | :-: | :-: | :-: | :-: | :-: | :-: |
+      |  0 | 0 0 | 0 0 | 0 | 1 | 0 |
+      |  1 | 0 0 | 0 1 | 0 | 0 | 1 |
+      |  2 | 0 0 | 1 0 | 0 | 0 | 1 |
+      |  3 | 0 0 | 1 1 | 0 | 0 | 1 |
+      |  4 | 0 1 | 0 0 |  | 0 |  |
+      |  5 | 0 1 | 0 1 |  | 1 |  |
+      |  6 | 0 1 | 1 0 |  | 0 |  |
+      |  7 | 0 1 | 1 1 |  | 0 |  |
+      |  8 | 1 0 | 0 0 |  | 0 |  |
+      |  9 | 1 0 | 0 1 |  | 0 |  |
+      | 10 | 1 0 | 1 0 |  | 1 |  |
+      | 11 | 1 0 | 1 1 |  | 0 |  |
+      | 12 | 1 1 | 0 0 |  | 0 |  |
+      | 13 | 1 1 | 0 1 |  | 0 |  |
+      | 14 | 1 1 | 1 0 |  | 0 |  |
+      | 15 | 1 1 | 1 1 |  | 1 |  |
 
-2. According to truth table, create K-maps for all functions.
+2. According to truth table, complete K-maps for all functions.
 
    ![2-bit comparator Karnaugh maps](images/k-maps.png)
 
@@ -65,6 +65,7 @@ After completing this laboratory, students will be able to:
 
 Design a circuit that implements a **2-bit binary comparator**. The comparator shall compare two 2-bit unsigned inputs `a` and `b` and generate three mutually exclusive outputs `b_gt`, `b_a_eq`, `a_gt`.
 
+   <!--
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
    | `b`       | input  | [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-examples/wiki/Data-types) | Input bus b[1:0] |
@@ -72,8 +73,9 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
    | `b_gt` | output | `std_logic` | Output is `1` if b > a |
    | `b_a_eq` | output | `std_logic` | Output is `1` if b = a |
    | `a_gt` | output | `std_logic` | Output is `1` if b < a |
+   -->
 
-   - Use 2-bit input busses `std_logic_vector(1 downto 0)`  
+   - Use 2-bit input busses [`std_logic_vector(1 downto 0)`](https://github.com/tomas-fryza/vhdl-examples/wiki/Data-types)
    - Use **combinational logic only**
    - Use **concurrent signal assignments** (`<=`)
    - Do not use clocks or sequential logic
@@ -86,17 +88,17 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
    1. Project name: `comparator`
    2. Project location: your working folder, such as `Documents`
    3. Project type: **RTL Project**
-   4. Create a new VHDL source file: `compare_2bit`
+   4. Create a new VHDL source file: `comparator`
    5. Do not add any constraints now
    6. Choose a default board: `Nexys A7-50T`
    7. Click **Finish** to create the project
    8. Define I/O ports of new module:
 
-      * Port name: `a`, Direction: `in`, Bus: `check`, MSB: `1`, LSB: `0`
-      * `b`, `in`, Bus: `check`, MSB: `1`, LSB: `0`
-      * `b_gt`, `out`
-      * `b_a_eq`, `out`
-      * `a_gt`, `out`
+      * Port name: `a`, Direction: `input`, Bus: `check`, MSB: `1`, LSB: `0`
+      * `b`, `input`, Bus: `check`, MSB: `1`, LSB: `0`
+      * `b_gt`, `output`
+      * `b_a_eq`, `output`
+      * `a_gt`, `output`
 
 2. In VHDL, define an [architecture](https://github.com/tomas-fryza/vhdl-examples/wiki/Architecture) for a 2-bit binary comparator. The combination logic can be written using low-level operators (`and`, `or`, etc.) as assignment statements using SoP or PoS logic. However, it is more efficient to use a higher notation with [conditional signal assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments).
 
@@ -104,7 +106,7 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
    -------------------------------------------------
    -- Architecture definition, Implementation design
    -------------------------------------------------
-   architecture behavioral of compare_2bit is
+   architecture behavioral of comparator is
    begin
      ---------------------------------------------
      -- Method 1: Behavioral (recommended for design)
@@ -125,12 +127,12 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
    end architecture behavioral;
    ```
 
-3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `compare_2bit_tb`. [Generate the testbench](https://vhdl.lapinoo.net/testbench/) file, and complete the stimuli process by all input combinations.
+3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `comparator_tb`. [Generate the testbench](https://vhdl.lapinoo.net/testbench/) file, and complete the stimuli process by all input combinations.
 
    ```vhdl
    stimuli : process
    begin
-     b <= "00"; a <= "00"; wait for 100 ns;
+     b <= "00"; a <= "00"; wait for 10 ns;
 
 
      -- TODO: Write other test cases here
@@ -180,7 +182,7 @@ Remember, the message is displayed to the console when the condition is NOT met,
 
      -- Test case is followed by the expected output value(s). If assert
      -- condition is false, then an error is reported to the console.
-     b <= "00"; a <= "00"; wait for 100 ns;
+     b <= "00"; a <= "00"; wait for 10 ns;
      assert (b_gt = '0') and (b_a_eq = '1') and (a_gt = '0')
        report "[ERROR] Unexpected result" severity error;
 

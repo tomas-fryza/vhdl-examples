@@ -98,11 +98,11 @@ The module shall have two single-bit inputs `a`, `b` and three single-bit output
    6. Choose a default board: `Nexys A7-50T` (will be used later in the lab)
    7. Click **Finish** to create the project
    8. Define I/O ports of new module `gates`:
-      * Port name: `a`, Direction: `in`
-      * `b`, `in`
-      * `y_and`, `out`
-      * `y_or`, `out`
-      * `y_xor`, `out`
+      * Port name: `a`, Direction: `input`
+      * `b`, `input`
+      * `y_and`, `output`
+      * `y_or`, `output`
+      * `y_xor`, `output`
 
 2. Open the generated file `gates.vhd` located in **Design Sources** and take a look at the basic parts of the VHDL source code, such as [entity](https://github.com/tomas-fryza/vhdl-examples/wiki/Entity), [architecture](https://github.com/tomas-fryza/vhdl-examples/wiki/Architecture), and the useful VHDL operators.
 
