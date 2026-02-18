@@ -1,6 +1,6 @@
 -------------------------------------------------
 --! @brief 2-bit binary comparator.
---! @version 1.2
+--! @version 1.3
 --! @copyright (c) 2020-2026 Tomas Fryza, MIT license
 --!
 --! A digital or **binary comparator** compares digital
@@ -25,7 +25,7 @@ library ieee;
 
 -------------------------------------------------
 
-entity compare_2bit is
+entity comparator is
     port (
         b      : in    std_logic_vector(1 downto 0); --! Input bus b[1:0]
         a      : in    std_logic_vector(1 downto 0); --! Input bus a[1:0]
@@ -33,11 +33,11 @@ entity compare_2bit is
         b_a_eq : out   std_logic;                    --! Output is `1` if b = a
         a_gt   : out   std_logic                     --! Output is `1` if b < a
     );
-end entity compare_2bit;
+end entity comparator;
 
 -------------------------------------------------
 
-architecture behavioral of compare_2bit is
+architecture behavioral of comparator is
 begin
     ---------------------------------------------
     -- Method 1: Behavioral (recommended for design)

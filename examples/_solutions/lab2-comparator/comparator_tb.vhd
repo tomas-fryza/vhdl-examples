@@ -3,14 +3,14 @@ library ieee;
 
 -------------------------------------------------
 
-entity compare_2bit_tb is
+entity comparator_tb is
 -- Entity of testbench is always empty
-end entity compare_2bit_tb;
+end entity comparator_tb;
 
 -------------------------------------------------
 
-architecture testbench of compare_2bit_tb is
-    component compare_2bit is
+architecture testbench of comparator_tb is
+    component comparator is
         port (
             b      : in    std_logic_vector(1 downto 0);
             a      : in    std_logic_vector(1 downto 0);
@@ -28,7 +28,7 @@ architecture testbench of compare_2bit_tb is
     signal sig_a_gt   : std_logic;
 begin
 
-    dut : component compare_2bit
+    dut : component comparator
         port map (
             b      => sig_b,
             a      => sig_a,
