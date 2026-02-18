@@ -3,17 +3,17 @@
 # ===============================================
 
 # Simulator and tools
-GHDL     = ghdl
-GTKWAVE  = gtkwave
+GHDL    = ghdl
+GTKWAVE = gtkwave
 
 # Top-level testbench entity
-TOP      = gates_tb
+TOP     = gates_tb
 
 # Waveform file
-VCD      = gates.vcd
+VCD     = gates.vcd
 
 # VHDL source files
-SRCS     = gates.vhd gates_tb.vhd
+SRCS    = gates.vhd gates_tb.vhd
 
 # Default target
 all: sim

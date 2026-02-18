@@ -3,17 +3,17 @@
 # ===============================================
 
 # Simulator and tools
-GHDL     = ghdl
-GTKWAVE  = gtkwave
+GHDL    = ghdl
+GTKWAVE = gtkwave
 
 # Top-level testbench entity
-TOP      = compare_2bit_tb
+TOP     = comparator_tb
 
 # Waveform file
-VCD      = compare_2bit.vcd
+VCD     = comparator.vcd
 
 # VHDL source files
-SRCS     = compare_2bit.vhd compare_2bit_tb.vhd
+SRCS    = comparator.vhd comparator_tb.vhd
 
 # Default target
 all: sim

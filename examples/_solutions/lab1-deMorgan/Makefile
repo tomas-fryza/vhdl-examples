@@ -3,17 +3,17 @@
 # ===============================================
 
 # Simulator and tools
-GHDL     = ghdl
-GTKWAVE  = gtkwave
+GHDL    = ghdl
+GTKWAVE = gtkwave
 
 # Top-level testbench entity
-TOP      = demorgan_tb
+TOP     = demorgan_tb
 
 # Waveform file
-VCD      = demorgan.vcd
+VCD     = demorgan.vcd
 
 # VHDL source files
-SRCS     = demorgan.vhd demorgan_tb.vhd
+SRCS    = demorgan.vhd demorgan_tb.vhd
 
 # Default target
 all: sim

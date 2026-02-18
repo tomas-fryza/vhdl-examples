@@ -3,17 +3,17 @@
 # ===============================================
 
 # Simulator and tools
-GHDL     = ghdl
-GTKWAVE  = gtkwave
+GHDL    = ghdl
+GTKWAVE = gtkwave
 
 # Top-level testbench entity
-TOP      = bin2seg_tb
+TOP     = bin2seg_tb
 
 # Waveform file
-VCD      = bin2seg.vcd
+VCD     = bin2seg.vcd
 
 # VHDL source files
-SRCS     = bin2seg.vhd bin2seg_tb.vhd
+SRCS    = bin2seg.vhd bin2seg_tb.vhd
 
 # Default target
 all: sim
