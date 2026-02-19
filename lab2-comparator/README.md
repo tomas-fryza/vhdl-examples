@@ -34,7 +34,7 @@ After completing this laboratory, students will be able to:
    - `b_a_eq`: Output is `1` when `b = a`
    - `a_gt`: Output is `1` when `b < a`
 
-      | **Dec. equivalent** | **B[1:0]** | **A[1:0]** | **B is greater than A** | **B equals A** | **A is greater than B** |
+      | **Dec. equivalent** | **B(1:0)** | **A(1:0)** | **B is greater than A** | **B equals A** | **A is greater than B** |
       | :-: | :-: | :-: | :-: | :-: | :-: |
       |  0 | 0 0 | 0 0 | 0 | 1 | 0 |
       |  1 | 0 0 | 0 1 | 0 | 0 | 1 |
