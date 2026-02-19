@@ -5,6 +5,7 @@
 * [Part 3: Top level VHDL code](#part3)
 * [Part 4: Implement to FPGA](#part4)
 * [Optional tasks](#tasks)
+* [Questions](#questions)
 * [References](#references)
 
 ### Objectives
@@ -313,7 +314,7 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
 
 ## Optional tasks
 
-1. Extend the functionality of one-digit 7-segment decoder to drive a two-digit display. Upon pressing a button, the display will switch between the two digits.v
+1. Extend the functionality of one-digit 7-segment decoder to drive a two-digit display. Upon pressing a button, the display will switch between the two digits.
 
    ![Top level, 2-digit](images/top-level_2-digit.png)
 
@@ -336,6 +337,12 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
 
    end architecture behavioral;
    ```
+
+<a name="questions"></a>
+
+## Questions
+
+1. TBD
 
 <a name="references"></a>
 
