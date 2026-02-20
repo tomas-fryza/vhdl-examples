@@ -19,11 +19,16 @@ After completing this laboratory, students will be able to:
 
 ### Background
 
+The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control signals which can be displayed on 7-segment display. A display consists of 7 LED segments to display the decimal digits `0` to `9` and letters `A` to `F`.
+
+   > Note that, there are other types of segment displays, [such as 14- or 16-segment](http://avtanski.net/projects/lcd/).
+   >
+   > ![other displays](images/7-14-segment-display.jpg) &nbsp; &nbsp; &nbsp; &nbsp;
+   > ![other displays](images/16-segment-display.png)
+
 The Nexys A7 board provides two four-digit common anode seven-segment LED displays (configured to behave like a single eight-digit display). See [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of 7-segment displays and push-buttons. What is the difference between NPN and PNP type of BJT (Bipolar Junction Transistor).
 
    ![nexys A7 led and segment](../lab2-comparator/images/nexys-a7_leds-display.png)
-
-The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control signals which can be displayed on 7-segment display. A display consists of 7 LED segments to display the decimal digits `0` to `9` and letters `A` to `F`.
 
 <a name="task1"></a>
 
@@ -51,13 +56,6 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
    | `d` |      |   |   |   |   |   |   |   |
    | `E` | 1110 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
    | `F` | 1111 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
-
-<!--
-   > Note that, there are other types of segment displays, [such as 14- or 16-segment](http://avtanski.net/projects/lcd/).
-   >
-   > ![other displays](images/7-14-segment-display.jpg) &nbsp; &nbsp; &nbsp; &nbsp;
-   > ![other displays](images/16-segment-display.png)
--->
 
 2. Run Vivado, create a new RTL project `segment` with VHDL source file `bin2seg` and the following I/O ports:
 
