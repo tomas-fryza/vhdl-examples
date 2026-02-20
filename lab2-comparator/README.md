@@ -94,11 +94,11 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
    7. Click **Finish** to create the project
    8. Define I/O ports of new module:
 
-      * Port name: `a`, Direction: `input`, Bus: `check`, MSB: `1`, LSB: `0`
-      * `b`, `input`, Bus: `check`, MSB: `1`, LSB: `0`
-      * `b_gt`, `output`
-      * `b_a_eq`, `output`
-      * `a_gt`, `output`
+      * Port name: `a`, Direction: `in`, Bus: `check`, MSB: `1`, LSB: `0`
+      * `b`, `in`, Bus: `check`, MSB: `1`, LSB: `0`
+      * `b_gt`, `out`
+      * `b_a_eq`, `out`
+      * `a_gt`, `out`
 
 2. In VHDL, define an [architecture](https://github.com/tomas-fryza/vhdl-examples/wiki/Architecture) for a 2-bit binary comparator. The combination logic can be written using low-level operators (`and`, `or`, etc.) as assignment statements using SoP or PoS logic. However, it is more efficient to use a higher notation with [conditional signal assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments).
 
@@ -149,6 +149,14 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
 <a name="task3"></a>
 
 ## Task 3: Assertion statements
+
+Relying only on waveform inspection is not sufficient. Modern digital design requires **self-checking verification**, where the testbench evaluates whether the Design Under Test (DUT) behaves as expected. There are three levels of testing quality:
+
+   * Manual checking (bad). Inputs are applied and the waveform is visually inspected.
+
+   * Hardcoded expected values (better). Expected outputs are manually written for each test case.
+
+   * Computed expected model (best). The testbench computes expected results automatically and compares them with DUT outputs.
 
 During the simulation, you can write any information to the console using the **report statement**. The basic syntax in VHDL is:
 

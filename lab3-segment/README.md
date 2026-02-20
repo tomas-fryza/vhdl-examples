@@ -1,9 +1,9 @@
 # Lab 3: Seven-segment display decoder
 
-* [Part 1: VHDL code for seven-segment display decoder](#part1)
-* [Part 2: Structural modeling, instantiation](#part2)
-* [Part 3: Top level VHDL code](#part3)
-* [Part 4: Implement to FPGA](#part4)
+* [Task 1: Seven-segment display decoder](#task1)
+* [Task 2: Structural modeling, instantiation](#task2)
+* [Task 3: Top level](#task3)
+* [Task 4: Implementation to FPGA](#task4)
 * [Optional tasks](#tasks)
 * [Questions](#questions)
 * [References](#references)
@@ -23,28 +23,34 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
 
    ![nexys A7 led and segment](../lab2-comparator/images/nexys-a7_leds-display.png)
 
-The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control signals which can be displayed on 7-segment display. A display consists of 7 LED segments to display the decimal digits `0` to `9` and letters `A` to `F`. Complete the decoder truth table for **common anode** (active low) 7-segment display.
+The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control signals which can be displayed on 7-segment display. A display consists of 7 LED segments to display the decimal digits `0` to `9` and letters `A` to `F`.
+
+<a name="task1"></a>
+
+## Task 1: Seven-segment display decoder
+
+1. Complete the decoder truth table for **common anode** (active low) 7-segment display.
 
    ![https://lastminuteengineers.com/seven-segment-arduino-tutorial/](images/7-Segment-Display-Number-Formation-Segment-Contol.png)
 
    | **Symbol** | **Inputs** | **a** | **b** | **c** | **d** | **e** | **f** | **g** |
    | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-   | 0 | 0000 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-   | 1 | 0001 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
-   | 2 |      |   |   |   |   |   |   |   |
-   | 3 |      |   |   |   |   |   |   |   |
-   | 4 |      |   |   |   |   |   |   |   |
-   | 5 |      |   |   |   |   |   |   |   |
-   | 6 |      |   |   |   |   |   |   |   |
-   | 7 | 0111 | 0 | 0 | 0 | 1 | 1 | 1 | 1 |
-   | 8 | 1000 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-   | 9 |      |   |   |   |   |   |   |   |
-   | A |      |   |   |   |   |   |   |   |
-   | b |      |   |   |   |   |   |   |   |
-   | C |      |   |   |   |   |   |   |   |
-   | d |      |   |   |   |   |   |   |   |
-   | E | 1110 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
-   | F | 1111 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
+   | `0` | 0000 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+   | `1` | 0001 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
+   | `2` |      |   |   |   |   |   |   |   |
+   | `3` |      |   |   |   |   |   |   |   |
+   | `4` |      |   |   |   |   |   |   |   |
+   | `5` |      |   |   |   |   |   |   |   |
+   | `6` |      |   |   |   |   |   |   |   |
+   | `7` | 0111 | 0 | 0 | 0 | 1 | 1 | 1 | 1 |
+   | `8` | 1000 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+   | `9` |      |   |   |   |   |   |   |   |
+   | `A` |      |   |   |   |   |   |   |   |
+   | `b` |      |   |   |   |   |   |   |   |
+   | `C` |      |   |   |   |   |   |   |   |
+   | `d` |      |   |   |   |   |   |   |   |
+   | `E` | 1110 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
+   | `F` | 1111 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
 
 <!--
    > Note that, there are other types of segment displays, [such as 14- or 16-segment](http://avtanski.net/projects/lcd/).
@@ -53,29 +59,14 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
    > ![other displays](images/16-segment-display.png)
 -->
 
-<a name="part1"></a>
+2. Run Vivado, create a new RTL project `segment` with VHDL source file `bin2seg` and the following I/O ports:
 
-## Part 1: VHDL code for seven-segment display decoder
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `bin` | input   | `std_logic_vector(3 downto 0)` | 4-bit input |
+   | `seg` | output  | `std_logic_vector(6 downto 0)` | {a,b,c,d,e,f,g} active-low |
 
-1. Run Vivado and create a new project:
-
-   1. Project name: `segment`
-   2. Project location: your working folder, such as `Documents`
-   3. Project type: **RTL Project** (Note, the Register-Transfer Level refers to a level of abstraction used to describe how the data is transferred and processed inside hardware.)
-   4. Create a new VHDL source file: `bin2seg`
-   5. Do not add any constraints now
-   6. Choose a default board: `Nexys A7-50T`
-   7. Click **Finish** to create the project
-   8. Define I/O ports of new module:
-      * `bin`, `in`, Bus: `check`, MSB: `3`, LSB: `0`
-      * `seg`, `out`, Bus: `check`, MSB: `6`, LSB: `0`
-
-      | **Port name** | **Direction** | **Type** | **Description** |
-      | :-: | :-: | :-- | :-- |
-      | `bin` | input   | `std_logic_vector(3 downto 0)` | 4-bit input |
-      | `seg` | output  | `std_logic_vector(6 downto 0)` | {a,b,c,d,e,f,g} active-low |
-
-2. Use [combinational process](https://github.com/tomas-fryza/vhdl-examples/wiki/Processes) and complete an architecture of the decoder.
+3. Use [combinational process](https://github.com/tomas-fryza/vhdl-examples/wiki/Processes) and complete an architecture of the decoder.
 
    The process statement is very similar to the classical programming language. The code inside the process statement is executed sequentially. The process statement is declared in the concurrent section of the architecture, so two different processes are executed concurrently.
 
@@ -102,16 +93,18 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
            when x"1" =>
                seg <= "1001111";
 
-           -- WRITE YOUR CODE HERE
-           -- 2, 3, 4, 5, 6
+
+           -- TODO: Complete settings for 2, 3, 4, 5, 6
+
 
            when x"7" =>
                seg <= "0001111";
            when x"8" =>
                seg <= "0000000";
 
-           -- WRITE YOUR CODE HERE
-           -- 9, A, b, C, d
+
+           -- TODO: Complete settings for 9, A, b, C, d
+
 
            when x"E" =>
                seg <= "0110000";
@@ -121,41 +114,31 @@ The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control sign
    end process p_7seg_decoder;
    ```
 
-3. Create a VHDL simulation source `bin2seg_tb`, [generate testbench template](https://vhdl.lapinoo.net/testbench/), complete all test cases, and verify the functionality of your decoder.
+4. Create a VHDL simulation source `bin2seg_tb`, [generate testbench template](https://vhdl.lapinoo.net/testbench/), complete all test cases, and verify the functionality of your decoder.
+
+   Test cases can be also generated by a loop. **IMPORTANT:** In the following example you have to include `ieee.numeric_std.all` package for data types conversion.
 
    ```vhdl
-   -- Test case 1: Input binary value 0000
-   bin <= x"0";
-   wait for 50 ns;
-   assert seg = "0000001"
-     report "0 does not map to 0000001" severity error;
-
-   -- WRITE YOUR CODE HERE
+     library ieee;
+       use ieee.std_logic_1164.all;
+       use ieee.numeric_std.all; -- Definition of "to_unsigned"
+   
+     ...
+     -- Loop for all hex values
+     for i in 0 to 15 loop
+   
+       -- Convert decimal value `i` to 4-bit wide binary
+       bin <= std_logic_vector(to_unsigned(i, 4));
+       wait for 50 ns;
+   
+     end loop;
    ```
 
-   > **Note:** Test cases can be also generated by a loop. IMPORTANT: In the following example you have to also include `ieee.numeric_std.all` package for data types conversion.
-   >
-   > ```vhdl
-   >   library ieee;
-   >     use ieee.std_logic_1164.all;
-   >     use ieee.numeric_std.all; -- Definition of "to_unsigned"
-   >
-   >   ...
-   >   -- Loop for all hex values
-   >   for i in 0 to 15 loop
-   >
-   >     -- Convert decimal value `i` to 4-bit wide binary
-   >     bin <= std_logic_vector(to_unsigned(i, 4));
-   >     wait for 50 ns;
-   >
-   >   end loop;
-   > ```
+5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
 
-4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
+<a name="task2"></a>
 
-<a name="part2"></a>
-
-## Part 2: Structural modeling, instantiation
+## Task 2: Structural modeling, instantiation
 
 VHDL provides a mechanism how to build a larger [structural systems](https://surf-vhdl.com/vhdl-syntax-web-course-surf-vhdl/vhdl-structural-modeling-style/) from simpler or predesigned components. It is called an **instantiation**. Each instantiation statement creates an instance (copy) of a design entity.
 
@@ -199,11 +182,11 @@ begin
 end architecture;
 ```
 
-<a name="part3"></a>
+<a name="task3"></a>
 
-## Part 3: Top level VHDL code
+## Task 3: Top level
 
-Utilize the top-level design to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display,.
+Utilize the top-level design to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display.
 
 1. Create a new VHDL design source `segment_top` in your project.
 2. Define I/O ports as follows.
@@ -250,11 +233,9 @@ Utilize the top-level design to instantiate a `bin2seg` component and implement 
    end architecture behavioral;
    ```
 
-4. Display input switch value on LEDs.
+<a name="task4"></a>
 
-<a name="part4"></a>
-
-## Part 4: Implementing to FPGA
+## Task 4: Implementation to FPGA
 
 *A constraint is a rule that dictates a placement or timing restriction for the implementation. Constraints are not VHDL, and the syntax of constraints files differ between FPGA vendors.*
 
@@ -314,7 +295,9 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
 
 ## Optional tasks
 
-1. Extend the functionality of one-digit 7-segment decoder to drive a two-digit display. Upon pressing a button, the display will switch between the two digits.
+1. Display input switch value on LEDs.
+
+2. Extend the functionality of one-digit 7-segment decoder to drive a two-digit display. Upon pressing a button, the display will switch between the two digits.
 
    ![Top level, 2-digit](images/top-level_2-digit.png)
 
@@ -326,14 +309,16 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
      signal sig_tmp : std_logic_vector(3 downto 0);
 
    begin
-     -- Switch between inputs
-     sig_tmp <= sw_l when ... else
-                sw_r;
      ...
+
+     -- Switch between inputs
+     sig_tmp <= sw_l when (btnd = '1') else
+                sw_r;
 
      -- Set display positions
      an(7 downto 2) <= b"11_1111";
-     ...
+     an(1)          <= ...
+     an(0)          <= ...
 
    end architecture behavioral;
    ```
