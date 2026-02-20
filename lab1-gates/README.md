@@ -174,10 +174,10 @@ The module shall have two single-bit inputs `a`, `b` and three single-bit output
    library ieee;
    use ieee.std_logic_1164.all;
    -----------------------------------------------
-   entity tb_gates is
-   end tb_gates;
+   entity gates_tb is
+   end gates_tb;
    -----------------------------------------------
-   architecture tb of tb_gates is
+   architecture tb of gates_tb is
 
        component gates
            port (a     : in  std_logic;

@@ -38,7 +38,7 @@ library ieee;
 --   dp_vect(3:0) -- Decimal points for individual digits
 --
 -- Outputs:
---   dp:          -- Decimal point for specific digit
+--   dp           -- Decimal point for specific digit
 --   seg(6:0)     -- Cathode values for individual segments
 --   dig(3:0)     -- Common anode signals to individual digits
 --
