@@ -86,7 +86,7 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
       ```vhdl
       -- This combinational process decodes binary input
       -- `bin` into 7-segment display output `seg` for a
-      -- Common Anode configuration. (active-low outputs).
+      -- Common Anode configuration (active-low outputs).
       -- The process is triggered whenever `bin` changes.
 
       p_7seg_decoder : process (bin) is

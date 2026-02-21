@@ -30,6 +30,8 @@ end entity segment_top;
 -------------------------------------------------
 
 architecture behavioral of segment_top is
+
+    -- Declare component `bin2seg`
     component bin2seg is
         port (
             bin   : in    std_logic_vector(3 downto 0);
@@ -37,32 +39,33 @@ architecture behavioral of segment_top is
         );
     end component;
 
-    --! Local signal for 7-segment decoder
+    --! Internal signal for selected 4-bit input
     signal sig_tmp : std_logic_vector(3 downto 0);
 begin
 
-    --! Instantiate (make a copy of) `bin2seg` component to
-    --! decode binary input into seven-segment display signals.
+    --! Instantiate decoder
     display : component bin2seg
         port map (
             bin => sig_tmp,
             seg => seg
         );
 
-    -- Connect local signal to input switches
-    sig_tmp <= sw_l when (btnd = '1') else
-               sw_r;
-
-    -- Turn off decimal point
+    -- Turn off decimal point (inactive = '1')
     dp <= '1';
 
     -- Display input value(s) on LEDs
     led_r <= sw_r;
     led_l <= sw_l;
 
-    -- Set display position
+    -- Select left or right 4-bit input
+    sig_tmp <= sw_l when (btnd = '1') else
+               sw_r;
+
+    -- Disable unused digits (active-low logic)
     an(7 downto 2) <= b"11_1111";
-    an(1)          <= not(btnd);
-    an(0)          <= btnd;
+
+    -- Enable only one digit at a time
+    an(1) <= not(btnd);
+    an(0) <= btnd;
 
 end architecture behavioral;

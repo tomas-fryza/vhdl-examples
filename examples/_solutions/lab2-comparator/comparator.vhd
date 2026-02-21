@@ -42,14 +42,14 @@ begin
     ---------------------------------------------
     -- Method 1: Behavioral (recommended for design)
     ---------------------------------------------
-    -- b_gt <= '1' when (b > a) else
-    --         '0';
+    -- b_gt   <= '1' when (b > a) else
+    --           '0';
 
     b_a_eq <= '1' when (b = a) else
               '0';
 
-    a_gt <= '1' when (b < a) else
-            '0';
+    a_gt   <= '1' when (b < a) else
+              '0';
 
     ---------------------------------------------
     -- Method 2: Gate-level implementation (for learning only)

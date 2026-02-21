@@ -1,6 +1,6 @@
 library ieee;
     use ieee.std_logic_1164.all;
-    use ieee.numeric_std.all; -- Definition of "to_unsigned"
+    use ieee.numeric_std.all;  -- Required for "to_unsigned"
 
 -------------------------------------------------
 
@@ -18,7 +18,7 @@ architecture testbench of bin2seg_tb is
         );
     end component;
 
-    -- Testbench local signals
+    -- Testbench internal signals
     signal sig_bin : std_logic_vector(3 downto 0);
     signal sig_seg : std_logic_vector(6 downto 0);
 begin
@@ -37,13 +37,13 @@ begin
 
         report "Stimulus process started";
 
-        -- Loop for all hex values
+        -- Loop through all hexadecimal values (0 to 15)
         for i in 0 to 15 loop
 
-            -- Convert decimal value `i` to 4-bit wide binary
+            -- Convert integer i to 4-bit std_logic_vector
             sig_bin <= std_logic_vector(to_unsigned(i, 4));
             -- sig_bin <= std_logic_vector(to_unsigned(i, sig_bin'length));
-            wait for 50 ns;
+            wait for 10 ns;
 
             -- Expected segment values
             case sig_bin is
