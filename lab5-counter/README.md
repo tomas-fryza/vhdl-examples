@@ -397,7 +397,7 @@ To drive another logic in the design (with slower clock), it is better to genera
 
 1. Add a second instantiation (copy) of the counter and clock enable components and make a 16-bit counter with a 2 ms time base. Display the counter values on LEDs.
 
-   ![top level](images/top-level_challenge.png)
+   ![top level](images/top-level_ver3.png)
 
 2. Create a new component `up_down_counter` implementing bi-directional (up/down) binary counter.
 
