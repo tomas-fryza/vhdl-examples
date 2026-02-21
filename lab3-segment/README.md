@@ -79,9 +79,9 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
       end process process_label;
       ```
 
-   All signals that affect the output must be listed in the **sensitivity list**. For a combinational decoder, the process should be sensitive to `bin` only.
+   All signals that affect the output must be listed in the **sensitivity list**. If a VHDL process has no sensitivity list and no `wait` statement, then: it executes all sequential statements, and when it reaches the end process, it automatically restarts immediately!
 
-   Inside the process, use a `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments) to describe the mapping between the input value and the 7-segment output.
+   For a combinational decoder, the process should be sensitive to `bin` only. Inside the process, use a `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments) to describe the mapping between the input value and the 7-segment output.
 
       ```vhdl
       -- This combinational process decodes binary input
