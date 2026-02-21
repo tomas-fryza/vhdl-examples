@@ -153,9 +153,7 @@ Since VHDL-93, there are two main methods of instantiation:
 
    * **Direct instantiation** – The entity is instantiated directly inside the architecture of the parent design.
 
-   * **Component instantiation** – A component is first declared in the architecture, and then instantiated.
-
-In both cases, signals are connected using the `port map` statement.
+   * **Component instantiation** – A component is first declared in the architecture, and then instantiated. In both cases, signals are connected using the `port map` statement.
 
 The following example shows a simple structural design consisting of two 2-input XOR gates. The top-level entity connects two instances (`U1` and `U2`) of the `xor2` component.
 
@@ -203,9 +201,7 @@ In this example, `U1` and `U2` are two independent instances of the same compone
 
 ## Task 3: Top-level design and FPGA implementation
 
-In this task, you will integrate your `bin2seg` decoder into a **top-level entity** and implement the design on the **Nexys A7 FPGA board**.
-
-The 4-bit input value will be provided by slide switches, and the decoded output will drive one digit of the onboard 7-segment display.
+In this task, you will integrate your `bin2seg` decoder into a **top-level entity** and implement the design on the **Nexys A7 FPGA board**. The 4-bit input value will be provided by slide switches, and the decoded output will drive one digit of the onboard 7-segment display.
 
 1. Create a new VHDL design source named `segment_top`.
 2. Define the following I/O ports:
@@ -254,11 +250,11 @@ The 4-bit input value will be provided by slide switches, and the decoded output
 
    Only one digit must be enabled. All other digits must remain disabled to prevent multiple digits from lighting simultaneously.
 
-4. A **constraint** is a rule that dictates a placement or timing restriction for the implementation. Constraints are not VHDL, and the syntax of constraints files differ between FPGA vendors.*
+4. A **constraint** is a rule that dictates a placement or timing restriction for the implementation. Constraints are not VHDL, and the syntax of constraints files differ between FPGA vendors.
 
-   * __Physical constraints__ limit the placement of a signal or instance within the FPGA. The most common physical constraints are pin assignments. They tell the P&R (Place & Route) tool to which physical FPGA pins the top-level entity signals shall be mapped.*
+   * __Physical constraints__ limit the placement of a signal or instance within the FPGA. The most common physical constraints are pin assignments. They tell the P&R (Place & Route) tool to which physical FPGA pins the top-level entity signals shall be mapped.
 
-   * __Timing constraints__ set boundaries for the propagation time from one logic element to another. The most common timing constraint is the clock constraint. We need to specify the clock frequency so that the P&R tool knows how much time it has to work with between clock edges.*
+   * __Timing constraints__ set boundaries for the propagation time from one logic element to another. The most common timing constraint is the clock constraint. We need to specify the clock frequency so that the P&R tool knows how much time it has to work with between clock edges.
 
    In this design, only physical constraints are required.
 
