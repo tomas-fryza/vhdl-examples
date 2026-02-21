@@ -1,9 +1,8 @@
 # Lab 3: Seven-segment display decoder
 
 * [Task 1: Seven-segment display decoder](#task1)
-* [Task 2: Structural modeling, instantiation](#task2)
-* [Task 3: Top level](#task3)
-* [Task 4: Implementation to FPGA](#task4)
+* [Task 2: Structural modeling and instantiation](#task2)
+* [Task 3: Top-level design and FPGA implementation](#task3)
 * [Optional tasks](#tasks)
 * [Questions](#questions)
 * [References](#references)
@@ -21,10 +20,12 @@ After completing this laboratory, students will be able to:
 
 The Binary to 7-Segment Decoder converts 4-bit binary data to 7-bit control signals which can be displayed on 7-segment display. A display consists of 7 LED segments to display the decimal digits `0` to `9` and letters `A` to `F`.
 
-   > Note that, there are other types of segment displays, [such as 14- or 16-segment](http://avtanski.net/projects/lcd/).
-   >
-   > ![other displays](images/7-14-segment-display.jpg) &nbsp; &nbsp; &nbsp; &nbsp;
-   > ![other displays](images/16-segment-display.png)
+Note that, there are other types of segment displays, such as 9-, 14- or 16-segment.
+
+   ![other displays](images/7-segment.png) &nbsp; &nbsp; &nbsp; &nbsp;
+   ![other displays](images/9-segment.png) &nbsp; &nbsp; &nbsp; &nbsp;
+   ![other displays](images/14-segment.png) &nbsp; &nbsp; &nbsp; &nbsp;
+   ![other displays](images/16-segment.png)
 
 The Nexys A7 board provides two four-digit common anode seven-segment LED displays (configured to behave like a single eight-digit display). See [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of 7-segment displays and push-buttons. What is the difference between NPN and PNP type of BJT (Bipolar Junction Transistor).
 
@@ -34,11 +35,11 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
 
 ## Task 1: Seven-segment display decoder
 
-1. Complete the decoder truth table for **common anode** (active low) 7-segment display.
+1. Complete the decoder truth table for a **common anode** (active low) 7-segment display.
 
    ![https://lastminuteengineers.com/seven-segment-arduino-tutorial/](images/7-Segment-Display-Number-Formation-Segment-Contol.png)
 
-   | **Symbol** | **Inputs** | **a** | **b** | **c** | **d** | **e** | **f** | **g** |
+   | **Symbol** | **bin** | **a** | **b** | **c** | **d** | **e** | **f** | **g** |
    | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
    | `0` | 0000 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
    | `1` | 0001 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
@@ -57,146 +58,166 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
    | `E` | 1110 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
    | `F` | 1111 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
 
-2. Run Vivado, create a new RTL project `segment` with VHDL source file `bin2seg` and the following I/O ports:
+2. Run Vivado, create a new RTL project named `segment` with a VHDL source file `bin2seg`. Use the following I/O ports:
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
-   | `bin` | input   | `std_logic_vector(3 downto 0)` | 4-bit input |
-   | `seg` | output  | `std_logic_vector(6 downto 0)` | {a,b,c,d,e,f,g} active-low |
+   | `bin` | in   | `std_logic_vector(3 downto 0)` | 4-bit hexadecimal input |
+   | `seg` | out  | `std_logic_vector(6 downto 0)` | {a,b,c,d,e,f,g} active-low outputs |
 
-3. Use [combinational process](https://github.com/tomas-fryza/vhdl-examples/wiki/Processes) and complete an architecture of the decoder.
+3. Use a [combinational process](https://github.com/tomas-fryza/vhdl-examples/wiki/Processes) to describe the decoder behavior.
 
-   The process statement is very similar to the classical programming language. The code inside the process statement is executed sequentially. The process statement is declared in the concurrent section of the architecture, so two different processes are executed concurrently.
+   A process in VHDL is similar to a block in classical programming languages: statements inside the process are executed sequentially. However, the process itself runs concurrently with other processes in the architecture.
 
-   ```vhdl
-   process_label : process (sensitivity_list) is
-       -- Declarative part (can be empty)
-   begin
-       -- Sequential statements
-   end process process_label;
-   ```
+   General structure:
 
-   In the process sensitivity list are declared all the signal which the process is sensitive to. In the following example, the process is evaluated any time a transaction is scheduled on the signal `bin` only. Inside a process, `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments) can be used.
+      ```vhdl
+      process_label : process (sensitivity_list) is
+          -- Declarative part (optional)
+      begin
+          -- Sequential statements
+      end process process_label;
+      ```
 
-   ```vhdl
-   -- This combinational process decodes binary input
-   -- `bin` into 7-segment display output `seg` for a
-   -- Common Anode configuration. When `bin` changes,
-   -- the process is triggered.
-   p_7seg_decoder : process (bin) is
-   begin
-       case bin is
-           when x"0" =>
-               seg <= "0000001";
-           when x"1" =>
-               seg <= "1001111";
+   All signals that affect the output must be listed in the **sensitivity list**. For a combinational decoder, the process should be sensitive to `bin` only.
 
+   Inside the process, use a `case`-`when` [assignments](https://github.com/tomas-fryza/vhdl-examples/wiki/Signal-assignments) to describe the mapping between the input value and the 7-segment output.
 
-           -- TODO: Complete settings for 2, 3, 4, 5, 6
+      ```vhdl
+      -- This combinational process decodes binary input
+      -- `bin` into 7-segment display output `seg` for a
+      -- Common Anode configuration. (active-low outputs).
+      -- The process is triggered whenever `bin` changes.
 
+      p_7seg_decoder : process (bin) is
+      begin
+          case bin is
+              when x"0" =>
+                  seg <= "0000001";
+              when x"1" =>
+                  seg <= "1001111";
 
-           when x"7" =>
-               seg <= "0001111";
-           when x"8" =>
-               seg <= "0000000";
+              -- TODO: Complete settings for 2, 3, 4, 5, 6
 
+              when x"7" =>
+                  seg <= "0001111";
+              when x"8" =>
+                  seg <= "0000000";
 
-           -- TODO: Complete settings for 9, A, b, C, d
+              -- TODO: Complete settings for 9, A, b, C, d
 
+              when x"E" =>
+                  seg <= "0110000";
 
-           when x"E" =>
-               seg <= "0110000";
-           when others =>
-               seg <= "0111000";
-       end case;
-   end process p_7seg_decoder;
-   ```
+              -- Default case (e.g., for undefined values)
+              when others =>
+                  seg <= "0111000";
+          end case;
+      end process p_7seg_decoder;
+      ```
 
-4. Create a VHDL simulation source `bin2seg_tb`, [generate testbench template](https://vhdl.lapinoo.net/testbench/), complete all test cases, and verify the functionality of your decoder.
+4. Create a VHDL simulation source file named `bin2seg_tb`. [Generate a testbench template](https://vhdl.lapinoo.net/testbench/) and complete all test cases to verify the functionality of your decoder.
 
-   Test cases can be also generated by a loop. **IMPORTANT:** In the following example you have to include `ieee.numeric_std.all` package for data types conversion.
+   Test cases can also be generated automatically using a loop. **Important:** You must include the `ieee.numeric_std.all` package to use the `to_unsigned` conversion function.
 
-   ```vhdl
-     library ieee;
-       use ieee.std_logic_1164.all;
-       use ieee.numeric_std.all; -- Definition of "to_unsigned"
+   Example:
+
+      ```vhdl
+      library ieee;
+      use ieee.std_logic_1164.all;
+      use ieee.numeric_std.all;  -- Required for "to_unsigned"
    
-     ...
-     -- Loop for all hex values
-     for i in 0 to 15 loop
+      ...
+
+      -- Loop through all hexadecimal values (0 to 15)
+      for i in 0 to 15 loop
    
-       -- Convert decimal value `i` to 4-bit wide binary
-       bin <= std_logic_vector(to_unsigned(i, 4));
-       wait for 50 ns;
+          -- Convert integer i to 4-bit std_logic_vector
+          bin <= std_logic_vector(to_unsigned(i, 4));
+          wait for 10 ns;
    
-     end loop;
-   ```
+      end loop;
+      ```
 
 5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
 
 <a name="task2"></a>
 
-## Task 2: Structural modeling, instantiation
+## Task 2: Structural modeling and instantiation
 
-VHDL provides a mechanism how to build a larger [structural systems](https://surf-vhdl.com/vhdl-syntax-web-course-surf-vhdl/vhdl-structural-modeling-style/) from simpler or predesigned components. It is called an **instantiation**. Each instantiation statement creates an instance (copy) of a design entity.
+VHDL allows designers to build larger digital systems from smaller, reusable components. This design approach is called [**structural modeling**](https://surf-vhdl.com/vhdl-syntax-web-course-surf-vhdl/vhdl-structural-modeling-style/), based on **instantiation**.
 
-VHDL-93 and later offers two methods of instantiation: **direct instantiation** and **component instantiation**. In direct instantiation, the entity itself is directly instantiated within the architecture of the parent entity. In component instantiation, the component needs to be defined within the parental architecture first. In both, the ports are connected using the port map.
+An instantiation statement creates an instance (a copy) of an existing design entity inside another design. In this way, complex systems can be constructed hierarchically from simpler building blocks.
 
-Example shows the component instantiation statement defining a simple netlist. Here, the two instances (copies) U1 and U2 are instantiations of the 2-input XOR gate component:
+Since VHDL-93, there are two main methods of instantiation:
 
-![component instance](images/component_example.png)
+   * **Direct instantiation** – The entity is instantiated directly inside the architecture of the parent design.
 
-```vhdl
-...
-architecture behavioral of top_level is
-  -- Component declaration
-  component xor2 is
-    port (
-      in1  : in  std_logic;
-      in2  : in  std_logic;
-      out1 : out std_logic
-    );
-  end component;
+   * **Component instantiation** – A component is first declared in the architecture, and then instantiated.
 
-  -- Local signal
-  signal sig_tmp : std_logic;
+In both cases, signals are connected using the `port map` statement.
 
-begin
-  -- Component instantiations
-  U1 : xor2
-    port map (
-      in1  => a,
-      in2  => b,
-      out1 => sig_tmp
-    );
+The following example shows a simple structural design consisting of two 2-input XOR gates. The top-level entity connects two instances (`U1` and `U2`) of the `xor2` component.
 
-  U2 : xor2
-    port map (
-      in1  => sig_tmp,
-      in2  => c,
-      out1 => y
-    );
+   ![component instance](images/component_example.png)
 
-end architecture;
-```
+   ```vhdl
+   architecture behavioral of top_level is
+
+       -- Component declaration
+       component xor2 is
+            port (
+                in1  : in  std_logic;
+                in2  : in  std_logic;
+                out1 : out std_logic
+            );
+       end component;
+
+       -- Internal signal
+       signal sig_tmp : std_logic;
+
+   begin
+
+       -- First XOR instance
+       U1 : xor2
+           port map (
+               in1  => a,
+               in2  => b,
+               out1 => sig_tmp
+           );
+
+       -- Second XOR instance
+       U2 : xor2
+           port map (
+               in1  => sig_tmp,
+               in2  => c,
+               out1 => y
+           );
+
+   end architecture behavioral;
+   ```
+
+In this example, `U1` and `U2` are two independent instances of the same component, the signal `sig_tmp` connects the output of the first XOR gate to the input of the second, and the architecture describes a structural netlist rather than behavioral logic.
 
 <a name="task3"></a>
 
-## Task 3: Top level
+## Task 3: Top-level design and FPGA implementation
 
-Utilize the top-level design to instantiate a `bin2seg` component and implement the seven-segment display decoder on the Nexys A7 board. Input for the decoder is obtained from four slide switches, and the output is directed to a single 7-segment display.
+In this task, you will integrate your `bin2seg` decoder into a **top-level entity** and implement the design on the **Nexys A7 FPGA board**.
 
-1. Create a new VHDL design source `segment_top` in your project.
-2. Define I/O ports as follows.
+The 4-bit input value will be provided by slide switches, and the decoded output will drive one digit of the onboard 7-segment display.
+
+1. Create a new VHDL design source named `segment_top`.
+2. Define the following I/O ports:
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
-   | `sw`  | in  | `std_logic_vector(3 downto 0)` | Input data |
+   | `sw`  | in  | `std_logic_vector(3 downto 0)` | Slide switch inputs |
    | `seg` | out | `std_logic_vector(6 downto 0)` | Seven-segment cathodes CA..CG (active-low) |
-   | `dp` | out | `std_logic` | Decimal point |
-   | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
+   | `dp` | out | `std_logic` | Decimal point (active-low) |
+   | `an` | out | `std_logic_vector(7 downto 0)` | Digit enable anodes AN7..AN0 (active-low) |
 
-3. Use component instantiation of `bin2seg` and define the top-level architecture.
+3. Use component instantiation to connect `bin2seg` and define the top-level architecture.
 
    ![Top level, 1-digit](images/top-level_1-digit.png)
 
@@ -204,119 +225,116 @@ Utilize the top-level design to instantiate a `bin2seg` component and implement 
 
    ```vhdl
    architecture behavioral of segment_top is
-     -- Declare component `bin2seg`
-     component bin2seg is
-       port (
-         bin : in    std_logic_vector(3 downto 0);
-         seg : out   std_logic_vector(6 downto 0)
-       );
-     end component;
+
+       -- Declare component `bin2seg`
+       component bin2seg is
+           port (
+               bin : in  std_logic_vector(3 downto 0);
+               seg : out std_logic_vector(6 downto 0)
+           );
+       end component;
 
    begin
 
-     -- Instantiate (make a copy of) `bin2seg` component to decode
-     -- binary input into seven-segment display signals.
-     display : bin2seg
-       port map (
-         bin => sw,
-         seg => seg
-       );
+       -- Instantiate decoder
+       display : bin2seg
+           port map (
+               bin => sw,
+               seg => seg
+           );
 
-     -- Turn off decimal point
+       -- Turn off decimal point (inactive = '1')
+       dp <= ...
 
-
-     -- Set digit position
-
+       -- Enable only the rightmost digit (AN0 active-low)
+       an <= ...
 
    end architecture behavioral;
    ```
 
-<a name="task4"></a>
+   Only one digit must be enabled. All other digits must remain disabled to prevent multiple digits from lighting simultaneously.
 
-## Task 4: Implementation to FPGA
+4. A **constraint** is a rule that dictates a placement or timing restriction for the implementation. Constraints are not VHDL, and the syntax of constraints files differ between FPGA vendors.*
 
-*A constraint is a rule that dictates a placement or timing restriction for the implementation. Constraints are not VHDL, and the syntax of constraints files differ between FPGA vendors.*
+   * __Physical constraints__ limit the placement of a signal or instance within the FPGA. The most common physical constraints are pin assignments. They tell the P&R (Place & Route) tool to which physical FPGA pins the top-level entity signals shall be mapped.*
 
-*__Physical constraints__ limit the placement of a signal or instance within the FPGA. The most common physical constraints are pin assignments. They tell the P&R (Place & Route) tool to which physical FPGA pins the top-level entity signals shall be mapped.*
+   * __Timing constraints__ set boundaries for the propagation time from one logic element to another. The most common timing constraint is the clock constraint. We need to specify the clock frequency so that the P&R tool knows how much time it has to work with between clock edges.*
 
-*__Timing constraints__ set boundaries for the propagation time from one logic element to another. The most common timing constraint is the clock constraint. We need to specify the clock frequency so that the P&R tool knows how much time it has to work with between clock edges.*
+   In this design, only physical constraints are required.
 
-The Nexys A7 board provides sixteen switches and LEDs. The switches can be used to provide inputs, and the LEDs can be used as output devices.
+5. Create a new constraints file `nexys` (XDC file).
 
-1. See [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out components you are using.
+6. Copy relevant pin assignments from the [Nexys A7-50T](../examples/_solutions/nexys.xdc) constraint file or use the following minimal constrains:
 
-2. The Nexys A7 board have hardwired connections between FPGA chip and the switches, LEDs, seven-segment displays, and others. To use these devices, it is necessary to include in your project the correct pin assignments:
+   ```xdc
+   set_property PACKAGE_PIN J15 [get_ports {sw[0]}]
+   set_property PACKAGE_PIN L16 [get_ports {sw[1]}]
+   set_property PACKAGE_PIN M13 [get_ports {sw[2]}]
+   set_property PACKAGE_PIN R15 [get_ports {sw[3]}]
+   set_property IOSTANDARD LVCMOS33 [get_ports {sw[*]}]
 
-   1. Create a new constraints source `nexys` (XDC file).
-   2. Copy/paste default constraints from [Nexys-A7-50T-Master.xdc](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) to `nexys.xdc` file, uncomment used pins according to the `segment_top` entity or use the following minimal constrains:
+   set_property PACKAGE_PIN T10 [get_ports {seg[6]}] ; # CA
+   set_property PACKAGE_PIN R10 [get_ports {seg[5]}] ; # CB
+   set_property PACKAGE_PIN K16 [get_ports {seg[4]}] ; # CC
+   set_property PACKAGE_PIN K13 [get_ports {seg[3]}] ; # CD
+   set_property PACKAGE_PIN P15 [get_ports {seg[2]}] ; # CE
+   set_property PACKAGE_PIN T11 [get_ports {seg[1]}] ; # CF
+   set_property PACKAGE_PIN L18 [get_ports {seg[0]}] ; # CG
+   set_property PACKAGE_PIN H15 [get_ports {dp}]
+   set_property IOSTANDARD LVCMOS33 [get_ports {seg[*] dp}]
 
-        ```xdc
-        set_property PACKAGE_PIN J15 [get_ports {sw[0]}] ; # SW_0
-        set_property PACKAGE_PIN L16 [get_ports {sw[1]}] ; # SW_1
-        set_property PACKAGE_PIN M13 [get_ports {sw[2]}] ; # SW_2
-        set_property PACKAGE_PIN R15 [get_ports {sw[3]}] ; # SW_3
-        set_property IOSTANDARD LVCMOS33 [get_ports {sw[*]}]
+   set_property PACKAGE_PIN J17 [get_ports {an[0]}]
+   set_property PACKAGE_PIN J18 [get_ports {an[1]}]
+   set_property PACKAGE_PIN T9  [get_ports {an[2]}]
+   set_property PACKAGE_PIN J14 [get_ports {an[3]}]
+   set_property PACKAGE_PIN P14 [get_ports {an[4]}]
+   set_property PACKAGE_PIN T14 [get_ports {an[5]}]
+   set_property PACKAGE_PIN K2  [get_ports {an[6]}]
+   set_property PACKAGE_PIN U13 [get_ports {an[7]}]
+   set_property IOSTANDARD LVCMOS33 [get_ports {an[*]}]
+   ```
 
-        set_property PACKAGE_PIN T10 [get_ports {seg[6]}] ; # CA
-        set_property PACKAGE_PIN R10 [get_ports {seg[5]}] ; # CB
-        set_property PACKAGE_PIN K16 [get_ports {seg[4]}] ; # CC
-        set_property PACKAGE_PIN K13 [get_ports {seg[3]}] ; # CD
-        set_property PACKAGE_PIN P15 [get_ports {seg[2]}] ; # CE
-        set_property PACKAGE_PIN T11 [get_ports {seg[1]}] ; # CF
-        set_property PACKAGE_PIN L18 [get_ports {seg[0]}] ; # CG
-        set_property PACKAGE_PIN H15 [get_ports {dp}]     ; # DP
-        set_property IOSTANDARD LVCMOS33 [get_ports {seg[*] dp}]
+7. Implement your design to Nexys A7 board:
 
-        set_property PACKAGE_PIN J17 [get_ports {an[0]}] ; # AN0
-        set_property PACKAGE_PIN J18 [get_ports {an[1]}] ; # AN1
-        set_property PACKAGE_PIN T9  [get_ports {an[2]}] ; # AN2
-        set_property PACKAGE_PIN J14 [get_ports {an[3]}] ; # AN3
-        set_property PACKAGE_PIN P14 [get_ports {an[4]}] ; # AN4
-        set_property PACKAGE_PIN T14 [get_ports {an[5]}] ; # AN5
-        set_property PACKAGE_PIN K2  [get_ports {an[6]}] ; # AN6
-        set_property PACKAGE_PIN U13 [get_ports {an[7]}] ; # AN7
-        set_property IOSTANDARD LVCMOS33 [get_ports {an[*]}]
-        ```
+   1. Click **Generate Bitstream** (the process is time consuming and may take some time).
+   2. Open **Hardware Manager**.
+   3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
+   4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/segment.runs/impl_1/segment_top.bit`.
 
-3. Implement your design to Nexys A7 board:
+8. Test the functionality of the seven-segment display decoder by toggling the switches and observing the display.
 
-   1. Use **Flow > Generate Bitstream** (the process is time consuming and can take tens of seconds).
-   2. Select **Open Hardware Manager**.
-   3. Click on **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
-   4. Click on **Program device** and select generated bitstream `YOUR-PROJECT-FOLDER/segment.runs/impl_1/segment_top.bit`.
-
-4. Test the functionality of the seven-segment display decoder by toggling the switches and observing the display.
-
-5. Use **IMPLEMENTATION > Open Implemented Design > Schematic** to see the generated structure.
+9. Use **IMPLEMENTATION > Open Implemented Design > Schematic** to see the generated structure.
 
 <a name="tasks"></a>
 
 ## Optional tasks
 
-1. Display input switch value on LEDs.
+1. Display input `bin` value on LEDs.
 
-2. Extend the functionality of one-digit 7-segment decoder to drive a two-digit display. Upon pressing a button, the display will switch between the two digits.
+2. Use 8 slide switches to extend the one-digit 7-segment decoder to drive a two-digit display. When the button `btnd` is pressed, the display should switch between the two digits and only one digit should be active at a time.
 
    ![Top level, 2-digit](images/top-level_2-digit.png)
 
    ```vhdl
    architecture behavioral of segment_top is
-     ...
+       ...
 
-     -- Local signal for 7-segment decoder
-     signal sig_tmp : std_logic_vector(3 downto 0);
+       -- Internal signal for selected 4-bit input
+       signal sig_tmp : std_logic_vector(3 downto 0);
 
    begin
-     ...
+       ...
 
-     -- Switch between inputs
-     sig_tmp <= sw_l when (btnd = '1') else
-                sw_r;
+       -- Select left or right 4-bit input
+       sig_tmp <= sw_l when (btnd = '1') else
+                  sw_r;
 
-     -- Set display positions
-     an(7 downto 2) <= b"11_1111";
-     an(1)          <= ...
-     an(0)          <= ...
+       -- Disable unused digits (active-low logic)
+       an(7 downto 2) <= b"11_1111";
+
+       -- Enable only one digit at a time
+       an(1) <= ...  -- left digit
+       an(0) <= ...  -- right digit
 
    end architecture behavioral;
    ```
@@ -325,7 +343,19 @@ The Nexys A7 board provides sixteen switches and LEDs. The switches can be used 
 
 ## Questions
 
-1. TBD
+1. What is the difference between a common anode and a common cathode 7-segment display?
+
+2. What would happen if the `bin` signal were not included in the process sensitivity list?
+
+3. What is the purpose of the `when others` branch in the `case` statement?
+
+4. What is the purpose of a top-level entity in an FPGA design?
+
+5. What does instantiation mean in VHDL?
+
+6. What is the purpose of the `port map` statement?
+
+6. Why must only one digit (`an`) be enabled at a time on the Nexys A7 display?
 
 <a name="references"></a>
 
