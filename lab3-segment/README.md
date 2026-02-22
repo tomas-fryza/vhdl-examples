@@ -1,4 +1,4 @@
-# Lab 3: Seven-segment display decoder
+# Laboratory 3: Seven-segment display decoder
 
 * [Task 1: Seven-segment display decoder](#task1)
 * [Task 2: Structural modeling and instantiation](#task2)
@@ -29,7 +29,7 @@ Note that, there are other types of segment displays, such as 9-, 14- or 16-segm
 
 The Nexys A7 board provides two four-digit common anode seven-segment LED displays (configured to behave like a single eight-digit display). See [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of 7-segment displays and push-buttons. What is the difference between NPN and PNP type of BJT (Bipolar Junction Transistor).
 
-   ![nexys A7 led and segment](../lab2-comparator/images/nexys-a7_leds-display.png)
+   ![nexys A7 led and segment](images/nexys-a7_leds-display.png)
 
 <a name="task1"></a>
 
@@ -62,8 +62,8 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
-   | `bin` | in   | `std_logic_vector(3 downto 0)` | 4-bit hexadecimal input |
-   | `seg` | out  | `std_logic_vector(6 downto 0)` | {a,b,c,d,e,f,g} active-low outputs |
+   | `bin` | in | `std_logic_vector(3 downto 0)` | 4-bit hexadecimal input |
+   | `seg` | out | `std_logic_vector(6 downto 0)` | {a,b,c,d,e,f,g} active-low outputs |
 
 3. Use a [combinational process](https://github.com/tomas-fryza/vhdl-examples/wiki/Processes) to describe the decoder behavior.
 
@@ -208,7 +208,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
-   | `sw`  | in  | `std_logic_vector(3 downto 0)` | Slide switch inputs |
+   | `sw`  | in | `std_logic_vector(3 downto 0)` | Slide switch inputs |
    | `seg` | out | `std_logic_vector(6 downto 0)` | Seven-segment cathodes CA..CG (active-low) |
    | `dp` | out | `std_logic` | Decimal point (active-low) |
    | `an` | out | `std_logic_vector(7 downto 0)` | Digit enable anodes AN7..AN0 (active-low) |
