@@ -152,11 +152,11 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
 
 Relying only on waveform inspection is not sufficient. Modern digital design requires **self-checking verification**, where the testbench evaluates whether the Design Under Test (DUT) behaves as expected. There are three levels of testing quality:
 
-   * Manual checking (bad). Inputs are applied and the waveform is visually inspected.
+   * **Manual checking** (bad). Inputs are applied and the waveform is visually inspected.
 
-   * Hardcoded expected values (better). Expected outputs are manually written for each test case.
+   * **Hardcoded expected values** (better). Expected outputs are manually written for each test case.
 
-   * Computed expected model (best). The testbench computes expected results automatically and compares them with DUT outputs.
+   * **Computed expected model** (best). The testbench computes expected results automatically and compares them with DUT outputs.
 
 During the simulation, you can write any information to the console using the **report statement**. The basic syntax in VHDL is:
 
@@ -181,16 +181,16 @@ Assertions are part of verification methodology and allow automated checking of 
 Remember, the message is displayed to the console when the condition is NOT met, therefore the message should be an opposite to the condition.
 
    ```vhdl
-   -------------------------------------------------
    p_stimulus : process is
    begin
 
-     -- Report a note at the beginning of stimulus process
      report "Stimulus process started";
 
      -- Test case is followed by the expected output value(s). If assert
      -- condition is false, then an error is reported to the console.
+
      b <= "00"; a <= "00"; wait for 10 ns;
+
      assert (b_gt = '0') and (b_a_eq = '1') and (a_gt = '0')
        report "[ERROR] Unexpected result" severity error;
 
