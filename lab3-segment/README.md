@@ -208,10 +208,10 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
-   | `sw`  | in | `std_logic_vector(3 downto 0)` | Slide switch inputs |
+   | `sw`  | in | `std_logic_vector(3 downto 0)` | Slide switches SW3..SW0 |
    | `seg` | out | `std_logic_vector(6 downto 0)` | Seven-segment cathodes CA..CG (active-low) |
-   | `dp` | out | `std_logic` | Decimal point (active-low) |
-   | `an` | out | `std_logic_vector(7 downto 0)` | Digit enable anodes AN7..AN0 (active-low) |
+   | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
+   | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
 
 3. Use component instantiation to connect `bin2seg` and define the top-level architecture.
 
@@ -321,7 +321,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
    begin
        ...
 
-       -- Select left or right 4-bit input
+       -- Select left or right 4-bit input (multiplexor)
        sig_tmp <= sw_l when (btnd = '1') else
                   sw_r;
 
