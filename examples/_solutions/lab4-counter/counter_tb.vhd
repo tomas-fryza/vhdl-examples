@@ -7,16 +7,16 @@ library ieee;
 
 -------------------------------------------------
 
-entity tb_counter is
-end entity tb_counter;
+entity counter_tb is
+end entity counter_tb;
 
 -------------------------------------------------
 
-architecture tb of tb_counter is
+architecture tb of counter_tb is
 
   component counter is
     generic (
-      n_bits : integer
+      N_BITS : integer
     );
     port (
       clk   : in    std_logic;
@@ -26,11 +26,11 @@ architecture tb of tb_counter is
     );
   end component counter;
 
-  constant c_nbits : integer := 5;
-  signal   clk     : std_logic;
-  signal   rst     : std_logic;
-  signal   en      : std_logic;
-  signal   count   : std_logic_vector(c_nbits - 1 downto 0);
+  constant C_N_BITS : integer := 8;  -- Change this value to scale the counter
+  signal   clk      : std_logic;
+  signal   rst      : std_logic;
+  signal   en       : std_logic;
+  signal   count    : std_logic_vector(C_N_BITS - 1 downto 0);
 
   constant tbperiod   : time      := 10 ns; -- EDIT Put right period here
   signal   tbclock    : std_logic := '0';
@@ -40,7 +40,7 @@ begin
 
   dut : component counter
     generic map (
-      n_bits => c_nbits
+      N_BITS => C_N_BITS
     )
     port map (
       clk   => clk,
@@ -59,17 +59,14 @@ begin
   stimuli : process is
   begin
 
-    -- EDIT Adapt initialization as needed
     en <= '1';
 
     -- Reset generation
-    -- EDIT: Check that rst is really your reset signal
     rst <= '1';
     wait for 100 ns;
     rst <= '0';
     wait for 100 ns;
 
-    -- EDIT Add stimuli here
     wait for 33 * tbperiod;
     en <= '0';
     wait for 6 * tbperiod;
@@ -93,10 +90,3 @@ begin
   end process stimuli;
 
 end architecture tb;
-
--- Configuration block below is required by some simulators. Usually no need to edit.
-
-configuration cfg_tb_counter of tb_counter is
-    for tb
-    end for;
-end cfg_tb_counter;

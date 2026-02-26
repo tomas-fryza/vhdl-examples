@@ -203,7 +203,7 @@ In this example, `U1` and `U2` are two independent instances of the same compone
 
 In this task, you will integrate your `bin2seg` decoder into a **top-level entity** and implement the design on the **Nexys A7 FPGA board**. The 4-bit input value will be provided by slide switches, and the decoded output will drive one digit of the onboard 7-segment display.
 
-1. Create a new VHDL design source named `segment_top`.
+1. Create a new VHDL design source named `segment_top` in your project.
 2. Define the following I/O ports:
 
    | **Port name** | **Direction** | **Type** | **Description** |

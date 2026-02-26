@@ -22,13 +22,16 @@ This repository contains VHDL examples for the bachelor-level course [*Digital E
 1. [Basic logic gates](lab1-gates)
 2. [Binary comparator](lab2-comparator)
 3. [Seven-segment display decoder](lab3-segment)
-4. [Arithmetic-logic unit (ALU)](lab4-alu)
-5. [Binary counter](lab5-counter)
+4. [Binary counter](lab5-counter)
+
+<!--
 6. [LFSR counter](lab6-lfsr)
 7. [UART transmitter](lab7-uart)
-8. [VHDL project](lab8-project)
+-->
 
-![vhdl_course](examples/_archive/_07-display_driver/images/nexys-lab.jpg)
+[VHDL project](lab8-project)
+
+   ![vhdl_course](examples/_archive/_07-display_driver/images/nexys-lab.jpg)
 
 ## Installation(s)
 
