@@ -7,13 +7,14 @@ GHDL    = ghdl
 GTKWAVE = gtkwave
 
 # Top-level testbench entity
-TOP     = counter_tb
+# TOP     = counter_tb
+TOP     = clk_en_tb
 
 # Waveform file
 VCD     = counter.vcd
 
 # VHDL source files
-SRCS    = counter.vhd counter_tb.vhd
+SRCS    = counter.vhd counter_tb.vhd clk_en.vhd clk_en_tb.vhd
 
 # Default target
 all: sim

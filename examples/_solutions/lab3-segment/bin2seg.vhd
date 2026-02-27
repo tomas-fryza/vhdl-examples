@@ -1,6 +1,6 @@
 -------------------------------------------------
 --! @brief Binary to 7-segment decoder (common anode, 1 digit)
---! @version 1.4
+--! @version 1.5
 --! @copyright (c) 2018-2026 Tomas Fryza, MIT license
 --!
 --! This design decodes a 4-bit binary input into control
@@ -41,45 +41,41 @@ begin
     begin
         case bin is
             when x"0" =>
-                seg <= "0000001";
+                seg <= b"000_0001";
             when x"1" =>
-                seg <= "1001111";
-
-            -- TODO: Complete settings for 2, 3, 4, 5, 6
-
+                seg <= b"100_1111";
             when x"2" =>
-                seg <= "0010010";
+                seg <= b"001_0010";
             when x"3" =>
-                seg <= "0000110";
+                seg <= b"000_0110";
             when x"4" =>
-                seg <= "1001100";
+                seg <= b"100_1100";
             when x"5" =>
-                seg <= "0100100";
+                seg <= b"010_0100";
             when x"6" =>
-                seg <= "0100000";
+                seg <= b"010_0000";
             when x"7" =>
-                seg <= "0001111";
+                seg <= b"000_1111";
             when x"8" =>
-                seg <= "0000000";
-
-            -- TODO: Complete settings for 9, A, b, C, d
-
+                seg <= b"000_0000";
             when x"9" =>
-                seg <= "0000100";
+                seg <= b"000_0100";
             when x"A" =>
-                seg <= "0001000";
+                seg <= b"000_1000";
             when x"b" =>
-                seg <= "1100000";
+                seg <= b"110_0000";
             when x"C" =>
-                seg <= "0110001";
+                seg <= b"011_0001";
             when x"d" =>
-                seg <= "1000010";
+                seg <= b"100_0010";
             when x"E" =>
-                seg <= "0110000";
+                seg <= b"011_0000";
+            when x"F" =>
+                seg <= b"011_1000";
 
             -- Default case (e.g., for undefined values)
             when others =>
-                seg <= "0111000";
+                seg <= b"111_1111";  -- All segments off
         end case;
     end process p_7seg_decoder;
 

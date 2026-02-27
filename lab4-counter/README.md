@@ -38,142 +38,8 @@ A simple **N-bit counter** is a digital circuit and has N output bits representi
 > }
 > ```
 
-<a name="task1"></a>
-
-## Task 1: Simple counter
-
-1. Run Vivado, create a new RTL project named `counter` with a VHDL source file `counter` and implement a 4-bit up counter with active-high reset and enable input. Use the following I/O ports:
-
-    | **Port name** | **Direction** | **Type** | **Description** |
-    | :-: | :-: | :-- | :-- |
-    | `clk`   | in | `std_logic` | Main clock |
-    | `rst`   | in | `std_logic` | High-active synchronous reset |
-    | `en`    | in | `std_logic` | Clock enable input |
-    | `count` | out | `std_logic_vector(3 downto 0)` | Counter value |
-
-2. Use VHDL templates in menu **Tools > Language Templates**, search for `up counters`, and select the one using clock enable (CE) and synchronous active-high reset. Copy/paste this template to the architecture and modify the code according to your I/O port names.
-
-   > **Note:** The up counter template is located in:
-   > ```bash
-   > Language Templates:
-   > VHDL
-   >   Synthesis Constructs
-   >     Coding Examples
-   >       Counters
-   >         Binary
-   >           Up Counters
-   >             /w CE and Sync Active High Reset
-   > ```
-
-   ```vhdl
-   architecture behavioral of counter is
-       ...
-   begin
-
-       process (<clock>)
-       begin
-       if <clock>='1' and <clock>'event then
-           if <reset>='1' then
-               <count> <= (others => '0');
-           elsif <clock_enable>='1' then
-               <count> <= <count> + 1;
-           end if;
-       end if;
-       end process;
-
-   end behavioral;
-   ```
-
-   Hints:
-      * Use `rising_edge(clk)` instead of `clk='1' and clk'event` to test clock edge
-      * Statement `(others => '0')` initializes all elements of the array to binary zero
-      * Define an internal signal `sig_count` of data type `std_logic_vector(3 downto 0)` to implement the counter. This is because the **output** port `count` cannot be read and therefore the operation `count + 1` cannot be performed
-      * Add `use ieee.std_logic_unsigned.all;` package to use arithmetic operations with `std_logic_vector` data type
-      * Outside the process, connect internal signal to counter output
-
-   <!--
-   **FYI:** The structure below describes a 4-bit counter in RTL (higher) level.
-
-   ![simple counter rtl](images/teros_simple-counter_rtl.png)
-   -->
-
-<a name="task2"></a>
-
-## Task 2: VHDL generics
-
-A VHDL **generic** allows the designer to parametrize the entity during the component instantiation and it is a great way to create modular code that can be quickly changed to accommodate a wide variety of designs. Since a generic cannot be modified inside the architecture, it is like a constant.
-
-Instead of writing:
-
-   ```vhdl
-   entity some_entity is
-       port (
-           clk     : in    std_logic;
-           counter : out   std_logic_vector(3 downto 0) -- Hard coded to be 4 bits long
-       );
-   end entity some_entity;
-   ```
-
-We can write:
-
-   ```vhdl
-   entity some_entity is
-       generic (
-           N_BITS : integer := some_default_value
-       );
-       port (
-           clk     : in    std_logic;
-           counter : out   std_logic_vector(N_BITS-1 downto 0) -- Can be any width
-           -- (the desired width will be passed during instantiation in the generic map)
-       );
-   end entity some_entity;
-   ```
 
 
-
-
-
-1. Create [testbench](https://vhdl.lapinoo.net/testbench/) file `counter_tb`.
-
-2. In **design source**, use generic `N_BITS` to define number of bits for the counter. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
-
-   ```vhdl
-   -- Design source file
-   entity counter is
-       generic (
-           N_BITS : integer := 4 --! Default number of bits
-       );
-       port (
-           ...
-       );
-   end entity counter;
-   ```
-
-   ```vhdl
-   -- Testbench file
-   constant C_NBITS : integer := 6; --! Simulating number of bits
-   signal count : std_logic_vector(C_NBITS-1 downto 0);
-   ```
-
-   When you instantiate your counter, you then also bind the `N_BITS` generic to this constant:
-
-   ```vhdl
-   dut : component counter
-       generic map (
-           N_BITS => C_NBITS
-       )
-       ...
-   ```
-
-3. Run the simulation, test the functionality of `rst` and `en` signals, and try several `C_N_BITS` values.
-
-   > Note that for any vector, it is possible to change the numeric system in the simulation which represents the current value. To do so, right-click the vector name and select **Radix > Unsigned Decimal** from the context menu. You can change the vector color by **Signal Color** as well.
-
-   > ![Change radix](images/vivado_radix.png)
-
-4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
-
-5. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
 
 <a name="task3"></a>
 
@@ -323,6 +189,165 @@ T_{clk}=\frac{1}{f_{clk}}=
    > **Note:** The default simulation run time in Vivado is set to 1000&nbsp;ns You can change it in the menu **Tools > Settings...**
    >
    > ![Specify simulation run time in Vivado](images/vivado_run_time.png)
+
+
+
+
+
+<a name="task2"></a>
+
+## Task 2: VHDL generics
+
+A VHDL **generic** allows the designer to parametrize the entity during the component instantiation and it is a great way to create modular code that can be quickly changed to accommodate a wide variety of designs. Since a generic cannot be modified inside the architecture, it is like a constant.
+
+Instead of writing:
+
+   ```vhdl
+   entity some_entity is
+       port (
+           clk     : in    std_logic;
+           counter : out   std_logic_vector(3 downto 0) -- Hard coded to be 4 bits long
+       );
+   end entity some_entity;
+   ```
+
+We can write:
+
+   ```vhdl
+   entity some_entity is
+       generic (
+           N_BITS : integer := some_default_value
+       );
+       port (
+           clk     : in    std_logic;
+           counter : out   std_logic_vector(N_BITS-1 downto 0) -- Can be any width
+           -- (the desired width will be passed during instantiation in the generic map)
+       );
+   end entity some_entity;
+   ```
+
+
+
+
+
+1. Create [testbench](https://vhdl.lapinoo.net/testbench/) file `counter_tb`.
+
+2. In **design source**, use generic `N_BITS` to define number of bits for the counter. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
+
+   ```vhdl
+   -- Design source file
+   entity counter is
+       generic (
+           N_BITS : integer := 4 --! Default number of bits
+       );
+       port (
+           ...
+       );
+   end entity counter;
+   ```
+
+   ```vhdl
+   -- Testbench file
+   constant C_NBITS : integer := 6; --! Simulating number of bits
+   signal count : std_logic_vector(C_NBITS-1 downto 0);
+   ```
+
+   When you instantiate your counter, you then also bind the `N_BITS` generic to this constant:
+
+   ```vhdl
+   dut : component counter
+       generic map (
+           N_BITS => C_NBITS
+       )
+       ...
+   ```
+
+3. Run the simulation, test the functionality of `rst` and `en` signals, and try several `C_N_BITS` values.
+
+   > Note that for any vector, it is possible to change the numeric system in the simulation which represents the current value. To do so, right-click the vector name and select **Radix > Unsigned Decimal** from the context menu. You can change the vector color by **Signal Color** as well.
+
+   > ![Change radix](images/vivado_radix.png)
+
+4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
+
+5. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
+
+
+
+
+
+
+
+
+
+
+
+<a name="task1"></a>
+
+## Task 1: Simple counter
+
+1. Run Vivado, create a new RTL project named `counter` with a VHDL source file `counter` and implement a 4-bit up counter with active-high reset and enable input. Use the following I/O ports:
+
+    | **Port name** | **Direction** | **Type** | **Description** |
+    | :-: | :-: | :-- | :-- |
+    | `clk`   | in | `std_logic` | Main clock |
+    | `rst`   | in | `std_logic` | High-active synchronous reset |
+    | `en`    | in | `std_logic` | Clock enable input |
+    | `count` | out | `std_logic_vector(3 downto 0)` | Counter value |
+
+2. Use VHDL templates in menu **Tools > Language Templates**, search for `up counters`, and select the one using clock enable (CE) and synchronous active-high reset. Copy/paste this template to the architecture and modify the code according to your I/O port names.
+
+   > **Note:** The up counter template is located in:
+   > ```bash
+   > Language Templates:
+   > VHDL
+   >   Synthesis Constructs
+   >     Coding Examples
+   >       Counters
+   >         Binary
+   >           Up Counters
+   >             /w CE and Sync Active High Reset
+   > ```
+
+   ```vhdl
+   architecture behavioral of counter is
+       ...
+   begin
+
+       process (<clock>)
+       begin
+       if <clock>='1' and <clock>'event then
+           if <reset>='1' then
+               <count> <= (others => '0');
+           elsif <clock_enable>='1' then
+               <count> <= <count> + 1;
+           end if;
+       end if;
+       end process;
+
+   end behavioral;
+   ```
+
+   Hints:
+      * Use `rising_edge(clk)` instead of `clk='1' and clk'event` to test clock edge
+      * Statement `(others => '0')` initializes all elements of the array to binary zero
+      * Define an internal signal `sig_count` of data type `std_logic_vector(3 downto 0)` to implement the counter. This is because the **output** port `count` cannot be read and therefore the operation `count + 1` cannot be performed
+      * Add `use ieee.std_logic_unsigned.all;` package to use arithmetic operations with `std_logic_vector` data type
+      * Outside the process, connect internal signal to counter output
+
+   <!--
+   **FYI:** The structure below describes a 4-bit counter in RTL (higher) level.
+
+   ![simple counter rtl](images/teros_simple-counter_rtl.png)
+   -->
+
+
+
+
+
+
+
+
 
 
 

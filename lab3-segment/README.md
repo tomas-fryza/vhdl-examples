@@ -43,14 +43,14 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
    | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
    | `0` | 0000 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
    | `1` | 0001 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
-   | `2` |      |   |   |   |   |   |   |   |
+   | `2` | 0010 | 0 | 0 | 1 | 0 | 0 | 1 | 0 |
    | `3` |      |   |   |   |   |   |   |   |
    | `4` |      |   |   |   |   |   |   |   |
    | `5` |      |   |   |   |   |   |   |   |
    | `6` |      |   |   |   |   |   |   |   |
    | `7` | 0111 | 0 | 0 | 0 | 1 | 1 | 1 | 1 |
    | `8` | 1000 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-   | `9` |      |   |   |   |   |   |   |   |
+   | `9` | 1001 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
    | `A` |      |   |   |   |   |   |   |   |
    | `b` |      |   |   |   |   |   |   |   |
    | `C` |      |   |   |   |   |   |   |   |
@@ -93,28 +93,42 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
       begin
           case bin is
               when x"0" =>
-                  seg <= "0000001";
+                  seg <= b"000_0001";
               when x"1" =>
-                  seg <= "1001111";
+                  seg <= b"100_1111";
+              when x"2" =>
+                  seg <= b"001_0010";
 
-              -- TODO: Complete settings for 2, 3, 4, 5, 6
+              -- TODO: Complete settings for 3, 4, 5, 6
 
               when x"7" =>
-                  seg <= "0001111";
+                  seg <= b"000_1111";
               when x"8" =>
-                  seg <= "0000000";
+                  seg <= b"000_0000";
+              when x"9" =>
+                  seg <= b"000_0100";
 
-              -- TODO: Complete settings for 9, A, b, C, d
+              -- TODO: Complete settings for A, b, C, d
 
               when x"E" =>
-                  seg <= "0110000";
+                  seg <= b"011_0000";
+              when x"F" =>
+                  seg <= b"011_1000";
 
               -- Default case (e.g., for undefined values)
               when others =>
-                  seg <= "0111000";
+                  seg <= b"111_1111";  -- All segments off
           end case;
       end process p_7seg_decoder;
       ```
+
+   > **Note:** Binary and hexadecimal representation in VHDL:
+   >    * `x"0"` 
+   >       - `x` means hexadecimal (base 16)
+   >       - `"0"` is the hex value, ie it represents 4 binary bits
+   >    * `b"000_0001"`
+   >       - `b` means binary (base 2)
+   >       - Underscores `_` are only for readability
 
 4. Create a VHDL simulation source file named `bin2seg_tb`. [Generate a testbench template](https://vhdl.lapinoo.net/testbench/) and complete all test cases to verify the functionality of your decoder.
 
@@ -129,15 +143,24 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
    
       ...
 
-      -- Loop through all hexadecimal values (0 to 15)
-      for i in 0 to 15 loop
+      p_stimulus : process is
+      begin
+          -- Loop through all hexadecimal values (0 to 15)
+          for i in 0 to 15 loop
    
-          -- Convert integer i to 4-bit std_logic_vector
-          bin <= std_logic_vector(to_unsigned(i, 4));
-          wait for 10 ns;
+              -- Convert integer i to 4-bit std_logic_vector
+              bin <= std_logic_vector(to_unsigned(i, 4));
+              wait for 10 ns;
    
-      end loop;
+          end loop;
+          wait;
+      end process p_stimulus;
       ```
+
+   > **Note:** In VHDL, different data types may need to be converted before performing other operations. Here's how to convert data types:
+   >
+   >    ![data types](images/Types_Conversion_Diagram.png)
+
 
 5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
 
@@ -162,8 +185,7 @@ The following example shows a simple structural design consisting of two 2-input
    ```vhdl
    architecture behavioral of top_level is
 
-       -- Component declaration
-       component xor2 is
+       component xor2 is            -- Component declaration
             port (
                 in1  : in  std_logic;
                 in2  : in  std_logic;
@@ -171,27 +193,22 @@ The following example shows a simple structural design consisting of two 2-input
             );
        end component;
 
-       -- Internal signal
-       signal sig_tmp : std_logic;
+       signal sig_tmp : std_logic;  -- Internal signal
 
    begin
-
-       -- First XOR instance
-       U1 : xor2
+       U1 : xor2                    -- First XOR instance
            port map (
                in1  => a,
                in2  => b,
                out1 => sig_tmp
            );
 
-       -- Second XOR instance
-       U2 : xor2
+       U2 : xor2                    -- Second XOR instance
            port map (
                in1  => sig_tmp,
                in2  => c,
                out1 => y
            );
-
    end architecture behavioral;
    ```
 
