@@ -44,7 +44,7 @@ To drive other logic in the design that requires a slower operation, it is bette
    | 500&nbsp;ms |  |  |  |
    | 1&nbsp;sec | 100_000_000 | `b"101_1111_0101_1110_0001_0000_0000"` | `x"5F5_E100"` | 27 |
 
-2. Run Vivado, create a new RTL project named `counter`, add a VHDL source file `clk_en`, and implement a clock enable circuit which generates one-clock-cycle positive pulse every `MAX` clock periods. Use the following I/O ports:
+2. Run Vivado, create a new RTL project named `counter`, add a VHDL source file `clk_en`, and implement a clock enable circuit which generates one-clock-cycle positive pulse every `G_MAX` clock periods. Use the following I/O ports:
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
