@@ -22,7 +22,7 @@ This repository contains VHDL examples for the bachelor-level course [*Digital E
 1. [Basic logic gates](lab1-gates)
 2. [Binary comparator](lab2-comparator)
 3. [Seven-segment display decoder](lab3-segment)
-4. [Binary counter](lab5-counter)
+4. [Binary counter](lab4-counter)
 
 <!--
 6. [LFSR counter](lab6-lfsr)
