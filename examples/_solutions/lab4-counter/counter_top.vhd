@@ -63,11 +63,11 @@ architecture behavioral of counter_top is
         );
     end component bin2seg;
 
-    -- Local signals for first counter: 4-bit @ 250 ms
+    -- Internal signals for first counter: 4-bit @ 250 ms
     signal sig_en_250ms : std_logic;                     --! Clock enable signal for 4-bit counter
     signal sig_cnt_4bit : std_logic_vector(3 downto 0);  --! 4-bit counter value
 
-    -- Local signal for second counter: 16-bit @ 2 ms
+    -- Internal signal for second counter: 16-bit @ 2 ms
     signal sig_en_2ms : std_logic;  --! Clock enable signal for 16-bit counter
 
 begin
@@ -83,7 +83,7 @@ begin
             ce  => sig_en_250ms
         );
 
-    -- Component instantiation of 4-bit simple counter
+    -- Component instantiation of 4-bit binary counter
     counter0 : component counter
         generic map (
             G_BITS => 4
@@ -119,7 +119,7 @@ begin
             ce  => sig_en_2ms
         );
 
-    -- Component instantiation of 16-bit simple counter
+    -- Component instantiation of 16-bit binary counter
     counter1 : component counter
         generic map (
             G_BITS => 16

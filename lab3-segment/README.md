@@ -58,7 +58,7 @@ The Nexys A7 board provides two four-digit common anode seven-segment LED displa
    | `E` | 1110 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
    | `F` | 1111 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
 
-2. Run Vivado, create a new RTL project named `segment` with a VHDL source file `bin2seg`. Use the following I/O ports:
+2. Run Vivado, create a new RTL project named `segment` and add a VHDL source file `bin2seg`. Use the following I/O ports:
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
@@ -220,7 +220,7 @@ In this example, `U1` and `U2` are two independent instances of the same compone
 
 In this task, you will integrate your `bin2seg` decoder into a **top-level entity** and implement the design on the **Nexys A7 FPGA board**. The 4-bit input value will be provided by slide switches, and the decoded output will drive one digit of the onboard 7-segment display.
 
-1. Create a new VHDL design source named `segment_top` in your project.
+1. In your project, create a new VHDL design source file named `segment_top`.
 2. Define the following I/O ports:
 
    | **Port name** | **Direction** | **Type** | **Description** |

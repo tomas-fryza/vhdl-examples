@@ -1,9 +1,8 @@
 # Laboratory 4: Binary counter
 
-* [Task 1: Simple counter](#task1)
-* [Task 2: VHDL generics](#task2)
-* [Task 3: Clock enable](#task3)
-* [Task 4: Top-level design and FPGA implementation](#task4)
+* [Task 1: Clock enable](#task1)
+* [Task 2: Binary counter](#task2)
+* [Task 3: Top-level design and FPGA implementation](#task3)
 * [Optional tasks](#tasks)
 * [Questions](#questions)
 * [References](#references)
@@ -18,66 +17,25 @@ After completing this laboratory, students will be able to:
 
 ### Background
 
-A simple **N-bit counter** is a digital circuit and has N output bits representing the count value. It counts up sequentially from `0` to `2^N-1`, where `N` is the number of bits and then wraps around back to 0. When the reset signal is asserted, the counter is reset to 0. Many digital circuits have a **clock enable** input. This signal is used to enable or disable the counting operation of the counter. When the clock enable signal is active (typically high), the counter counts normally with the clock input. When the clock enable signal is inactive (typically low), the counter holds its current value and does not count.
+A binary **N-bit counter** is a digital circuit with **N output bits** representing the current count value. It counts sequentially from `0` to `2^N-1` and then wraps around back to `0`. When the reset signal is asserted, the counter is cleared and starts again from `0`.
 
-![simple counter](images/wavedrom_simple_counter.png)
+Many digital circuits include an **enable** (clock enable) input. This signal controls whether the counter is allowed to increment. When the clock enable signal is active (typically high), the counter updates its value on each clock edge and counts normally. When the clock enable signal is inactive (typically low), the counter holds its current value and does not increment.
 
-> The figure above was created in [WaveDrom](https://wavedrom.com/) digital timing diagram online tool. The figure source code is as follows:
-> 
-> ```javascript
-> {
->   signal: [
->     ["inputs",
->       {name: "clk", wave: 'P.................'},
->       {name: "rst", wave: 'lnhpl.............'},
->       {name: "en",  wave: 'h.............pl..'},
->     ],
->     {},
->     {name: "count[2:0]", wave: 'x.3.33333333333...', data: ["0","1","2","3","4","5","6","7","0","1","2","3"]},
->   ],
-> }
-> ```
+![simple counter](images/waveform_counter.png)
 
+<a name="task1"></a>
 
+## Task 1: Clock enable
 
+To drive other logic in the design that requires a slower operation, it is better to generate a **clock enable signal** (see figure bellow) instead of creating a new clock domain using clock dividers. Creating additional clock domains may cause timing issues or clock domain crossing (CDC) problems such as metastability, data loss, and data incoherency.
 
-<a name="task3"></a>
+![Clock enable](images/waveform_clock-enable.png)
 
-## Task 3: VHDL code for clock enable
+1. Calculate how many clock cycles of a 100&nbsp;MHz clock (period 10&nbsp;ns) correspond to the following time intervals: 2&nbsp;ms, 4&nbsp;ms, 8&nbsp;ms, 10&nbsp;ms, 250&nbsp;ms, 500&nbsp;ms, and 1&nbsp;s.
 
-To drive another logic in the design (with slower clock), it is better to generate a **clock enable signal** (see figure bellow) instead of creating another clock domain (using clock dividers) that would cause timing issues or clock domain crossing problems such as metastability, data loss, and data incoherency.
+   Express each result in decimal, binary, and hexadecimal forms. What is the minimum number of bits required for each counter?
 
-![Clock enable](images/wavedrom_clock_enable.png)
-
-> ```javascript
-> {
->   signal: [
->     ["inputs",
->       {name: "clk", wave: 'P.................'},
->       {name: "rst", wave: 'lnhpl.............'},
->     ],
->     {},
->     ["internal",
->       {name: "sig_count", wave: 'x.3.33333333333333', data: ["0","1","2","3","4","5","0","1","2","3","4","5","0","1","2",]},
->     ],
->     {},
->     ["output",
->       {name: "pulse", wave: 'l.......hl....hl..'},
->     ],
->   ],
->   head: {
->   },
->   foot: {
->     text: 'N_PERIODS = 6',
->   },
-> }
-> ```
-
-
-
-
-1. Calculate how many periods of clock signal with frequency of 100&nbsp;MHz contain time intervals 2&nbsp;ms, 4&nbsp;ms, 10&nbsp;ms, 250&nbsp;ms, 500&nbsp;ms, and 1&nbsp;s. Write values in decimal, binary, and hexadecimal forms.
-
+<!--
    &nbsp;
    ![clock period](images/freq.png)
    &nbsp;
@@ -85,368 +43,419 @@ To drive another logic in the design (with slower clock), it is better to genera
    ![number of periods](images/periods.png)
    &nbsp;
 
-<!--
 https://editor.codecogs.com/
 T_{clk}=\frac{1}{f_{clk}}=
 \textup{number of clk period} = \frac{\textup{time interval}}{T_{clk}}=
 -->
 
-   | **Time interval** | **Number of clk periods** | **Number of clk periods in hex** | **Number of clk periods in binary** | **Number of bits** |
+   | **Time interval** | **Clock cycles (decimal)** | **Binary** | **Hexadecimal** | **Required bits** |
    | :-: | :-: | :-: | :-: | :-: |
-   | 2&nbsp;ms | 200_000 | `x"3_0d40"` | `b"0011_0000_1101_0100_0000"` | 18 |
+   | 2&nbsp;ms | 200_000 | `b"11_0000_1101_0100_0000"` | `x"3_0d40"` | 18 |
    | 4&nbsp;ms |  |  |  |  |
+   | 8&nbsp;ms |  |  |  |  |
    | 10&nbsp;ms |  |  |  |  |
-   | 250&nbsp;ms | 25_000_000 | `x"17d_7840"` | `b"0001_0111_1101_0111_1000_0100_0000"` | 25 |
+   | 250&nbsp;ms | 25_000_000 | `b"1_0111_1101_0111_1000_0100_0000"` | `x"17d_7840"` | 25 |
    | 500&nbsp;ms |  |  |  |
-   | 1&nbsp;sec | 100_000_000 | `x"5F5_E100"` | `b"0101_1111_0101_1110_0001_0000_0000"` | 27 |
+   | 1&nbsp;sec | 100_000_000 | `b"101_1111_0101_1110_0001_0000_0000"` | `x"5F5_E100"` | 27 |
 
+1. Run Vivado, create a new RTL project named `counter`, add a VHDL source file `clk_en`, and implement a clock enable circuit which generates one-clock-cycle positive pulse every `MAX` clock periods. Use the following I/O ports:
 
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `clk` | in | `std_logic` | Main clock |
+   | `rst` | in | `std_logic` | High-active synchronous reset |
+   | `en` | out | `std_logic` | One-clock-cycle enable pulse |
 
+2. A VHDL **generic** is a parameter of an entity that allows the designer to configure the design at instantiation time. It makes the design flexible and reusable, because the same entity can be used with different parameter values without modifying its internal code.
 
+   A generic behaves similarly to a constant:
 
+      * Its value is defined when the component is instantiated.
+      * It cannot be changed inside the architecture.
+      * It is typically used to define sizes, limits, or timing parameters.
 
+   In this example, the generic `G_MAX` defines how many clock periods must pass before a single enable pulse is generated. Extend the entity with such a `generic`:
 
+      ```vhdl
+      entity clk_en is
+          generic (
+              G_MAX : positive := 5  -- Default number of clock cycles
+          );
+          port (
+              clk : in  std_logic;
+              rst : in  std_logic;
+              en  : out std_logic
+          );
+      end entity clk_en;
+      ```
 
+   > **Note:** Here is a clear overview of the basic numeric data types in VHDL and their differences.
+   >
+   > | **Type** | **Range / Values** | **Typical use** |
+   > |----------|--------------------|-----------------|
+   > | `integer` | Tool-defined (can be constrained) | Loop variables, generics, counters |
+   > | `natural` | 0 to integer'high | Non-negative generics, parameters |
+   > | `positive` | 1 to integer'high | Size definitions, generics |
+   > | `std_logic_vector` | Array of `'0'`, `'1'`, `'X'`, `'Z'`, etc.| Data buses, ports, bit signals |
+   > | `unsigned` | 0 to 2^N − 1 | Counters, non-negative arithmetic |
+   > | `signed` | −2^(N−1) to 2^(N−1) − 1 | Signed arithmetic |
 
-
-
-
-1. Create a new VHDL source file: `clock_en` and define I/O ports as follows:
-
-   | **Port name** | **Direction** | **Type** | **Description**
-   | :-: | :-: | :-- | :--
-   | `clk`   | in | `std_logic` | Main clock
-   | `rst`   | in | `std_logic` | High-active synchronous reset
-   | `pulse` | out | `std_logic` | Clock enable pulse signal
-
-2. Add generic `N_PERIODS` to the entity defining the default number of clk periods to generate one pulse.
+3. Use a **synchronous process** and complete the architecture of the clock enable circuit. The internal counter `sig_cnt` is used to track clock pulses.
 
    ```vhdl
-   entity clock_en is
-       generic (
-           N_PERIODS : integer := 6
-       );
-       port (
-           ...
-       );
-   end entity clock_en;
-   ```
+   architecture behavioral of clk_en is
 
-3. Another way how to create a counter is the usage of `integer` data type. In architecture declaration part, define a local counter using the range of integers needed for `N_PERIODS` values. Because all incrementations will be performed with integers and not `std_logic_vector`, no extra package is used.
+       -- Internal counter
+       signal sig_cnt : integer range 0 to G_MAX-1;
 
-   ```vhdl
-   library ieee;
-       use ieee.std_logic_1164.all;
-
-   ...
-   architecture behavioral of clock_en is
-       --! Local counter
-       signal sig_count : integer range 0 to N_PERIODS-1;
    begin
-   ```
 
-4. Complete the architecture to define the `clock_en` according to the following structure.
-
-   ```vhdl
-   begin
-       --! Count the number of clock pulses from zero to N_PERIODS-1.
-       p_clk_enable : process (clk) is
+       -- Count clock pulses and generate a one-clock-cycle enable pulse
+       process (clk) is
        begin
+           if rising_edge(clk) then  -- Synchronous process
+               if rst = '1' then     -- High-active reset
+                   ce      <= '0';   -- Reset output
+                   sig_cnt <= 0;     -- Reset internal counter
 
-           -- Synchronous process
-           if (rising_edge(clk)) then
-               -- if high-active reset then
-                   -- Clear integer counter
+               elsif sig_cnt = G_MAX-1 then
+                   -- TODO: Set output pulse and reset internal counter
 
-               -- elsif sig_count is less than N_PERIODS-1 then
-                   -- Counting
+               else
+                   -- TODO: Clear output and increment internal counter
 
-               -- else reached the end of counter
-                   -- Clear integer counter
-
-               -- Each `if` must end by `end if`
-           end if;
-
-       end process p_clk_enable;
-
-       -- Generated pulse is always one clock long
-       -- when sig_count = N_PERIODS-1
-
+               end if;  -- End if for reset/check
+           end if;      -- End if for rising_edge
+       end process;
 
    end architecture behavioral;
    ```
 
-5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+3. Create a VHDL simulation source file named `clk_en_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
 
-6. Create a VHDL simulation source `clock_en_tb`, simulate reset functionality and 100 clock periods. Test several `N_PERIODS` values within your testbench.
-
+   <!--
    > **Solution:** [https://www.edaplayground.com/x/5LiJ](https://www.edaplayground.com/x/5LiJ)
+   -->
 
-   > **Note:** To change the testbench you want to simulate, right click to testbench file name and select `Set as Top`.
-   >
-   > ![Set as Top](images/vivado_set_top.png)
+4. In a **testbench**, you need to manually add the **generic** section for the component.
 
-   > **Note:** The default simulation run time in Vivado is set to 1000&nbsp;ns You can change it in the menu **Tools > Settings...**
-   >
-   > ![Specify simulation run time in Vivado](images/vivado_run_time.png)
+   ```vhdl
+   architecture tb of clk_en_tb is
 
+       component clk_en is
+           generic (
+               G_MAX : positive
+           );
+           port (
+               clk : in  std_logic;
+               rst : in  std_logic;
+               ce  : out std_logic
+           );
+       end component clk_en;
 
+       ...
 
+   begin
 
+       dut : component clk_en
+           generic map (
+               G_MAX => 10  -- Change only this value to modify the counting
+           )
+           port map (
+               clk => clk,
+               rst => rst,
+               ce  => ce
+           );
+
+       ...
+
+   end architecture tb;
+   ```
+
+5. Run the simulation, test the functionality of the `rst` and `en` signals, and try several `G_MAX` values.
+
+   > **Note:** For any vector, you can change the numeric display format in the simulation. To do this, right-click the vector name and select **Radix > Unsigned Decimal** from the context menu. You can also change the vector color using **Signal Color**.
+   > 
+   > ![Change radix](images/vivado_radix.png)
+
+6. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+
+7. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
 
 <a name="task2"></a>
 
-## Task 2: VHDL generics
+## Task 2: Binary counter
 
-A VHDL **generic** allows the designer to parametrize the entity during the component instantiation and it is a great way to create modular code that can be quickly changed to accommodate a wide variety of designs. Since a generic cannot be modified inside the architecture, it is like a constant.
+1. In your project, create a new VHDL design source file named `counter`.
 
-Instead of writing:
+2. Copy the [design](../examples/_solutions/lab4-counter/counter.vhd) into your `counter.vhd` file.
 
-   ```vhdl
-   entity some_entity is
-       port (
-           clk     : in    std_logic;
-           counter : out   std_logic_vector(3 downto 0) -- Hard coded to be 4 bits long
-       );
-   end entity some_entity;
-   ```
+3. (Optionaly) Create a VHDL simulation source file named `counter_tb`, copy the [testbench](../examples/_solutions/lab4-counter/counter_tb.vhd), and test several `C_BITS` values.
 
-We can write:
+   > **Note:** In the testbench, the generic value (`G_MAX`) is defined as a constant `C_MAX`. To test different counter widths, you can change this value in the testbench file before running the simulation.
 
-   ```vhdl
-   entity some_entity is
-       generic (
-           N_BITS : integer := some_default_value
-       );
-       port (
-           clk     : in    std_logic;
-           counter : out   std_logic_vector(N_BITS-1 downto 0) -- Can be any width
-           -- (the desired width will be passed during instantiation in the generic map)
-       );
-   end entity some_entity;
-   ```
-
-
-
-
-
-1. Create [testbench](https://vhdl.lapinoo.net/testbench/) file `counter_tb`.
-
-2. In **design source**, use generic `N_BITS` to define number of bits for the counter. In **testbench**, define a constant `C_NBITS`, prior to declaring the component and use it to declare your internal counter signal:
-
-   ```vhdl
-   -- Design source file
-   entity counter is
-       generic (
-           N_BITS : integer := 4 --! Default number of bits
-       );
-       port (
-           ...
-       );
-   end entity counter;
-   ```
-
-   ```vhdl
-   -- Testbench file
-   constant C_NBITS : integer := 6; --! Simulating number of bits
-   signal count : std_logic_vector(C_NBITS-1 downto 0);
-   ```
-
-   When you instantiate your counter, you then also bind the `N_BITS` generic to this constant:
-
-   ```vhdl
-   dut : component counter
-       generic map (
-           N_BITS => C_NBITS
-       )
-       ...
-   ```
-
-3. Run the simulation, test the functionality of `rst` and `en` signals, and try several `C_N_BITS` values.
-
-   > Note that for any vector, it is possible to change the numeric system in the simulation which represents the current value. To do so, right-click the vector name and select **Radix > Unsigned Decimal** from the context menu. You can change the vector color by **Signal Color** as well.
-
-   > ![Change radix](images/vivado_radix.png)
-
-4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis. Note that RTL (Register Transfer Level) represents digital circuit at the abstract level.
-
-5. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
-
-
-
-
-
-
-
-
-
-
-
-<a name="task1"></a>
-
-## Task 1: Simple counter
-
-1. Run Vivado, create a new RTL project named `counter` with a VHDL source file `counter` and implement a 4-bit up counter with active-high reset and enable input. Use the following I/O ports:
-
-    | **Port name** | **Direction** | **Type** | **Description** |
-    | :-: | :-: | :-- | :-- |
-    | `clk`   | in | `std_logic` | Main clock |
-    | `rst`   | in | `std_logic` | High-active synchronous reset |
-    | `en`    | in | `std_logic` | Clock enable input |
-    | `count` | out | `std_logic_vector(3 downto 0)` | Counter value |
-
-2. Use VHDL templates in menu **Tools > Language Templates**, search for `up counters`, and select the one using clock enable (CE) and synchronous active-high reset. Copy/paste this template to the architecture and modify the code according to your I/O port names.
-
-   > **Note:** The up counter template is located in:
-   > ```bash
-   > Language Templates:
-   > VHDL
-   >   Synthesis Constructs
-   >     Coding Examples
-   >       Counters
-   >         Binary
-   >           Up Counters
-   >             /w CE and Sync Active High Reset
-   > ```
-
-   ```vhdl
-   architecture behavioral of counter is
-       ...
-   begin
-
-       process (<clock>)
-       begin
-       if <clock>='1' and <clock>'event then
-           if <reset>='1' then
-               <count> <= (others => '0');
-           elsif <clock_enable>='1' then
-               <count> <= <count> + 1;
-           end if;
-       end if;
-       end process;
-
-   end behavioral;
-   ```
-
-   Hints:
-      * Use `rising_edge(clk)` instead of `clk='1' and clk'event` to test clock edge
-      * Statement `(others => '0')` initializes all elements of the array to binary zero
-      * Define an internal signal `sig_count` of data type `std_logic_vector(3 downto 0)` to implement the counter. This is because the **output** port `count` cannot be read and therefore the operation `count + 1` cannot be performed
-      * Add `use ieee.std_logic_unsigned.all;` package to use arithmetic operations with `std_logic_vector` data type
-      * Outside the process, connect internal signal to counter output
+   > **Note:** To select which testbench to simulate, right-click to the testbench file name and choose `Set as Top`.
+   >
+   > ![Set as Top](images/vivado_set_top.png)
 
    <!--
-   **FYI:** The structure below describes a 4-bit counter in RTL (higher) level.
-
-   ![simple counter rtl](images/teros_simple-counter_rtl.png)
+   > **Note:** The default simulation run time in Vivado is set to 1000&nbsp;ns You can change it in the menu **Tools > Settings...**
+   >
+   > ![Specify simulation run time in Vivado](images/vivado_run_time.png)
    -->
 
+<a name="task3"></a>
 
+## Task 3: Top-level design and FPGA implementation
 
+Choose one of the following variants, implement a counter on the Nexys A7 board, and display the counter value on the LEDs (variant 1) or 7-segment display (variant 2).
 
+### Variant 1: Counter and LEDs
 
+![top level ver1](images/top-level_ver1.png)
 
-
-
-
-
-
-
-<a name="task4"></a>
-
-## Task 4: Top-level design and FPGA implementation
-
-1. Create a new VHDL design source named `counter_top` in your project and implement the 4-bit up counter on the Nexys A7 board. Let the counter value increment every 250 ms and choose one of the following implementations to display the output values ​​on: LEDs or a 7-segment display.
-
-   * **Version 1: LEDs:**
-
-   ![top level ver1](images/top-level_ver1.png)
-
-   * **Version 2: 7-segment display:**
-
-   ![top level ver2](images/top-level_ver2.png)
-
-2. Note that, the following text describes the implementation of version 2. Use **Define Module** dialog and define I/O ports as follows.
+1. In your project, create a new VHDL design source file named `counter_top`. Define I/O ports as follows.
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
-   | `CLK100MHZ` | in  | `std_logic` | Main clock |
-   | `CA` | out | `std_logic` | Cathode of segment A |
-   | `CB` | out | `std_logic` | Cathode of segment B |
-   | `CC` | out | `std_logic` | Cathode of segment C |
-   | `CD` | out | `std_logic` | Cathode of segment D |
-   | `CE` | out | `std_logic` | Cathode of segment E |
-   | `CF` | out | `std_logic` | Cathode of segment F |
-   | `CG` | out | `std_logic` | Cathode of segment G |
-   | `DP` | out | `std_logic` | Decimal point |
-   | `AN` | out | `std_logic_vector(7 downto 0)` | Common anodes of all on-board displays |
-   | `BTNC` | in  | `std_logic` | High-active synchronous reset |
+   | `clk` | in | `std_logic` | Main clock |
+   | `btnu` | in | `std_logic` | High-active synchronous reset |
+   | `led` | out | `std_logic_vector(7 downto 0)` | Show 8-bit counter value |
 
-3. Copy design source file `bin2seg.vhd` from the previous lab to `YOUR-PROJECT-FOLDER/counter.srcs/sources_1/new/` folder and add it to the project.
-
-4. Use component declaration and instantiation of `counter`, `clock_en`, and `bin2seg`, and define the top-level architecture as follows.
+2. Use component declaration and instantiation of `clk_en` and `counter`, and define the top-level architecture as follows.
 
    ```vhdl
    architecture behavioral of top_level is
        -- Component declaration for clock enable
+       component clk_en is
+           generic (
+               G_MAX : positive
+           );
+           port (
+               clk : in  std_logic;
+               rst : in  std_logic;
+               ce  : out std_logic
+           );
+       end component clk_en;
 
+       -- Component declaration for binary counter
+       component counter is
+           // TODO
+       end component counter;
 
-       -- Component declaration for simple counter
-
-
-       -- Component declaration for bin2seg
-
-
-       -- Local signals for a counter: 4-bit @ 250 ms
-
+       -- Internal signal for counter
+       signal sig_en_10ms : std_logic;
 
    begin
 
-       -- Component instantiation of clock enable for 250 ms
+       -- Component instantiation of clock enable for 10 ms
+       clock_0 : component clk_en
+           generic map (
+               G_MAX => 1_000_000
+           )
+           port map (
+               clk => clk,
+               rst => btnu,
+               ce  => sig_en_10ms
+           );
 
-
-       -- Component instantiation of 4-bit simple counter
-
-
-       -- Component instantiation of bin2seg
-
-
-       -- Turn off decimal point
-
-
-       -- Set display position
-
+       -- Component instantiation of 8-bit binary counter
+       // TODO
 
    end architecture behavioral;
    ```
 
-5. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys`, uncomment and modify names of used pins according to the `top_level` entity.
+3. Create a new constraints file `nexys` (XDC file). Copy relevant pin assignments from the [Nexys A7-50T](../examples/_solutions/nexys.xdc) constraint file or use the following minimal constrains:
 
-6. Compile the project (ie. transform the high-level VHDL code into a binary configuration file) and download the generated bitstream `YOUR-PROJECT-FOLDER/counter.runs/impl_1/top_level.bit` into the FPGA chip.
+   ```xdc
+   # -----------------------------------------------
+   # Clock signal
+   # -----------------------------------------------
+   set_property -dict { PACKAGE_PIN E3 IOSTANDARD LVCMOS33 } [get_ports { clk }]; 
+   create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports {clk}];
 
-7. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+   # -----------------------------------------------
+   # Push button
+   # -----------------------------------------------
+   set_property PACKAGE_PIN M18 [get_ports {btnu}]
+   set_property IOSTANDARD LVCMOS33 [get_ports {btnu}]
 
+   # -----------------------------------------------
+   # LEDs
+   # -----------------------------------------------
+   set_property PACKAGE_PIN H17 [get_ports { led[0] }] ;
+   set_property PACKAGE_PIN K15 [get_ports { led[1] }] ;
+   set_property PACKAGE_PIN J13 [get_ports { led[2] }] ;
+   set_property PACKAGE_PIN N14 [get_ports { led[3] }] ;
+   set_property PACKAGE_PIN R18 [get_ports { led[4] }] ;
+   set_property PACKAGE_PIN V17 [get_ports { led[5] }] ;
+   set_property PACKAGE_PIN U17 [get_ports { led[6] }] ;
+   set_property PACKAGE_PIN U16 [get_ports { led[7] }] ;
+   set_property IOSTANDARD LVCMOS33 [get_ports {led[*]}]
+   ```
 
+4. Implement your design to Nexys A7 board:
+
+   1. Click **Generate Bitstream** (the process is time consuming and may take some time).
+   2. Open **Hardware Manager**.
+   3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
+   4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/counter.runs/impl_1/counter_top.bit`.
+
+5. Use **IMPLEMENTATION > Open Implemented Design > Schematic** to see the generated structure.
+
+### Variant 2: Counter and 7-segment display
+
+![top level ver2](images/top-level_ver2.png)
+
+1. In your project, create a new VHDL design source file named `counter_top`. Define I/O ports as follows.
+
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `clk` | in  | `std_logic` | Main clock |
+   | `btnu` | in | `std_logic` | High-active synchronous reset |
+   | `seg` | out | `std_logic_vector(6 downto 0)` | Seven-segment cathodes CA..CG (active-low) |
+   | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
+   | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
+
+2. In your project, add the design source file `bin2seg.vhd` from the previous lab and check the "Copy file to the project".
+
+3. Use component declaration and instantiation of `clk_en`, `counter`, and `bin2seg`, and define the top-level architecture as follows.
+
+   ```vhdl
+   architecture behavioral of top_level is
+       -- Component declaration for clock enable
+       component clk_en is
+           generic (
+               G_MAX : positive
+           );
+           port (
+               clk : in  std_logic;
+               rst : in  std_logic;
+               ce  : out std_logic
+           );
+       end component clk_en;
+
+       -- Component declaration for binary counter
+       component counter is
+           // TODO
+       end component counter;
+
+       -- Component declaration for bin2seg
+       component hex2seg is
+           // TODO
+       end component hex2seg;
+
+       -- Internal signals for counter: 4-bit @ 250 ms
+       signal sig_en_250ms : std_logic;
+       signal sig_cnt      : std_logic_vector(3 downto 0);
+
+   begin
+
+       -- Component instantiation of clock enable for 250 ms
+       clock_0 : component clk_en
+           generic map (
+               G_MAX => 25_000_000
+           )
+           port map (
+               clk => clk,
+               rst => btnu,
+               ce  => sig_en_250ms
+           );
+
+       -- Component instantiation of 4-bit binary counter
+       // TODO
+
+       -- Component instantiation of bin2seg
+       // TODO
+
+       -- Turn off decimal point
+       dp <= ...
+
+       -- Set display position
+       an <= ...
+
+   end architecture behavioral;
+   ```
+
+4. Create a new constraints file `nexys` (XDC file). Copy relevant pin assignments from the [Nexys A7-50T](../examples/_solutions/nexys.xdc) constraint file or use the following minimal constrains:
+
+   ```xdc
+   # -----------------------------------------------
+   # Clock signal
+   # -----------------------------------------------
+   set_property -dict { PACKAGE_PIN E3 IOSTANDARD LVCMOS33 } [get_ports { clk }]; 
+   create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports {clk}];
+
+   # -----------------------------------------------
+   # Push button
+   # -----------------------------------------------
+   set_property PACKAGE_PIN M18 [get_ports {btnu}]
+   set_property IOSTANDARD LVCMOS33 [get_ports {btnu}]
+
+   # -----------------------------------------------
+   # Seven-segment cathodes CA..CG + DP (active-low)
+   # seg[6]=A ... seg[0]=G
+   # -----------------------------------------------
+   set_property PACKAGE_PIN T10 [get_ports {seg[6]}] ; # CA
+   set_property PACKAGE_PIN R10 [get_ports {seg[5]}] ; # CB
+   set_property PACKAGE_PIN K16 [get_ports {seg[4]}] ; # CC
+   set_property PACKAGE_PIN K13 [get_ports {seg[3]}] ; # CD
+   set_property PACKAGE_PIN P15 [get_ports {seg[2]}] ; # CE
+   set_property PACKAGE_PIN T11 [get_ports {seg[1]}] ; # CF
+   set_property PACKAGE_PIN L18 [get_ports {seg[0]}] ; # CG
+   set_property PACKAGE_PIN H15 [get_ports {dp}]
+   set_property IOSTANDARD LVCMOS33 [get_ports {seg[*] dp}]
+
+   # -----------------------------------------------
+   # Seven-segment anodes AN7..AN0 (active-low)
+   # -----------------------------------------------
+   set_property PACKAGE_PIN J17 [get_ports {an[0]}]
+   set_property PACKAGE_PIN J18 [get_ports {an[1]}]
+   set_property PACKAGE_PIN T9  [get_ports {an[2]}]
+   set_property PACKAGE_PIN J14 [get_ports {an[3]}]
+   set_property PACKAGE_PIN P14 [get_ports {an[4]}]
+   set_property PACKAGE_PIN T14 [get_ports {an[5]}]
+   set_property PACKAGE_PIN K2  [get_ports {an[6]}]
+   set_property PACKAGE_PIN U13 [get_ports {an[7]}]
+   set_property IOSTANDARD LVCMOS33 [get_ports {an[*]}]
+   ```
+
+5. Implement your design to Nexys A7 board:
+
+   1. Click **Generate Bitstream** (the process is time consuming and may take some time).
+   2. Open **Hardware Manager**.
+   3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
+   4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/counter.runs/impl_1/counter_top.bit`.
+
+6. Use **IMPLEMENTATION > Open Implemented Design > Schematic** to see the generated structure.
 
 <a name="tasks"></a>
 
 ## Optional tasks
 
-1. Add a second instantiation (copy) of the counter and clock enable components and make a 16-bit counter with a 2 ms time base. Display the counter values on LEDs.
+1. Combine two independent counters:
+   * 4-bit counter with a 250 ms time base
+   * 10-bit counter with a 10 ms time base
 
    ![top level](images/top-level_ver3.png)
 
 2. Create a new component `up_down_counter` implementing bi-directional (up/down) binary counter.
 
-
-
 <a name="questions"></a>
 
 ## Questions
 
-1. TBD
+1. What is the purpose of a **clock enable** signal, and how does it differ from creating a slower clock with a divider?
 
+2. How many bits are required in a counter to generate a pulse every 10 ms on a 100 MHz clock?
 
+3. What is a **generic** in VHDL, and why is it useful for this counter design?
+
+4. Explain the behavior of the counter when the `en` signal is low.
+
+5. Why do we use `rising_edge(clk)` in the synchronous process instead of just checking `clk = '1'`?
+
+6. In the testbench, what is the purpose of the **generic map**, and what would happen if it were omitted?
 
 <a name="references"></a>
 
@@ -456,6 +465,8 @@ We can write:
 
 2. [WaveDrom - Digital Timing Diagram everywhere](https://wavedrom.com/)
 
-3. Tomas Fryza. [Template for clock enable module](https://www.edaplayground.com/x/5LiJ)
+3. [WavePaint](https://www.wavepaint.net/app/)
 
-4. Digilent. [General .xdc file for the Nexys A7-50T](https://github.com/Digilent/digilent-xdc/blob/master/Nexys-A7-50T-Master.xdc)
+4. Tomas Fryza. [Template for clock enable module](https://www.edaplayground.com/x/5LiJ)
+
+5. Digilent. [General .xdc file for the Nexys A7-50T](https://github.com/Digilent/digilent-xdc/blob/master/Nexys-A7-50T-Master.xdc)
