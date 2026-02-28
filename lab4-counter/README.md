@@ -11,9 +11,10 @@
 
 After completing this laboratory, students will be able to:
 
-* Understand binary counters
-* Use VHDL generics and synchronous processes
-* Use clock enable signal to drive another logic in the design (with slower clock)
+* Use a clock enable signal to drive slower logic without creating new clock domains
+* Use VHDL generics to make designs flexible and reusable
+* Implement synchronous processes with a clock and reset signals
+Understand the operation of binary counters and how N-bit outputs represent sequential counts
 
 ### Background
 
@@ -31,22 +32,7 @@ To drive other logic in the design that requires a slower operation, it is bette
 
 ![Clock enable](images/waveform_clock-enable.png)
 
-1. Calculate how many clock cycles of a 100&nbsp;MHz clock (period 10&nbsp;ns) correspond to the following time intervals: 2&nbsp;ms, 4&nbsp;ms, 8&nbsp;ms, 10&nbsp;ms, 250&nbsp;ms, 500&nbsp;ms, and 1&nbsp;s.
-
-   Express each result in decimal, binary, and hexadecimal forms. What is the minimum number of bits required for each counter?
-
-<!--
-   &nbsp;
-   ![clock period](images/freq.png)
-   &nbsp;
-
-   ![number of periods](images/periods.png)
-   &nbsp;
-
-https://editor.codecogs.com/
-T_{clk}=\frac{1}{f_{clk}}=
-\textup{number of clk period} = \frac{\textup{time interval}}{T_{clk}}=
--->
+1. Calculate how many clock cycles of a 100&nbsp;MHz clock (period 10&nbsp;ns) correspond to the following time intervals. Express each result in decimal, binary, and hexadecimal forms. What is the minimum number of bits required for each counter?
 
    | **Time interval** | **Clock cycles (decimal)** | **Binary** | **Hexadecimal** | **Required bits** |
    | :-: | :-: | :-: | :-: | :-: |
@@ -58,7 +44,7 @@ T_{clk}=\frac{1}{f_{clk}}=
    | 500&nbsp;ms |  |  |  |
    | 1&nbsp;sec | 100_000_000 | `b"101_1111_0101_1110_0001_0000_0000"` | `x"5F5_E100"` | 27 |
 
-1. Run Vivado, create a new RTL project named `counter`, add a VHDL source file `clk_en`, and implement a clock enable circuit which generates one-clock-cycle positive pulse every `MAX` clock periods. Use the following I/O ports:
+2. Run Vivado, create a new RTL project named `counter`, add a VHDL source file `clk_en`, and implement a clock enable circuit which generates one-clock-cycle positive pulse every `MAX` clock periods. Use the following I/O ports:
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
@@ -66,7 +52,7 @@ T_{clk}=\frac{1}{f_{clk}}=
    | `rst` | in | `std_logic` | High-active synchronous reset |
    | `en` | out | `std_logic` | One-clock-cycle enable pulse |
 
-2. A VHDL **generic** is a parameter of an entity that allows the designer to configure the design at instantiation time. It makes the design flexible and reusable, because the same entity can be used with different parameter values without modifying its internal code.
+3. A VHDL **generic** is a parameter of an entity that allows the designer to configure the design at instantiation time. It makes the design flexible and reusable, because the same entity can be used with different parameter values without modifying its internal code.
 
    A generic behaves similarly to a constant:
 
@@ -100,7 +86,7 @@ T_{clk}=\frac{1}{f_{clk}}=
    > | `unsigned` | 0 to 2^N − 1 | Counters, non-negative arithmetic |
    > | `signed` | −2^(N−1) to 2^(N−1) − 1 | Signed arithmetic |
 
-3. Use a **synchronous process** and complete the architecture of the clock enable circuit. The internal counter `sig_cnt` is used to track clock pulses.
+4. Use a **synchronous process** and complete the architecture of the clock enable circuit. The internal counter `sig_cnt` is used to track clock pulses.
 
    ```vhdl
    architecture behavioral of clk_en is
@@ -131,13 +117,13 @@ T_{clk}=\frac{1}{f_{clk}}=
    end architecture behavioral;
    ```
 
-3. Create a VHDL simulation source file named `clk_en_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
+5. Create a VHDL simulation source file named `clk_en_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
 
    <!--
    > **Solution:** [https://www.edaplayground.com/x/5LiJ](https://www.edaplayground.com/x/5LiJ)
    -->
 
-4. In a **testbench**, you need to manually add the **generic** section for the component.
+6. In a **testbench**, you need to manually add the **generic** section for the component.
 
    ```vhdl
    architecture tb of clk_en_tb is
@@ -172,15 +158,15 @@ T_{clk}=\frac{1}{f_{clk}}=
    end architecture tb;
    ```
 
-5. Run the simulation, test the functionality of the `rst` and `en` signals, and try several `G_MAX` values.
+7. Run the simulation, test the functionality of the `rst` and `en` signals, and try several `G_MAX` values.
 
    > **Note:** For any vector, you can change the numeric display format in the simulation. To do this, right-click the vector name and select **Radix > Unsigned Decimal** from the context menu. You can also change the vector color using **Signal Color**.
    > 
    > ![Change radix](images/vivado_radix.png)
 
-6. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+8. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-7. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
+9. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
 
 <a name="task2"></a>
 
@@ -188,9 +174,9 @@ T_{clk}=\frac{1}{f_{clk}}=
 
 1. In your project, create a new VHDL design source file named `counter`.
 
-2. Copy the [design](../examples/_solutions/lab4-counter/counter.vhd) into your `counter.vhd` file.
+2. Copy the [design](https://raw.githubusercontent.com/tomas-fryza/vhdl-examples/refs/heads/master/examples/_solutions/lab4-counter/counter.vhd) into your `counter.vhd` file.
 
-3. (Optionaly) Create a VHDL simulation source file named `counter_tb`, copy the [testbench](../examples/_solutions/lab4-counter/counter_tb.vhd), and test several `C_BITS` values.
+3. (Optionaly) Create a VHDL simulation source file named `counter_tb`, copy the [testbench](https://raw.githubusercontent.com/tomas-fryza/vhdl-examples/refs/heads/master/examples/_solutions/lab4-counter/counter_tb.vhd), and test several `C_BITS` values.
 
    > **Note:** In the testbench, the generic value (`G_MAX`) is defined as a constant `C_MAX`. To test different counter widths, you can change this value in the testbench file before running the simulation.
 
