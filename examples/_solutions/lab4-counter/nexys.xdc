@@ -5,6 +5,12 @@ set_property -dict { PACKAGE_PIN E3 IOSTANDARD LVCMOS33 } [get_ports { clk }];
 create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports {clk}];
 
 # -----------------------------------------------
+# Push button
+# -----------------------------------------------
+set_property PACKAGE_PIN M18 [get_ports {btnu}]
+set_property IOSTANDARD LVCMOS33 [get_ports {btnu}]
+
+# -----------------------------------------------
 # LEDs
 # -----------------------------------------------
 set_property PACKAGE_PIN H17 [get_ports { led[0] }] ;
@@ -51,9 +57,3 @@ set_property PACKAGE_PIN T14 [get_ports {an[5]}]
 set_property PACKAGE_PIN K2  [get_ports {an[6]}]
 set_property PACKAGE_PIN U13 [get_ports {an[7]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {an[*]}]
-
-# -----------------------------------------------
-# Push button
-# -----------------------------------------------
-set_property PACKAGE_PIN M18 [get_ports {btnu}]
-set_property IOSTANDARD LVCMOS33 [get_ports {btnu}]

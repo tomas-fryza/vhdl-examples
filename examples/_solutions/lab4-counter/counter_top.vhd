@@ -18,11 +18,11 @@ library ieee;
 entity counter_top is
     port (
         clk  : in  std_logic;                      --! Main clock
+        btnu : in  std_logic;                      --! Synchronous reset
         led  : out std_logic_vector(15 downto 0);  --! Show 16-bit counter value
         seg  : out std_logic_vector(6 downto 0);   --! Seven-segment cathodes CA..CG (active-low)
         dp   : out std_logic;                      --! Decimal point
-        an   : out std_logic_vector(7 downto 0);   --! Seven-segment anodes AN7..AN0 (active-low)
-        btnu : in  std_logic                       --! Synchronous reset
+        an   : out std_logic_vector(7 downto 0)    --! Seven-segment anodes AN7..AN0 (active-low)
     );
 end entity counter_top;
 
