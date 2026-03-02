@@ -160,6 +160,10 @@ To drive other logic in the design that requires a slower operation, it is bette
 
 7. Run the simulation, test the functionality of the `rst` and `en` signals, and try several `G_MAX` values.
 
+   > **Note:** To show internal signbals, click to **dut** in **Scope** folder, right-click on signal name `sig_cnt` in **Object** folder, and select **Add to Wave Window**. Then use **Relaunch Simulation** icon.
+   >
+   > ![Vivado: add internal signal](images/vivado_add-wave.png)
+
    > **Note:** For any vector, you can change the numeric display format in the simulation. To do this, right-click the vector name and select **Radix > Unsigned Decimal** from the context menu. You can also change the vector color using **Signal Color**.
    > 
    > ![Change radix](images/vivado_radix.png)
@@ -182,7 +186,7 @@ To drive other logic in the design that requires a slower operation, it is bette
 
    > **Note:** To select which testbench to simulate, right-click to the testbench file name and choose `Set as Top`.
    >
-   > ![Set as Top](images/vivado_set_top.png)
+   > ![Set as Top](images/vivado_set-top.png)
 
    <!--
    > **Note:** The default simulation run time in Vivado is set to 1000&nbsp;ns You can change it in the menu **Tools > Settings...**
@@ -303,7 +307,9 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
    | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
    | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
 
-2. In your project, add the design source file `bin2seg.vhd` from the previous lab and check the "Copy file to the project".
+2. In your project, add the design source file `bin2seg.vhd` from the previous lab and check the "Copy sources into project".
+
+   ![vivado_copy-sources](images/vivado_copy-sources.png)
 
 3. Use component declaration and instantiation of `clk_en`, `counter`, and `bin2seg`, and define the top-level architecture as follows.
 
