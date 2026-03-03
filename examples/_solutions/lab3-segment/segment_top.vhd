@@ -16,14 +16,14 @@ library ieee;
 
 entity segment_top is
     port (
-        sw_r  : in    std_logic_vector(3 downto 0); --! Data for right display
-        sw_l  : in    std_logic_vector(3 downto 0); --! Data for left display
-        led_r : out   std_logic_vector(3 downto 0); --! Show right data
-        led_l : out   std_logic_vector(3 downto 0); --! Show left data
-        seg   : out   std_logic_vector(6 downto 0); --! Seven-segment cathodes CA..CG (active-low)
-        dp    : out   std_logic;                    --! Decimal point
-        an    : out   std_logic_vector(7 downto 0); --! Seven-segment anodes AN7..AN0 (active-low)
-        btnd  : in    std_logic                     --! Switch between displays
+        sw_r  : in    std_logic_vector(3 downto 0);  --! Data for right display
+        sw_l  : in    std_logic_vector(3 downto 0);  --! Data for left display
+        btnd  : in    std_logic;                     --! Switch between displays
+        led_r : out   std_logic_vector(3 downto 0);  --! Show right data
+        led_l : out   std_logic_vector(3 downto 0);  --! Show left data
+        seg   : out   std_logic_vector(6 downto 0);  --! Seven-segment cathodes CA..CG (active-low)
+        dp    : out   std_logic;                     --! Decimal point
+        an    : out   std_logic_vector(7 downto 0)   --! Seven-segment anodes AN7..AN0 (active-low)
     );
 end entity segment_top;
 
