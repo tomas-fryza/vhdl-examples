@@ -14,7 +14,7 @@ After completing this laboratory, students will be able to:
 * Use a clock enable signal to drive slower logic without creating new clock domains
 * Use VHDL generics to make designs flexible and reusable
 * Implement synchronous processes with a clock and reset signals
-Understand the operation of binary counters and how N-bit outputs represent sequential counts
+* Understand the operation of binary counters and how N-bit outputs represent sequential counts
 
 ### Background
 
@@ -215,7 +215,7 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 2. Use component declaration and instantiation of `clk_en` and `counter`, and define the top-level architecture as follows.
 
    ```vhdl
-   architecture behavioral of top_level is
+   architecture behavioral of counter_top is
        -- Component declaration for clock enable
        component clk_en is
            generic (
@@ -314,7 +314,7 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 3. Use component declaration and instantiation of `clk_en`, `counter`, and `bin2seg`, and define the top-level architecture as follows.
 
    ```vhdl
-   architecture behavioral of top_level is
+   architecture behavioral of counter_top is
        -- Component declaration for clock enable
        component clk_en is
            generic (
