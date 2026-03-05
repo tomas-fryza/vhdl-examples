@@ -230,7 +230,7 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
        -- Component declaration for binary counter
        component counter is
-           -- TODO
+           -- TODO: Add declaration of `counter`
        end component counter;
 
        -- Internal signal for counter
@@ -250,7 +250,7 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
 
        -- Component instantiation of 8-bit binary counter
-       -- TODO
+       -- TODO: Add instantiation of `counter`
 
    end architecture behavioral;
    ```
@@ -293,6 +293,8 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
 5. Use **IMPLEMENTATION > Open Implemented Design > Schematic** to see the generated structure.
 
+6. Modify the top-level module so that the counter increments ten times slower.
+
 ### Variant 2: Counter and 7-segment display
 
 ![top level ver2](images/top-level_ver2.png)
@@ -329,12 +331,12 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
        -- Component declaration for binary counter
        component counter is
-           -- TODO
+           -- TODO: Add declaration of `counter`
        end component counter;
 
        -- Component declaration for bin2seg
        component hex2seg is
-           -- TODO
+           -- TODO: Add declaration of `bin2seg`
        end component hex2seg;
 
        -- Internal signals for counter: 4-bit @ 250 ms
@@ -355,16 +357,14 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
 
        -- Component instantiation of 4-bit binary counter
-       -- TODO
+       -- TODO: Add instantiation of `counter`
 
        -- Component instantiation of bin2seg
-       -- TODO
+       -- TODO: Add instantiation of `bin2seg`
 
-       -- Turn off decimal point
-       dp <= ...
+       dp <=  -- TODO: Turn off decimal point
 
-       -- Set display position
-       an <= ...
+       an <=  -- TODO: Set display position
 
    end architecture behavioral;
    ```
