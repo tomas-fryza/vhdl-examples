@@ -50,7 +50,7 @@ To drive other logic in the design that requires a slower operation, it is bette
    | :-: | :-: | :-- | :-- |
    | `clk` | in | `std_logic` | Main clock |
    | `rst` | in | `std_logic` | High-active synchronous reset |
-   | `en` | out | `std_logic` | One-clock-cycle enable pulse |
+   | `ce` | out | `std_logic` | One-clock-cycle enable pulse |
 
 3. A VHDL **generic** is a parameter of an entity that allows the designer to configure the design at instantiation time. It makes the design flexible and reusable, because the same entity can be used with different parameter values without modifying its internal code.
 
@@ -70,7 +70,7 @@ To drive other logic in the design that requires a slower operation, it is bette
           port (
               clk : in  std_logic;
               rst : in  std_logic;
-              en  : out std_logic
+              ce  : out std_logic
           );
       end entity clk_en;
       ```
@@ -230,7 +230,7 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
        -- Component declaration for binary counter
        component counter is
-           // TODO
+           -- TODO
        end component counter;
 
        -- Internal signal for counter
@@ -250,7 +250,7 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
 
        -- Component instantiation of 8-bit binary counter
-       // TODO
+       -- TODO
 
    end architecture behavioral;
    ```
@@ -329,12 +329,12 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
        -- Component declaration for binary counter
        component counter is
-           // TODO
+           -- TODO
        end component counter;
 
        -- Component declaration for bin2seg
        component hex2seg is
-           // TODO
+           -- TODO
        end component hex2seg;
 
        -- Internal signals for counter: 4-bit @ 250 ms
@@ -355,10 +355,10 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
 
        -- Component instantiation of 4-bit binary counter
-       // TODO
+       -- TODO
 
        -- Component instantiation of bin2seg
-       // TODO
+       -- TODO
 
        -- Turn off decimal point
        dp <= ...
