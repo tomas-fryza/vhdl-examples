@@ -73,7 +73,7 @@ architecture behavioral of counter_top is
 begin
 
     -- Component instantiation of clock enable for 250 ms
-    clk_en0 : component clk_en
+    clock_0 : component clk_en
         generic map (
             G_MAX => 25_000_000
         )
@@ -84,7 +84,7 @@ begin
         );
 
     -- Component instantiation of 4-bit binary counter
-    counter0 : component counter
+    counter_0 : component counter
         generic map (
             G_BITS => 4
         )
@@ -96,7 +96,7 @@ begin
         );
 
     -- Component instantiation of bin2seg
-    display : component bin2seg
+    decoder_0 : component bin2seg
         port map (
             bin => sig_cnt_4bit,
             seg => seg
@@ -109,7 +109,7 @@ begin
     an <= b"1111_1110";
 
     -- Component instantiation of clock enable for 2 ms
-    clk_en1 : component clk_en
+    clock_1 : component clk_en
         generic map (
             G_MAX => 200_000
         )
@@ -120,7 +120,7 @@ begin
         );
 
     -- Component instantiation of 16-bit binary counter
-    counter1 : component counter
+    counter_1 : component counter
         generic map (
             G_BITS => 16
         )

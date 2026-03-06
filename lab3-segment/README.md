@@ -196,14 +196,14 @@ The following example shows a simple structural design consisting of two 2-input
        signal sig_tmp : std_logic;  -- Internal signal
 
    begin
-       U1 : xor2                    -- First XOR instance
+       U1 : component xor2          -- First XOR instance
            port map (
                in1  => a,
                in2  => b,
                out1 => sig_tmp
            );
 
-       U2 : xor2                    -- Second XOR instance
+       U2 : component xor2          -- Second XOR instance
            port map (
                in1  => sig_tmp,
                in2  => c,
@@ -250,7 +250,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
    begin
 
        -- Instantiate decoder
-       display : bin2seg
+       decoder_0 : component bin2seg
            port map (
                bin => sw,
                seg => seg
@@ -333,13 +333,13 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
        ...
 
        -- Internal signal for selected 4-bit input
-       signal sig_tmp : std_logic_vector(3 downto 0);
+       signal sig_bin : std_logic_vector(3 downto 0);
 
    begin
        ...
 
        -- Select left or right 4-bit input (multiplexor)
-       sig_tmp <= sw_l when (btnd = '1') else
+       sig_bin <= sw_l when (btnd = '1') else
                   sw_r;
 
        -- Disable unused digits (active-low logic)

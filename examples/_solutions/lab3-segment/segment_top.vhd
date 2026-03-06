@@ -34,19 +34,19 @@ architecture behavioral of segment_top is
     -- Declare component `bin2seg`
     component bin2seg is
         port (
-            bin   : in    std_logic_vector(3 downto 0);
-            seg   : out   std_logic_vector(6 downto 0)
+            bin : in  std_logic_vector(3 downto 0);
+            seg : out std_logic_vector(6 downto 0)
         );
     end component;
 
     --! Internal signal for selected 4-bit input
-    signal sig_tmp : std_logic_vector(3 downto 0);
+    signal sig_bin : std_logic_vector(3 downto 0);
 begin
 
     --! Instantiate decoder
-    display : component bin2seg
+    decoder_0 : component bin2seg
         port map (
-            bin => sig_tmp,
+            bin => sig_bin,
             seg => seg
         );
 
@@ -58,7 +58,7 @@ begin
     led_l <= sw_l;
 
     -- Select left or right 4-bit input
-    sig_tmp <= sw_l when (btnd = '1') else
+    sig_bin <= sw_l when (btnd = '1') else
                sw_r;
 
     -- Disable unused digits (active-low logic)

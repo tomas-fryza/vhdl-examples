@@ -250,7 +250,8 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
 
        -- Component instantiation of 8-bit binary counter
-       -- TODO: Add instantiation of `counter`
+       counter_0 : component counter
+           -- TODO: Add instantiation of `counter`
 
    end architecture behavioral;
    ```
@@ -357,10 +358,12 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
 
        -- Component instantiation of 4-bit binary counter
-       -- TODO: Add instantiation of `counter`
+       counter_0 : component counter
+           -- TODO: Add instantiation of `counter`
 
        -- Component instantiation of bin2seg
-       -- TODO: Add instantiation of `bin2seg`
+       decoder_0 : component bin2seg
+           -- TODO: Add instantiation of `bin2seg`
 
        dp <=  -- TODO: Turn off decimal point
 
