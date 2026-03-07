@@ -15,7 +15,7 @@ architecture behavioral of display_driver is
 
         -- Component declaration for clock enable
         component clk_en is
-            generic ( G_MAX : integer );
+            generic ( G_MAX : positive );
             port (
                 clk : in  std_logic;
                 rst : in  std_logic;

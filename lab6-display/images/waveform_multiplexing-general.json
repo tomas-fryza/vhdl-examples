@@ -5,36 +5,36 @@
       "wave": "P..................."
     },
     {
-      "name": "enable_count",
+      "name": "change digit",
       "wave": "0.10.10.10.10.10.10."
     },
     {
-      "name": "select_digit",
+      "name": "cathodes",
       "wave": "2.2..2..2..2..2..2..",
       "data": [
-        "digit0",
-        "digit1",
-        "digit2",
-        "digit3",
-        "digit0",
-        "digit1",
-        "digit2"
+        "digit 0",
+        "digit 1",
+        "digit 2",
+        "digit 3",
+        "digit 0",
+        "digit 1",
+        "digit 2"
       ]
     },
     {
-      "name": "anodes[0]",
+      "name": "anode 0",
       "wave": "0.1........0..1....."
     },
     {
-      "name": "anodes[1]",
+      "name": "anode 1",
       "wave": "1.0..1........0..1.."
     },
     {
-      "name": "anodes[2]",
+      "name": "anode 2",
       "wave": "1....0..1........0.."
     },
     {
-      "name": "anodes[3]",
+      "name": "anode 3",
       "wave": "1.......0..1........"
     }
   ],
