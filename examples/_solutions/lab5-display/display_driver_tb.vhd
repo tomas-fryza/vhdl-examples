@@ -7,18 +7,18 @@ end display_driver_tb;
 architecture tb of display_driver_tb is
 
     component display_driver
-        port (clk  : in  std_logic;
-              rst  : in  std_logic;
-              data : in  std_logic_vector(7 downto 0);
-              seg  : out std_logic_vector(6 downto 0);
-              an   : out std_logic_vector(1 downto 0));
+        port (clk   : in  std_logic;
+              rst   : in  std_logic;
+              data  : in  std_logic_vector(7 downto 0);
+              seg   : out std_logic_vector(6 downto 0);
+              anode : out std_logic_vector(1 downto 0));
     end component;
 
-    signal clk  : std_logic;
-    signal rst  : std_logic;
-    signal data : std_logic_vector(7 downto 0);
-    signal seg  : std_logic_vector(6 downto 0);
-    signal an   : std_logic_vector(1 downto 0);
+    signal clk   : std_logic;
+    signal rst   : std_logic;
+    signal data  : std_logic_vector(7 downto 0);
+    signal seg   : std_logic_vector(6 downto 0);
+    signal anode : std_logic_vector(1 downto 0);
 
     constant TbPeriod : time := 10 ns; -- ***EDIT*** Put right period here
     signal TbClock : std_logic := '0';
@@ -27,11 +27,11 @@ architecture tb of display_driver_tb is
 begin
 
     dut : component display_driver
-    port map (clk  => clk,
-              rst  => rst,
-              data => data,
-              seg  => seg,
-              an   => an);
+    port map (clk   => clk,
+              rst   => rst,
+              data  => data,
+              seg   => seg,
+              anode => anode);
 
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';

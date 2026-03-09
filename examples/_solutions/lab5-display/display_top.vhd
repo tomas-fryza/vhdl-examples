@@ -14,11 +14,11 @@ architecture Behavioral of display_top is
 
     -- Component declaration for display_driver
     component display_driver is
-    Port ( clk  : in  STD_LOGIC;
-           rst  : in  STD_LOGIC;
-           data : in  STD_LOGIC_VECTOR(7 downto 0);
-           seg  : out STD_LOGIC_VECTOR(6 downto 0);
-           an   : out STD_LOGIC_VECTOR(1 downto 0));
+    Port ( clk   : in  STD_LOGIC;
+           rst   : in  STD_LOGIC;
+           data  : in  STD_LOGIC_VECTOR(7 downto 0);
+           seg   : out STD_LOGIC_VECTOR(6 downto 0);
+           anode : out STD_LOGIC_VECTOR(1 downto 0));
     end component display_driver;
 
 begin
@@ -27,10 +27,10 @@ begin
     display_1 : display_driver
     port map (
        clk  => clk,
-       rst  => btnu,
-       data => sw,
-       seg  => seg,
-       an   => an(1 downto 0)
+       rst   => btnu,
+       data  => sw,
+       seg   => seg,
+       anode => an(1 downto 0)
     );
 
     an(7 downto 2) <= b"11_1111";

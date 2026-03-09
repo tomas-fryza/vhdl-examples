@@ -3,11 +3,11 @@ use ieee.std_logic_1164.all;
 -----------------------------------------------
 entity display_driver is
     port (
-        clk  : in  std_logic;
-        rst  : in  std_logic;
-        data : in  std_logic_vector(7 downto 0);  -- Vector of input bits, 4 per digit
-        seg  : out std_logic_vector(6 downto 0);
-        an   : out std_logic_vector(1 downto 0)
+        clk   : in  std_logic;
+        rst   : in  std_logic;
+        data  : in  std_logic_vector(7 downto 0);  -- Vector of input bits, 4 per digit
+        seg   : out std_logic_vector(6 downto 0);
+        anode : out std_logic_vector(1 downto 0)
     );
 end entity display_driver;
 -----------------------------------------------
@@ -94,11 +94,11 @@ begin
     begin
         case sig_digit is
             when '0' =>
-                an <= b"10";  -- Right digit
+                anode <= b"10";  -- Right digit
             when '1' =>
-                an <= b"01";  -- Left digit
+                anode <= b"01";  -- Left digit
             when others =>
-                an <= b"11";  -- Do not select anything
+                anode <= b"11";  -- Do not select anything
         end case;
     end process;
 
