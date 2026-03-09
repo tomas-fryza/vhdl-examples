@@ -30,7 +30,7 @@ architecture testbench of tb_blink is
     signal sig_led        : std_logic;
 begin
 
-    dut : component blink
+    dut : blink
         port map (
             clk => sig_clk_100mhz,
             rst => sig_rst,

@@ -28,7 +28,7 @@ end entity demorgan;
 
 -------------------------------------------------
 
-architecture behavioral of demorgan is
+architecture Behavioral of demorgan is
 begin
 
     -- Original logic function
@@ -38,4 +38,4 @@ begin
     f_nand <= not((c and b) and not(not(b) and a));
     f_nor  <= (not(c) or not(b)) or not(b or not(a));
 
-end architecture behavioral;
+end Behavioral;

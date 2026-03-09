@@ -28,7 +28,7 @@ architecture tb of tb_alu_4bit is
     signal zero   : std_logic;
 begin
 
-    dut : component alu_4bit
+    dut : alu_4bit
         port map (
             a      => a,
             b      => b,

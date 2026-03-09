@@ -28,13 +28,11 @@ end entity counter_top;
 
 -------------------------------------------------
 
-architecture behavioral of counter_top is
+architecture Behavioral of counter_top is
 
     -- Component declaration for clock enable
     component clk_en is
-        generic (
-            G_MAX : integer
-        );
+        generic ( G_MAX : integer );
         port (
             clk : in  std_logic;
             rst : in  std_logic;
@@ -44,9 +42,7 @@ architecture behavioral of counter_top is
 
     -- Component declaration for binary counter
     component counter is
-        generic (
-            G_BITS : positive
-        );
+        generic ( G_BITS : positive );
         port (
             clk : in  std_logic;
             rst : in  std_logic;
@@ -73,10 +69,8 @@ architecture behavioral of counter_top is
 begin
 
     -- Component instantiation of clock enable for 250 ms
-    clock_0 : component clk_en
-        generic map (
-            G_MAX => 25_000_000
-        )
+    clock_0 : clk_en
+        generic map ( G_MAX => 25_000_000 )
         port map (
             clk => clk,
             rst => btnu,
@@ -84,10 +78,8 @@ begin
         );
 
     -- Component instantiation of 4-bit binary counter
-    counter_0 : component counter
-        generic map (
-            G_BITS => 4
-        )
+    counter_0 : counter
+        generic map ( G_BITS => 4 )
         port map (
             clk => clk,
             rst => btnu,
@@ -96,7 +88,7 @@ begin
         );
 
     -- Component instantiation of bin2seg
-    decoder_0 : component bin2seg
+    decoder_0 : bin2seg
         port map (
             bin => sig_cnt_4bit,
             seg => seg
@@ -109,10 +101,8 @@ begin
     an <= b"1111_1110";
 
     -- Component instantiation of clock enable for 2 ms
-    clock_1 : component clk_en
-        generic map (
-            G_MAX => 200_000
-        )
+    clock_1 : clk_en
+        generic map ( G_MAX => 200_000 )
         port map (
             clk => clk,
             rst => btnu,
@@ -120,10 +110,8 @@ begin
         );
 
     -- Component instantiation of 16-bit binary counter
-    counter_1 : component counter
-        generic map (
-            G_BITS => 16
-        )
+    counter_1 : counter
+        generic map ( G_BITS => 16 )
         port map (
             clk => clk,
             rst => btnu,
@@ -131,4 +119,4 @@ begin
             cnt => led
         );
 
-end architecture behavioral;
+end Behavioral;

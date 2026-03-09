@@ -29,13 +29,11 @@ end entity top_level;
 
 -------------------------------------------------
 
-architecture behavioral of top_level is
+architecture Behavioral of top_level is
 
   -- Component declaration for clock enable
   component clock_en is
-    generic (
-      n_periods : integer
-    );
+    generic ( n_periods : integer );
     port (
       clk   : in    std_logic;
       rst   : in    std_logic;
@@ -45,9 +43,7 @@ architecture behavioral of top_level is
 
   -- Component declaration for lfsr counter
   component lfsr is
-    generic (
-      n_bits : integer
-    );
+    generic ( n_bits : integer );
     port (
       clk      : in    std_logic;
       rst      : in    std_logic;
@@ -65,10 +61,8 @@ architecture behavioral of top_level is
 begin
 
   -- Component instantiation of clock enable for 100 ms
-  CLOCKEN_100MSEC : component clock_en
-    generic map (
-      n_periods => 10_000_000
-    )
+  CLOCKEN_100MSEC : clock_en
+    generic map ( n_periods => 10_000_000 )
     port map (
       clk   => CLK100MHZ,
       rst   => BTNC,
@@ -76,10 +70,8 @@ begin
     );
 
   -- Component instantiation of 8-bit LFSR
-  LFSR_8BIT : component lfsr
-    generic map (
-      n_bits => 8
-    )
+  LFSR_8BIT : lfsr
+    generic map ( n_bits => 8 )
     port map (
       clk      => CLK100MHZ,
       rst      => BTNC,
@@ -90,4 +82,4 @@ begin
       lfsr_out => LED
     );
 
-end architecture behavioral;
+end Behavioral;

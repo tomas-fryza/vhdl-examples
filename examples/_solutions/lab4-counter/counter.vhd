@@ -24,9 +24,7 @@ use ieee.numeric_std.all;  -- Package for data types conversion
 -------------------------------------------------
 
 entity counter is
-    generic (
-        G_BITS : positive := 3  --! Default number of bits
-    );
+    generic ( G_BITS : positive := 3 );  --! Default number of bits
     port (
         clk : in  std_logic;                             --! Main clock
         rst : in  std_logic;                             --! High-active synchronous reset
@@ -37,7 +35,7 @@ end entity counter;
 
 -------------------------------------------------
 
-architecture behavioral of counter is
+architecture Behavioral of counter is
 
     -- Maximum counter value = 2^G_BITS - 1
     constant C_MAX : integer := 2**G_BITS - 1;
@@ -69,4 +67,4 @@ begin
     -- Convert integer to std_logic_vector
     cnt <= std_logic_vector(to_unsigned(sig_cnt, G_BITS));
 
-end architecture behavioral;
+end Behavioral;

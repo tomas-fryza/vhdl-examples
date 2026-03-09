@@ -30,7 +30,7 @@ end entity full_adder;
 
 -------------------------------------------------
 
-architecture behavioral of full_adder is
+architecture Behavioral of full_adder is
     -- Internal signals between gates
     signal sig_tmp_0 : std_logic;
     signal sig_tmp_1 : std_logic;
@@ -44,4 +44,4 @@ begin
     sig_tmp_1 <= c_in and sig_tmp_0;
     c_out     <= sig_tmp_1 or (b and a);
 
-end architecture behavioral;
+end Behavioral;

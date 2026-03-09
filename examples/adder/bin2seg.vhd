@@ -29,7 +29,7 @@ end entity bin2seg;
 
 -------------------------------------------------
 
-architecture behavioral of bin2seg is
+architecture Behavioral of bin2seg is
 begin
 
     --! This combinational process decodes binary input
@@ -107,4 +107,4 @@ begin
 
     end process p_7seg_decoder;
 
-end architecture behavioral;
+end Behavioral;

@@ -30,11 +30,11 @@ end entity gates;
 
 -------------------------------------------------
 
-architecture behavioral of gates is
+architecture Behavioral of gates is
 begin
 
     y_and <= a and b;
     y_or  <= a or b;
     y_xor <= a xor b;
 
-end architecture behavioral;
+end Behavioral;

@@ -11,9 +11,7 @@ end entity tb_debounce;
 
 architecture tb of tb_debounce is
     component debounce is
-        generic (
-            DB_TIME : time
-        );
+        generic ( DB_TIME : time );
         port (
             clk     : in    std_logic;
             btn_in  : in    std_logic;
@@ -36,10 +34,8 @@ architecture tb of tb_debounce is
     signal   tbsimended : std_logic := '0';
 
 begin
-    dut : component debounce
-        generic map (
-            DB_TIME => 25 ns
-        )
+    dut : debounce
+        generic map ( DB_TIME => 25 ns )
         port map (
             clk     => clk,
             btn_in  => btn_in,

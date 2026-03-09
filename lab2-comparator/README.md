@@ -106,7 +106,7 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
    -------------------------------------------------
    -- Architecture definition, Implementation design
    -------------------------------------------------
-   architecture behavioral of comparator is
+   architecture Behavioral of comparator is
    begin
      ---------------------------------------------
      -- Method 1: Behavioral (recommended for design)
@@ -124,7 +124,7 @@ Design a circuit that implements a **2-bit binary comparator**. The comparator s
      -- a 2-bit magnitude comparator.
      ---------------------------------------------
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 3. Use **File > Add Sources... Alt+A > Add or create simulation sources** and create a new VHDL file `comparator_tb`. [Generate the testbench](https://vhdl.lapinoo.net/testbench/) file, and complete the stimuli process by all input combinations.

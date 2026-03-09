@@ -24,9 +24,8 @@ library ieee;
 ----------------------------------------------------------
 
 entity clock_en is
-  generic (
-    g_MAX : natural := 5 --! Number of clk pulses to generate one enable signal period
-  );                       -- Note that there IS a semicolon between generic and port sections
+  generic ( g_MAX : natural := 5 );  --! Number of clk pulses to generate one enable signal period
+                                     -- Note that there IS a semicolon between generic and port sections
   port (
     clk : in    std_logic; --! Main clock
     rst : in    std_logic; --! High-active synchronous reset
@@ -38,7 +37,7 @@ end entity clock_en;
 -- Architecture body for clock enable
 ------------------------------------------------------------
 
-architecture behavioral of clock_en is
+architecture Behavioral of clock_en is
 
   -- Local counter
   signal sig_cnt : natural;
@@ -70,4 +69,4 @@ begin
 
   end process p_clk_enable;
 
-end architecture behavioral;
+end Behavioral;

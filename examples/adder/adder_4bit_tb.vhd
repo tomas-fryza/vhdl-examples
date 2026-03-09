@@ -27,7 +27,7 @@ architecture tb of tb_adder_4bit is
     signal result : std_logic_vector(3 downto 0);
 begin
 
-    dut : component adder_4bit
+    dut : adder_4bit
         port map (
             c_in   => c_in,
             b      => b,

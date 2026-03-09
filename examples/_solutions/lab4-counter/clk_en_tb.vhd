@@ -11,9 +11,7 @@ end entity clk_en_tb;
 architecture tb of clk_en_tb is
 
   component clk_en is
-    generic (
-      G_MAX : positive
-    );
+    generic ( G_MAX : positive );
     port (
       clk : in  std_logic;
       rst : in  std_logic;
@@ -31,10 +29,8 @@ architecture tb of clk_en_tb is
 
 begin
 
-  dut : component clk_en
-    generic map (
-      G_MAX => 10  -- Change only this value to modify counting
-    )
+  dut : clk_en
+    generic map ( G_MAX => 10 )  -- Change only this value to modify counting
     port map (
       clk => clk,
       rst => rst,

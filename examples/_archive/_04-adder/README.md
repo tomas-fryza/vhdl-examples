@@ -122,7 +122,7 @@ Full adder is the adder which adds three inputs and produces two outputs. The fi
    ![ripple carry adder](images/adder_4bit_structure.png)
 
    ```vhdl
-   architecture behavioral of adder_4bit is
+   architecture Behavioral of adder_4bit is
      -- Component declaration for full adder
      component full_adder is
        port (
@@ -160,7 +160,7 @@ Full adder is the adder which adds three inputs and produces two outputs. The fi
      -- 4th full adder
 
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
@@ -199,7 +199,7 @@ Full adder is the adder which adds three inputs and produces two outputs. The fi
    ![top level](images/top-level_structure.png)
 
    ```vhdl
-   architecture behavioral of top_level is
+   architecture Behavioral of top_level is
      -- Component declaration for 4-bit adder
 
 
@@ -225,7 +225,7 @@ Full adder is the adder which adds three inputs and produces two outputs. The fi
      -- Set display position
 
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 4. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys-a7-50t`, uncomment and modify names of used pins according to the `top_level` entity.

@@ -29,7 +29,7 @@ end entity alu_4bit;
 
 -------------------------------------------------
 
-architecture behavioral of alu_4bit is
+architecture Behavioral of alu_4bit is
     signal sig_res : std_logic_vector(4 downto 0);  -- Extra bit for carry
 begin
 
@@ -78,4 +78,4 @@ begin
     zero   <= '1' when sig_res(3 downto 0) = "0000" else
               '0';        -- Zero flag
 
-end architecture behavioral;
+end Behavioral;

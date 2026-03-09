@@ -124,7 +124,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 3. Define four states for the FSM and an internal counters in the architecture declaration section to count a sequence of data bits and clock periods.
 
     ```vhdl
-    architecture behavioral of uart_tx is
+    architecture Behavioral of uart_tx is
         type   state_type is (IDLE, START_BIT, DATA_BITS, STOP_BIT);
         signal state : state_type;
 
@@ -213,7 +213,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                 end if;
             end if;
         end process p_transmitter;
-    end architecture behavioral;
+    end Behavioral;
     ```
 
 5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.

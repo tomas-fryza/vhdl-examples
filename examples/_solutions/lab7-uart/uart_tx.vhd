@@ -37,7 +37,7 @@ end entity uart_tx;
 
 -------------------------------------------------
 
-architecture behavioral of uart_tx is
+architecture Behavioral of uart_tx is
     type   state_type is (IDLE, START_BIT, DATA_BITS, STOP_BIT);
     signal state : state_type;
 
@@ -121,4 +121,4 @@ begin
         end if;
     end process p_transmitter;
 
-end architecture behavioral;
+end Behavioral;

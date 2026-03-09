@@ -34,12 +34,10 @@ end entity top_level;
 
 -------------------------------------------------
 
-architecture behavioral of top_level is
+architecture Behavioral of top_level is
     -- Component declaration for clock enable
     component clock_en is
-        generic (
-            N_PERIODS : integer
-        );
+        generic ( N_PERIODS : integer );
         port (
             clk   : in    std_logic;
             rst   : in    std_logic;
@@ -62,9 +60,7 @@ architecture behavioral of top_level is
 
     -- Component declaration for simple counter
     component counter is
-        generic (
-            N_BITS : integer
-        );
+        generic ( N_BITS : integer );
         port (
             clk   : in    std_logic;
             rst   : in    std_logic;
@@ -81,10 +77,8 @@ architecture behavioral of top_level is
 begin
 
     -- Component instantiation of clock enable for 2 ms
-    clk_en : component clock_en
-        generic map (
-            N_PERIODS => 200_000
-        )
+    clk_en : clock_en
+        generic map ( N_PERIODS => 200_000 )
         port map (
             clk   => CLK100MHZ,
             rst   => BTNC,
@@ -92,7 +86,7 @@ begin
         );
 
     -- Component instantiation of button debouncer
-    display : component debounce
+    display : debounce
         port map (
             clk      => CLK100MHZ,
             rst      => BTNC,
@@ -104,10 +98,8 @@ begin
         );
 
     -- Component instantiation of 4-bit simple counter
-    counter : component counter
-        generic map (
-            N_BITS => 4
-        )
+    counter : counter
+        generic map ( N_BITS => 4 )
         port map (
             clk   => CLK100MHZ,
             rst   => BTNC,
@@ -115,4 +107,4 @@ begin
             count => LED
         );
 
-end architecture behavioral;
+end Behavioral;

@@ -26,7 +26,7 @@ architecture tb of tb_full_adder is
     signal sum   : std_logic;
 begin
 
-    dut : component full_adder
+    dut : full_adder
         port map (
             c_in  => c_in,
             b     => b,

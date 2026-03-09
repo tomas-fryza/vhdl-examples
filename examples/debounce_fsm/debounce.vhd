@@ -35,7 +35,7 @@ end entity debounce;
 
 -------------------------------------------------
 
-architecture behavioral of debounce is
+architecture Behavioral of debounce is
     --! Define states for the FSM
     type   state_type is (IDLE, COUNT_1, PRESSED, COUNT_0);
     signal state : state_type; --! FSM state
@@ -156,4 +156,4 @@ begin
     pos_edge <= sig_clean and not(sig_delayed);
     neg_edge <= not(sig_clean) and sig_delayed;
 
-end architecture behavioral;
+end Behavioral;

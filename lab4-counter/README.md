@@ -64,9 +64,7 @@ To drive other logic in the design that requires a slower operation, it is bette
 
       ```vhdl
       entity clk_en is
-          generic (
-              G_MAX : positive := 5  -- Default number of clock cycles
-          );
+          generic ( G_MAX : positive := 5 );  -- Default number of clock cycles
           port (
               clk : in  std_logic;
               rst : in  std_logic;
@@ -89,7 +87,7 @@ To drive other logic in the design that requires a slower operation, it is bette
 4. Use a **synchronous process** and complete the architecture of the clock enable circuit. The internal counter `sig_cnt` is used to track clock pulses.
 
    ```vhdl
-   architecture behavioral of clk_en is
+   architecture Behavioral of clk_en is
 
        -- Internal counter
        signal sig_cnt : integer range 0 to G_MAX-1;
@@ -114,7 +112,7 @@ To drive other logic in the design that requires a slower operation, it is bette
            end if;      -- End if for rising_edge
        end process;
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 5. Create a VHDL simulation source file named `clk_en_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
@@ -129,9 +127,7 @@ To drive other logic in the design that requires a slower operation, it is bette
    architecture tb of clk_en_tb is
 
        component clk_en is
-           generic (
-               G_MAX : positive
-           );
+           generic ( G_MAX : positive );
            port (
                clk : in  std_logic;
                rst : in  std_logic;
@@ -143,10 +139,8 @@ To drive other logic in the design that requires a slower operation, it is bette
 
    begin
 
-       dut : component clk_en
-           generic map (
-               G_MAX => 10  -- Change only this value to modify the counting
-           )
+       dut : clk_en
+           generic map ( G_MAX => 10 )  -- Change only this value to modify the counting
            port map (
                clk => clk,
                rst => rst,
@@ -215,12 +209,10 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 2. Use component declaration and instantiation of `clk_en` and `counter`, and define the top-level architecture as follows.
 
    ```vhdl
-   architecture behavioral of counter_top is
+   architecture Behavioral of counter_top is
        -- Component declaration for clock enable
        component clk_en is
-           generic (
-               G_MAX : positive
-           );
+           generic ( G_MAX : positive );
            port (
                clk : in  std_logic;
                rst : in  std_logic;
@@ -230,7 +222,9 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
        -- Component declaration for binary counter
        component counter is
+
            -- TODO: Add declaration of `counter`
+
        end component counter;
 
        -- Internal signal for counter
@@ -239,10 +233,8 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
    begin
 
        -- Component instantiation of clock enable for 10 ms
-       clock_0 : component clk_en
-           generic map (
-               G_MAX => 1_000_000
-           )
+       clock_0 : clk_en
+           generic map ( G_MAX => 1_000_000 )
            port map (
                clk => clk,
                rst => btnu,
@@ -250,13 +242,13 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
 
        -- Component instantiation of 8-bit binary counter
-       counter_0 : component counter
+       counter_0 : counter
            -- TODO: Add instantiation of `counter`
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
-3. Create a new constraints file `nexys` (XDC file). Copy relevant pin assignments from the [Nexys A7-50T](../examples/_solutions/nexys.xdc) constraint file or use the following minimal constrains:
+3. Create a new constraints file `nexys` (XDC file). Copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) constraint file or use the following minimal constrains:
 
    ```xdc
    # -----------------------------------------------
@@ -317,12 +309,10 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 3. Use component declaration and instantiation of `clk_en`, `counter`, and `bin2seg`, and define the top-level architecture as follows.
 
    ```vhdl
-   architecture behavioral of counter_top is
+   architecture Behavioral of counter_top is
        -- Component declaration for clock enable
        component clk_en is
-           generic (
-               G_MAX : positive
-           );
+           generic ( G_MAX : positive );
            port (
                clk : in  std_logic;
                rst : in  std_logic;
@@ -347,10 +337,8 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
    begin
 
        -- Component instantiation of clock enable for 250 ms
-       clock_0 : component clk_en
-           generic map (
-               G_MAX => 25_000_000
-           )
+       clock_0 : clk_en
+           generic map ( G_MAX => 25_000_000 )
            port map (
                clk => clk,
                rst => btnu,
@@ -358,21 +346,23 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
 
        -- Component instantiation of 4-bit binary counter
-       counter_0 : component counter
+       counter_0 : counter
+
            -- TODO: Add instantiation of `counter`
 
        -- Component instantiation of bin2seg
-       decoder_0 : component bin2seg
+       decoder_0 : bin2seg
+
            -- TODO: Add instantiation of `bin2seg`
 
        dp <=  -- TODO: Turn off decimal point
 
        an <=  -- TODO: Set display position
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
-4. Create a new constraints file `nexys` (XDC file). Copy relevant pin assignments from the [Nexys A7-50T](../examples/_solutions/nexys.xdc) constraint file or use the following minimal constrains:
+4. Create a new constraints file `nexys` (XDC file). Copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) constraint file or use the following minimal constrains:
 
    ```xdc
    # -----------------------------------------------

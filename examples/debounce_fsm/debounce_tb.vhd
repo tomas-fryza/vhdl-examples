@@ -36,7 +36,7 @@ architecture behavior of tb_debounce is
 begin
 
     -- Instantiate the Device Under Test (DUT)
-    dut : component debounce
+    dut : debounce
         port map (
             clk      => clock,
             rst      => reset,

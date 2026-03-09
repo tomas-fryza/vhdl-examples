@@ -27,10 +27,10 @@ end entity half_adder;
 
 -------------------------------------------------
 
-architecture behavioral of half_adder is
+architecture Behavioral of half_adder is
 begin
 
     carry <= b and a;
     sum   <= b xor a;
 
-end architecture behavioral;
+end Behavioral;

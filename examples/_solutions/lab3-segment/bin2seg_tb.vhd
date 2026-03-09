@@ -23,7 +23,7 @@ architecture testbench of bin2seg_tb is
     signal sig_seg : std_logic_vector(6 downto 0);
 begin
 
-    dut : component bin2seg
+    dut : bin2seg
         port map (
             bin => sig_bin,
             seg => sig_seg

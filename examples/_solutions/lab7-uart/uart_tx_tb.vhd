@@ -37,7 +37,7 @@ architecture tb of tb_uart_tx is
     signal   tbsimended : std_logic := '0';
 
 begin
-    dut : component uart_tx
+    dut : uart_tx
         generic map (
             CLK_FREQ => 100_000_000,
             BAUDRATE => 15_600_000

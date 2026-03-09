@@ -38,7 +38,7 @@ end entity top_level;
 
 -------------------------------------------------
 
-architecture behavioral of top_level is
+architecture Behavioral of top_level is
     -- Component declaration for 4-bit alu
     component alu_4bit is
         port (
@@ -65,7 +65,7 @@ architecture behavioral of top_level is
 begin
 
     -- Component instantiation of 4-bit alu
-    adder : component alu_4bit
+    adder : alu_4bit
         port map (
             a      => SW_A,
             b      => SW_B,
@@ -76,7 +76,7 @@ begin
         );
 
     -- Component instantiation of bin2seg
-    display : component bin2seg
+    display : bin2seg
         port map (
             clear  => '0',
             bin    => sig_tmp,
@@ -98,4 +98,4 @@ begin
     -- Set display position
     AN <= b"1111_1110";
 
-end architecture behavioral;
+end Behavioral;

@@ -28,7 +28,7 @@ architecture testbench of comparator_tb is
     signal sig_a_gt   : std_logic;
 begin
 
-    dut : component comparator
+    dut : comparator
         port map (
             b      => sig_b,
             a      => sig_a,

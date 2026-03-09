@@ -11,9 +11,7 @@ end entity tb_lfsr;
 architecture tb of tb_lfsr is
 
   component lfsr is
-    generic (
-      n_bits : integer
-    );
+    generic ( n_bits : integer );
     port (
       clk      : in    std_logic;
       rst      : in    std_logic;
@@ -40,10 +38,8 @@ architecture tb of tb_lfsr is
 
 begin
 
-  dut : component lfsr
-    generic map (
-      n_bits => c_nbits
-    )
+  dut : lfsr
+    generic map ( n_bits => c_nbits )
     port map (
       clk      => clk,
       rst      => rst,

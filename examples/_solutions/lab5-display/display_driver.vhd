@@ -44,7 +44,7 @@ architecture Behavioral of display_driver is
     
     -- Internal signals
     signal sig_en    : std_logic;
-    signal sig_digit : std_logic;
+    signal sig_digit : std_logic_vector(0 downto 0);  -- Can be scalable
     signal sig_bin   : std_logic_vector(3 downto 0);
 
 begin
@@ -52,7 +52,7 @@ begin
     ------------------------------------------------------------------------
     -- Clock enable generator for refresh timing
     ------------------------------------------------------------------------
-    clock_0 : component clk_en
+    clock_0 : clk_en
         generic map ( G_MAX => 16 ) -- Adjust for flicker-free multiplexing
         port map (                  -- For simulation: 16
             clk => clk,             -- For implementation: 1_600_000
@@ -63,25 +63,25 @@ begin
     ------------------------------------------------------------------------
     -- N-bit counter for digit selection
     ------------------------------------------------------------------------
-    counter_0 : component counter
+    counter_0 : counter
        generic map ( G_BITS => 1 )
        port map (
-           clk    => clk,
-           rst    => rst,
-           en     => sig_en,
-           cnt(0) => sig_digit  -- std_logic_vector => std_logic
-       );                       -- cnt(0) only for 1-bit counter
+           clk => clk,
+           rst => rst,
+           en  => sig_en,
+           cnt => sig_digit
+       );
 
     ------------------------------------------------------------------------
     -- Digit select
     ------------------------------------------------------------------------
-    sig_bin <= data(3 downto 0) when sig_digit = '0' else
+    sig_bin <= data(3 downto 0) when sig_digit = "0" else
                data(7 downto 4);
 
     ------------------------------------------------------------------------
     -- 7-segment decoder
     ------------------------------------------------------------------------
-    decoder_0 : component bin2seg
+    decoder_0 : bin2seg
         port map (
             bin => sig_bin,
             seg => seg
@@ -93,12 +93,12 @@ begin
     p_anode_select : process (sig_digit) is
     begin
         case sig_digit is
-            when '0' =>
-                anode <= b"10";  -- Right digit
-            when '1' =>
-                anode <= b"01";  -- Left digit
+            when "0" =>
+                anode <= "10";  -- Right digit active
+            when "1" =>
+                anode <= "01";  -- Left digit active
             when others =>
-                anode <= b"11";  -- Do not select anything
+                anode <= "11";  -- All off
         end case;
     end process;
 

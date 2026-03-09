@@ -17,9 +17,7 @@ library ieee;
 -------------------------------------------------
 
 entity clock_en is
-  generic (
-    n_periods : integer := 3 --! Default number of clk periodes to generate one pulse
-  );
+  generic ( n_periods : integer := 3 );  --! Default number of clk periodes to generate one pulse
   port (
     clk   : in    std_logic; --! Main clock
     rst   : in    std_logic; --! High-active synchronous reset
@@ -29,7 +27,7 @@ end entity clock_en;
 
 -------------------------------------------------
 
-architecture behavioral of clock_en is
+architecture Behavioral of clock_en is
 
   --! Local counter
   signal sig_count : integer range 0 to n_periods - 1;
@@ -60,4 +58,4 @@ begin
   pulse <= '1' when (sig_count = n_periods - 1) else
            '0';
 
-end architecture behavioral;
+end Behavioral;

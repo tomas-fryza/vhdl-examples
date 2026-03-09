@@ -5,9 +5,7 @@ library ieee;
     use ieee.numeric_std.all;
 
 entity debounce is
-    generic (
-        DB_TIME : time := 25 ms
-    );
+    generic ( DB_TIME : time := 25 ms );
     port (
         clk     : in    std_logic;
         btn_in  : in    std_logic; -- Asynchronous and noisy input

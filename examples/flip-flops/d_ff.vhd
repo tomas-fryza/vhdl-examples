@@ -35,7 +35,7 @@ end entity d_ff;
 -- Architecture body for D-type flip-flop
 ----------------------------------------------------------
 
-architecture behavioral of d_ff is
+architecture Behavioral of d_ff is
 
 begin
 
@@ -60,4 +60,4 @@ begin
 
   end process p_d_ff;
 
-end architecture behavioral;
+end Behavioral;

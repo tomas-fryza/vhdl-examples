@@ -72,7 +72,7 @@ architecture structural of full_adder is
 begin
 
     -- Component instantiations
-    HA0 : component half_adder
+    HA0 : half_adder
         port map (
             b     => b,
             a     => a,
@@ -80,7 +80,7 @@ begin
             sum   => sig_sum0
         );
 
-    HA1 : component half_adder
+    HA1 : half_adder
         port map (
             b     => c_in,
             a     => sig_sum0,

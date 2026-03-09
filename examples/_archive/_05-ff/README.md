@@ -135,7 +135,7 @@ A D-type latch can be modeled in VHDL as follows.
        );
    end entity d_latch;
    -------------------------------------
-   architecture behavioral of d_latch is
+   architecture Behavioral of d_latch is
    begin
        p_d_latch : process (en, d) is
        begin
@@ -144,7 +144,7 @@ A D-type latch can be modeled in VHDL as follows.
                q_bar <= not d;
            end if;
        end process p_d_latch;
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 <a name="part3"></a>
@@ -171,7 +171,7 @@ The basic difference between a latch and a flip-flop is a gating or clocking mec
    5. Use the following architecture example and complete the synchronous reset [assignment](https://github.com/tomas-fryza/digital-electronics-1/wiki/Signal-assignments).
 
       ```vhdl
-      architecture behavioral of d_ff_rst is
+      architecture Behavioral of d_ff_rst is
       begin
           --------------------------------------------------------
           -- p_d_ff_rst:
@@ -189,7 +189,7 @@ The basic difference between a latch and a flip-flop is a gating or clocking mec
                       q_bar <= not d;
               end if;
           end process p_d_ff_rst;
-      end architecture behavioral;
+      end Behavioral;
       ```
 
    6. Create a VHDL simulation source `tb_ff_rst`, use the following testbench example, and simulate the circuit. Verify the synchronous reset.
@@ -285,7 +285,7 @@ The basic difference between a latch and a flip-flop is a gating or clocking mec
    | `t_ff_rst` | `clk`, `rst`, `t` | `q`, `q_bar` | T type flip-flop with a sync reset |
 
    ```vhdl
-   architecture behavioral of t_ff_rst is
+   architecture Behavioral of t_ff_rst is
        -- It must use this local signal instead of output ports
        -- because "out" ports cannot be read within the architecture
        signal sig_q : std_logic;
@@ -310,7 +310,7 @@ The basic difference between a latch and a flip-flop is a gating or clocking mec
        -- Output ports are permanently connected to local signal
        q     <= sig_q;
        q_bar <= not sig_q;
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 3. Try to simulate both flip-flops together in existing testbench file `tb_ff_rst.vhd` with a maximum duration of 200 ns. Verify the synchronous reset as well.
@@ -343,7 +343,7 @@ Use D type flip-flops with synchronous reset and perform the following steps to 
       ------------------------------------------------------------------------
       -- Architecture body for top level
       ------------------------------------------------------------------------
-      architecture behavioral of top is
+      architecture Behavioral of top is
 
         -- Internal signals between flip-flops
         signal sig_ff0 : std_logic;
@@ -373,7 +373,7 @@ Use D type flip-flops with synchronous reset and perform the following steps to 
 
         -- PUT OTHER TWO FLIP-FLOP INSTANCES HERE
 
-      end architecture behavioral;
+      end Behavioral;
       ```
 
    4. Create a testbench file `tb_top` and simulate it.

@@ -28,7 +28,7 @@ end entity blink;
 
 -------------------------------------------------
 
-architecture behavioral of blink is
+architecture Behavioral of blink is
     --! Number of bits for internal counter
     constant NBIT : integer := 24;
     --! Internal counter
@@ -55,4 +55,4 @@ begin
     -- MSB of internal counter connect to LED
     led <= std_logic(sig_internal_cnt(NBIT - 1));
 
-end architecture behavioral;
+end Behavioral;

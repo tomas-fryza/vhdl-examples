@@ -19,9 +19,7 @@ library ieee;
 -------------------------------------------------
 
 entity clk_en is
-    generic (
-        G_MAX : positive := 5  --! Number of clock cycles between pulses
-    );
+    generic ( G_MAX : positive := 5 );  --! Number of clock cycles between pulses
     port (
         clk : in  std_logic;  --! Main clock
         rst : in  std_logic;  --! High-active synchronous reset
@@ -31,7 +29,7 @@ end entity clk_en;
 
 -------------------------------------------------
 
-architecture behavioral of clk_en is
+architecture Behavioral of clk_en is
 
     --! Internal counter
     signal sig_cnt : integer range 0 to G_MAX - 1;
@@ -58,4 +56,4 @@ begin
         end if;      -- End if for rising_edge
     end process p_clk_enable;
 
-end architecture behavioral;
+end Behavioral;

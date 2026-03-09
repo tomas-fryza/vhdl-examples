@@ -36,7 +36,7 @@ end entity top;
 -- Architecture body for top level
 ----------------------------------------------------------
 
-architecture behavioral of top is
+architecture Behavioral of top is
 
 begin
   --------------------------------------------------------
@@ -55,4 +55,4 @@ begin
       rst      => BTNC
     );
 
-end architecture behavioral;
+end Behavioral;

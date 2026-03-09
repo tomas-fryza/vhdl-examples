@@ -19,9 +19,7 @@ library ieee;
 -------------------------------------------------
 
 entity counter is
-  generic (
-    n_bits : integer := 3 --! Default number of counter bits
-  );
+  generic ( n_bits : integer := 3 );  --! Default number of counter bits
   port (
     clk   : in    std_logic;                            --! Main clock
     rst   : in    std_logic;                            --! High-active synchronous reset
@@ -32,7 +30,7 @@ end entity counter;
 
 -------------------------------------------------
 
-architecture behavioral of counter is
+architecture Behavioral of counter is
 
   --! Local counter
   signal sig_count : std_logic_vector(n_bits - 1 downto 0);
@@ -62,4 +60,4 @@ begin
   -- Assign internal register to output
   count <= sig_count;
 
-end architecture behavioral;
+end Behavioral;

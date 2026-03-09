@@ -41,7 +41,7 @@ end entity tlc;
 -- Architecture declaration for traffic light controller
 ----------------------------------------------------------
 
-architecture behavioral of tlc is
+architecture Behavioral of tlc is
 
   --! Define the FSM states
   type t_state is (
@@ -79,13 +79,11 @@ begin
   -- an enable pulse every 250 ms (4 Hz)
   --------------------------------------------------------
   clk_en0 : entity work.clock_en
-    generic map (
+    generic map ( g_MAX => 1 )
       -- FOR SIMULATION, KEEP THIS VALUE TO 1
       -- FOR IMPLEMENTATION, CALCULATE VALUE: 250 ms / (1/100 MHz)
       -- 1   @ 10 ns
       -- ??? @ 250 ms
-      g_MAX => 1
-    )
     port map (
       clk => clk,
       rst => rst,
@@ -233,4 +231,4 @@ begin
 
   end process p_output_fsm;
 
-end architecture behavioral;
+end Behavioral;

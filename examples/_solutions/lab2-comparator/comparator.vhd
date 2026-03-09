@@ -37,7 +37,7 @@ end entity comparator;
 
 -------------------------------------------------
 
-architecture behavioral of comparator is
+architecture Behavioral of comparator is
 begin
     ---------------------------------------------
     -- Method 1: Behavioral (recommended for design)
@@ -60,7 +60,7 @@ begin
             (b(0) and not(a(1)) and not (a(0))) or
             (b(1) and b(0) and not(a(0)));
 
-end architecture behavioral;
+end Behavioral;
 
 -- K-Map
 -- b_gt:           a1 a0

@@ -104,7 +104,7 @@ The main methods to debounce a bouncy button are:
    Define four states for the FSM and an internal counter in the architecture declaration section to count a sequence of unchanged button signal values. Additionally, define a debounced signal required later for the edge detector.
 
       ```vhdl
-      architecture behavioral of debounce is
+      architecture Behavioral of debounce is
           -- Define states for the FSM
           type   state_type is (IDLE, COUNT_1, PRESSED, COUNT_0);
           signal state : state_type;
@@ -174,7 +174,7 @@ The main methods to debounce a bouncy button are:
        -- Assign output debounced signal
        clean <= sig_clean;
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 4. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
@@ -237,7 +237,7 @@ A positive **edge detector** generates a single clock pulse when the input signa
           -- Assign output signals for edge detector
 
 
-      end architecture behavioral;
+      end Behavioral;
       ```
 
 2. Add new edge detector outputs to the simulation source `tb_debounce` and relaunch the simulation. Ensure that your simulations resemble the figure below:

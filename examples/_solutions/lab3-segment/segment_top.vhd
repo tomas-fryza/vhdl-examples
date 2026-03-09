@@ -29,7 +29,7 @@ end entity segment_top;
 
 -------------------------------------------------
 
-architecture behavioral of segment_top is
+architecture Behavioral of segment_top is
 
     -- Declare component `bin2seg`
     component bin2seg is
@@ -44,7 +44,7 @@ architecture behavioral of segment_top is
 begin
 
     --! Instantiate decoder
-    decoder_0 : component bin2seg
+    decoder_0 : bin2seg
         port map (
             bin => sig_bin,
             seg => seg
@@ -68,4 +68,4 @@ begin
     an(1) <= not(btnd);
     an(0) <= btnd;
 
-end architecture behavioral;
+end Behavioral;

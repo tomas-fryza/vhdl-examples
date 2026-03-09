@@ -29,7 +29,7 @@ end entity adder_4bit;
 
 -------------------------------------------------
 
-architecture behavioral of adder_4bit is
+architecture Behavioral of adder_4bit is
     -- Component declaration for full adder
     component full_adder is
         port (
@@ -49,7 +49,7 @@ begin
 
     -- Component instantiations for each bit position
     -- 1st full adder
-    FA0 : component full_adder
+    FA0 : full_adder
         port map (
             c_in  => c_in,
             b     => b(0),
@@ -59,7 +59,7 @@ begin
         );
 
     -- 2nd full adder
-    FA1 : component full_adder
+    FA1 : full_adder
         port map (
             c_in  => sig_c0,
             b     => b(1),
@@ -69,7 +69,7 @@ begin
         );
 
     -- 3rd full adder
-    FA2 : component full_adder
+    FA2 : full_adder
         port map (
             c_in  => sig_c1,
             b     => b(2),
@@ -79,7 +79,7 @@ begin
         );
 
     -- 4th full adder
-    FA3 : component full_adder
+    FA3 : full_adder
         port map (
             c_in  => sig_c2,
             b     => b(3),
@@ -88,7 +88,7 @@ begin
             sum   => result(3)
         );
 
-end architecture behavioral;
+end Behavioral;
 
 -------------------------------------------------
 -- See file full_adder.vhd
@@ -111,7 +111,7 @@ end entity full_adder;
 
 -------------------------------------------------
 
-architecture behavioral of full_adder is
+architecture Behavioral of full_adder is
     -- Internal signals between gates
     signal sig_tmp_0 : std_logic;
     signal sig_tmp_1 : std_logic;
@@ -125,4 +125,4 @@ begin
     sig_tmp_1 <= c_in and sig_tmp_0;
     c_out     <= sig_tmp_1 or (b and a);
 
-end architecture behavioral;
+end Behavioral;

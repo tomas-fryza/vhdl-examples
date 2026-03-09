@@ -26,7 +26,7 @@ architecture tb of display_driver_tb is
 
 begin
 
-    dut : component display_driver
+    dut : display_driver
     port map (clk   => clk,
               rst   => rst,
               data  => data,

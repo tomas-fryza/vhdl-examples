@@ -78,9 +78,7 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    ```vhdl
    -- Design source file
    entity lfsr is
-       generic (
-           N_BITS : positive := 4 --! Default number of bits
-       );
+       generic ( N_BITS : positive := 4 );  --! Default number of bits
        port (
            ...
            lfsr_in : out std_logic_vector(N_BITS-1 downto 0);
@@ -146,9 +144,7 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    -- Testbench file
    ...
    component lfsr is
-       generic (
-           N_BITS : positive
-       );
+       generic ( N_BITS : positive );
    ...
 
    constant C_NBITS : positive := 4; -- !!! Simulating number of bits !!!
@@ -159,10 +155,8 @@ A **Linear Feedback Shift Register (LFSR)** is a shift register whose input bit 
    When you instantiate your counter, you then also bind the `N_BITS` generic to this constant:
 
    ```vhdl
-   dut : component lfsr
-       generic map (
-           N_BITS => C_NBITS
-       )
+   dut : lfsr
+       generic map ( N_BITS => C_NBITS )
        ...
    ```
 
@@ -245,7 +239,7 @@ end generate label;
    **Note:** The `enable_clock` and `bin2seg` components from the previous lab(s) are required. Do not forget to **copy files** you need to `YOUR-PROJECT-FOLDER/lfsr.srcs/sources_1/new/` folder and **add them to the project** or use **Copy scripts to project** checkbox while adding design source files in Vivado.
 
    ```vhdl
-   architecture behavioral of top_level is
+   architecture Behavioral of top_level is
        -- Component declaration: clock enable
 
 
@@ -275,7 +269,7 @@ end generate label;
        -- Set display position
 
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 2. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys`, uncomment the used pins according to your `top_level` entity.

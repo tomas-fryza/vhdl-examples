@@ -28,7 +28,7 @@ architecture testbench of gates_tb is
 begin
 
     -- Instantiate the design under test (DUT)
-    dut : component gates
+    dut : gates
         port map (
             a     => sig_a,
             b     => sig_b,

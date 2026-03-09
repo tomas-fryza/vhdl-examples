@@ -99,7 +99,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    use ieee.numeric_std.all;  -- Package for data type conversions
    ...
 
-   architecture behavioral of alu_4bit is
+   architecture Behavioral of alu_4bit is
        signal sig_res : std_logic_vector(4 downto 0);  -- Extra bit for carry
    begin
 
@@ -130,7 +130,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
        zero   <= '1' when sig_res(3 downto 0) = "0000" else
                  '0';                  -- Zero flag
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
     Some **important notes**:
@@ -175,7 +175,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
    ![top level](images/top-level_alu.png)
 
    ```vhdl
-   architecture behavioral of top_level is
+   architecture Behavioral of top_level is
        -- Component declaration for 4-bit alu
 
 
@@ -202,7 +202,7 @@ An **opcode** (short for operation code) is a part of a machine language instruc
        -- Display output value on LEDs
 
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 4. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys`, uncomment and modify names of used pins according to the `top_level` entity.

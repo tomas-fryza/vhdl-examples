@@ -183,7 +183,7 @@ The following example shows a simple structural design consisting of two 2-input
    ![component instance](images/component_example.png)
 
    ```vhdl
-   architecture behavioral of top_level is
+   architecture Behavioral of top_level is
 
        component xor2 is            -- Component declaration
             port (
@@ -196,20 +196,20 @@ The following example shows a simple structural design consisting of two 2-input
        signal sig_tmp : std_logic;  -- Internal signal
 
    begin
-       U1 : component xor2          -- First XOR instance
+       U1 : xor2          -- First XOR instance
            port map (
                in1  => a,
                in2  => b,
                out1 => sig_tmp
            );
 
-       U2 : component xor2          -- Second XOR instance
+       U2 : xor2          -- Second XOR instance
            port map (
                in1  => sig_tmp,
                in2  => c,
                out1 => y
            );
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 In this example, `U1` and `U2` are two independent instances of the same component, the signal `sig_tmp` connects the output of the first XOR gate to the input of the second, and the architecture describes a structural netlist rather than behavioral logic.
@@ -237,7 +237,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
    > **Note:** In Vivado, individual templates can be found in **Flow Navigator** or in the menu **Tools > Language Templates**. Search for `component declaration` and `component instantiation`.
 
    ```vhdl
-   architecture behavioral of segment_top is
+   architecture Behavioral of segment_top is
 
        -- Declare component `bin2seg`
        component bin2seg is
@@ -250,7 +250,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
    begin
 
        -- Instantiate decoder
-       decoder_0 : component bin2seg
+       decoder_0 : bin2seg
            port map (
                bin => sw,
                seg => seg
@@ -262,7 +262,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
        -- Enable only the rightmost digit (AN0 active-low)
        an <= ...
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
    Only one digit must be enabled. All other digits must remain disabled to prevent multiple digits from lighting simultaneously.
@@ -277,7 +277,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
 
 5. Create a new constraints file `nexys` (XDC file).
 
-6. Copy relevant pin assignments from the [Nexys A7-50T](../examples/_solutions/nexys.xdc) constraint file or use the following minimal constrains:
+6. Copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) constraint file or use the following minimal constrains:
 
    ```xdc
    set_property PACKAGE_PIN J15 [get_ports {sw[0]}]
@@ -329,7 +329,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
    ![Top level, 2-digit](images/top-level_2-digit.png)
 
    ```vhdl
-   architecture behavioral of segment_top is
+   architecture Behavioral of segment_top is
        ...
 
        -- Internal signal for selected 4-bit input
@@ -349,7 +349,7 @@ In this task, you will integrate your `bin2seg` decoder into a **top-level entit
        an(1) <= ...  -- left digit
        an(0) <= ...  -- right digit
 
-   end architecture behavioral;
+   end Behavioral;
    ```
 
 <a name="questions"></a>

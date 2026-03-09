@@ -10,17 +10,19 @@
 
 After completing this laboratory, students will be able to:
 
-* Use several 7-segment displays
-* Use previously created modules in a new design
-* Understand how to use the multiplexer to switch between displays
+* Understand the hardware of 7-segment displays and the principles of multiplexing for multiple digits
+* Use previously created VHDL modules (`clk_en`, `counter`, `bin2seg`) in new designs.
+* Design and implement modular VHDL components for combinational and sequential logic.
 
 ### Background
 
-The Nexys A7 board provides two four-digit common anode seven-segment LED displays (configured to behave like a single eight-digit display). See [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board and find out the connection of 7-segment displays and push-buttons. What is the difference between NPN and PNP type of BJT (Bipolar Junction Transistor)?
+The Nexys A7 board provides two four-digit common anode seven-segment LED displays (configured to behave like a single eight-digit display). Refer to the [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board to determine how the 7-segment displays and push-buttons are conected. Here, the common anodes are switched to 3.3 V using **PNP-type transistors**, while the individual segments and decimal points are connected directly to eight output pins.
+
+Additionally, recall from the electronics course the differences between NPN and PNP types of bipolar junction transistors (BJTs).
 
    ![nexys A7 led and segment](images/nexys-a7_leds-display.png)
 
-A common way to control multiple displays is to gradually switch between them. We control (connect to supply voltage) only one of the displays at a time. Due to the physiological properties of human vision, it is necessary that the time required to display the whole value is a maximum of 16&nbsp;ms. If we display four digits, then the duration of one of them is 4&nbsp;ms. If we display eight digits, the time is reduced to 2&nbsp;ms, etc. Here is a general situation with four 7-segment displays.
+A common way to control multiple 7-segment displays is **multiplexing**, where the displays are switched sequentially. At any given moment, only one display is enabled and connected to the supply voltage. The individual segments are shared between all displays. Due to the persistence of human vision, the switching must be fast enough so that the complete value appears continuously visible. The total refresh period should not exceed **about 16&nbsp;ms**. For example, when displaying four digits, each digit is active for approximately&nbsp;4 ms. If eight digits are used, the active time for each digit is reduced to about 2&nbsp;ms. The figure below illustrates the general principle for four 7-segment displays.
 
    ![display multiplexing](images/waveform_multiplexing-general.png)
 
@@ -38,11 +40,11 @@ A common way to control multiple displays is to gradually switch between them. W
    | `seg` | out | `std_logic_vector(6 downto 0)` | {a,b,c,d,e,f,g} active-low outputs |
    | `anode` | out | `std_logic_vector(1 downto 0)` | Anodes AN1..AN0 (active-low) |
 
-2. In your project, add the design source files `clk_en.vhd`, `counter.vhd`, and `bin2seg.vhd` from the previous laba and check the "Copy sources into project".
+2. In your project, add the design source files `clk_en.vhd`, `counter.vhd`, and `bin2seg.vhd` from the previous labs and check the **Copy sources into project** option. The selected files will be copied into the corresponding Vivado project folders, ensuring that the project contains local copies of all source files.
 
    ![vivado_copy-sources](images/vivado_copy-sources.png)
 
-3. Use component declaration and instantiation of `clk_en`, `counter`, and `bin2seg`, and define the display driver architecture as follows.
+3. Use component declarations and instantiations of `clk_en`, `counter`, and `bin2seg`, and define the display driver architecture according to the following schematic and VHDL template.
 
    ![schematic of display driver](images/schematic_display-driver.png)
 
@@ -87,7 +89,7 @@ A common way to control multiple displays is to gradually switch between them. W
        ------------------------------------------------------------------------
        -- Clock enable generator for refresh timing
        ------------------------------------------------------------------------
-       clock_0 : component clk_en
+       clock_0 : clk_en
            generic map ( G_MAX => 16 )  -- Adjust for flicker-free multiplexing
            port map (                   -- For simulation: 16
                clk => clk,              -- For implementation: 1_600_000
@@ -98,24 +100,25 @@ A common way to control multiple displays is to gradually switch between them. W
        ------------------------------------------------------------------------
        -- N-bit counter for digit selection
        ------------------------------------------------------------------------
-       counter_0 : component counter
+       counter_0 : counter
            generic map ( G_BITS => 1 )
            port map (
-               clk    => clk,
-               rst    => rst,
-               en     => sig_en,
-               cnt(0) => sig_digit  -- std_logic_vector => std_logic
-           );                       -- cnt(0) only for 1-bit counter
+               clk => clk,
+               rst => rst,
+               en  => sig_en,
+               cnt => sig_digit
+           );
 
        ------------------------------------------------------------------------
        -- Digit select
        ------------------------------------------------------------------------
-       sig_bin <= data(3 downto 0) when  -- TODO: Complete the multiplexor
+       sig_bin <= data(3 downto 0) when sig_digit = "0" else
+                  data(7 downto 4);
 
        ------------------------------------------------------------------------
        -- 7-segment decoder
        ------------------------------------------------------------------------
-       decoder_0 : component bin2seg
+       decoder_0 : bin2seg
            port map (
 
                -- TODO: Complete the instantiation of `bin2seg`
@@ -128,24 +131,24 @@ A common way to control multiple displays is to gradually switch between them. W
        p_anode_select : process (sig_digit) is
        begin
            case sig_digit is
-               when '0' =>
-                   anode <= b"10";  -- Right digit
+               when "0" =>
+                   anode <= "10";  -- Right digit active
 
                -- TODO: Complete the anode selection
 
                when others =>
-                   anode <= b"11";  -- Do not select anything
+                   anode <= "11";  -- All off
            end case;
        end process;
 
    end Behavioral;
    ```
 
-4. Complete all "TODOs" in the architecture.
+4. Complete all **TODO** items in the architecture.
 
 5. Create a VHDL simulation source file named `display_driver_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
 
-6. Set clock period to `10 ns` and verify the functionality of the driver.
+6. Set the clock period to `10 ns` and verify the functionality of the display driver with several input data values.
 
    ```vhdl
    stimuli : process
@@ -173,7 +176,7 @@ A common way to control multiple displays is to gradually switch between them. W
    end process;
    ```
 
-7. Display all internal signals in the simulation.
+7. Display all internal signals during the simulation.
 
    ![Vivado: add internal signal](images/vivado_add-wave.png)
 
@@ -196,16 +199,16 @@ A common way to control multiple displays is to gradually switch between them. W
    | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
    | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
 
-2. **Important note:** Change the `G_MAX` parameter of `clk_en` instantiation in the driver architecture to **1_600_000**!
+2. **Important:** Change the `G_MAX` parameter in the `clk_en` instantiation of the driver architecture to **1_600_000**!
 
-3. Provide instantiation of the `display_driver` circuit and complete the top-level architecture.
+3. Provide an instantiation of the `display_driver` circuit and complete the top-level architecture according to the following schematic and template.
 
    ![top level ver1](images/top-level_ver1.png)
 
    ```vhdl
    architecture Behavioral of display_top is
 
-       -- Component declaration for display_driver
+       -- Display driver omponent declaration
        component display_driver is
 
            -- TODO: Complete declaration of `display_driver`
@@ -228,7 +231,7 @@ A common way to control multiple displays is to gradually switch between them. W
    end Behavioral;
    ```
 
-4. Create a new constraints file `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/_solutions/nexys.xdc) template.
+4. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
 
 5. Implement your design to Nexys A7 board:
 
@@ -237,7 +240,7 @@ A common way to control multiple displays is to gradually switch between them. W
    3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
    4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/display.runs/impl_1/display_top.bit`.
 
-6. Modify the `G_MAX` parameter in `display_driver.vhd` file so you can not see the display blinking.
+6. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink.
 
 7. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
@@ -245,13 +248,31 @@ A common way to control multiple displays is to gradually switch between them. W
 
 ## Optional tasks
 
-1. Modify top-level design, use Pmod ports and verify period of anode signals using external logic analyzer.
-
-   ![top level ver2](images/top-level_ver2.png)
+**Pmod (Peripheral Module)** ports are standardized 6- or 12-pin connectors on FPGA and microcontroller boards, used to interface with external peripheral modules like sensors, displays, or communication devices. They provide digital I/O signals, power (VCC), and ground, making it easy to connect add-on modules without complex wiring. On the Nexys A7 board, Pmod ports can be used to drive LEDs, connect switches, or read data from external devices.
 
    ![pmod ports](images/pmod_table.png)
 
-2. Extend the `display_driver` structure to control four or even eight 7-segment displays.
+1. Modify the top-level design to use Pmod ports, and verify the period of the anode signals using an external logic analyzer.
+
+   ![top level ver2](images/top-level_ver2.png)
+
+2. Extend the `display_driver` design to control four or even eight 7-segment displays.
+
+<a name="questions"></a>
+
+## Questions
+
+1. Explain how the common-anode 7-segment displays are connected on the Nexys A7 board. How are the anodes and segments controlled?
+
+2. What is the purpose of using PNP transistors in the display driver circuit? Why can not the segments be driven directly without them?
+
+3. Describe how multiplexing works for multiple 7-segment displays. Why is a fast refresh rate required?
+
+4. How would you modify your design to extend from two digits to four or eight digits? What changes are needed in the counter width and anode selection logic?
+
+5. What is the role of the `clk_en` component? How does changing the `G_MAX` parameter affect the display behavior?
+
+6. Describe the steps required to implement the top-level design on the Nexys A7 board. What role do XDC constraints play in this process?
 
 <a name="references"></a>
 

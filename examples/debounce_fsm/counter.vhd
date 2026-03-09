@@ -19,20 +19,18 @@ library ieee;
 -------------------------------------------------
 
 entity counter is
-    generic (
-        N_BITS : integer := 3 --! Number of bits
-    );
+    generic ( N_BITS : integer := 3 );  --! Number of bits
     port (
-        clk   : in    std_logic;                            --! Main clock
-        rst   : in    std_logic;                            --! High-active synchronous reset
-        en    : in    std_logic;                            --! Clock enable input
-        count : out   std_logic_vector(N_BITS - 1 downto 0) --! Counter value
+        clk   : in  std_logic;                            --! Main clock
+        rst   : in  std_logic;                            --! High-active synchronous reset
+        en    : in  std_logic;                            --! Clock enable input
+        count : out std_logic_vector(N_BITS - 1 downto 0) --! Counter value
     );
 end entity counter;
 
 -------------------------------------------------
 
-architecture behavioral of counter is
+architecture Behavioral of counter is
     --! Local counter
     signal sig_count : integer range 0 to (2 ** N_BITS - 1);
 begin
@@ -66,4 +64,4 @@ begin
     -- Note: integer--> unsigned--> std_logic vector
     count <= std_logic_vector(to_unsigned(sig_count, N_BITS));
 
-end architecture behavioral;
+end Behavioral;

@@ -149,7 +149,7 @@ Let an intersection contains two one-way streets with a fixed time control syste
 3. In VHDL it is possible to define a new data type, which contains the names of our states.
 
    ```vhdl
-   architecture behavioral of tlc is
+   architecture Behavioral of tlc is
 
      -- Define the FSM states
      type t_state is (
@@ -251,7 +251,7 @@ Let an intersection contains two one-way streets with a fixed time control syste
 
       end process p_output_fsm;
 
-    end architecture behavioral;
+    end Behavioral;
     ```
 
 <a name="part4"></a>
@@ -301,7 +301,7 @@ Let an intersection contains two one-way streets with a fixed time control syste
       -- Architecture body for top level
       ----------------------------------------------------------
 
-      architecture behavioral of top is
+      architecture Behavioral of top is
 
       begin
         --------------------------------------------------------
@@ -318,7 +318,7 @@ Let an intersection contains two one-way streets with a fixed time control syste
             rst      => BTNC
           );
 
-      end architecture behavioral;
+      end Behavioral;
       ```
 
    4. Create a new [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file: `nexys-a7-50t` and uncomment used pins according to top entity.

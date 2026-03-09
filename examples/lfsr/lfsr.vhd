@@ -21,9 +21,7 @@ library ieee;
 -------------------------------------------------
 
 entity lfsr is
-  generic (
-    n_bits : integer := 4 --! Default number of bits
-  );
+  generic ( n_bits : integer := 4 );  --! Default number of bits
   port (
     clk      : in    std_logic;                             --! Main clock
     rst      : in    std_logic;                             --! High-active synchronous reset
@@ -37,7 +35,7 @@ end entity lfsr;
 
 -------------------------------------------------
 
-architecture behavioral of lfsr is
+architecture Behavioral of lfsr is
 
   --! Internal register
   signal sig_reg : std_logic_vector(n_bits - 1 downto 0);
@@ -94,4 +92,4 @@ begin
   done <= '1' when (sig_reg = lfsr_in) else
           '0';
 
-end architecture behavioral;
+end Behavioral;

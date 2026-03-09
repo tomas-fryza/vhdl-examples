@@ -15,9 +15,7 @@ end entity counter_tb;
 architecture tb of counter_tb is
 
     component counter is
-        generic (
-            G_BITS : positive
-        );
+        generic ( G_BITS : positive );
         port (
             clk : in  std_logic;
             rst : in  std_logic;
@@ -38,10 +36,8 @@ architecture tb of counter_tb is
 
 begin
 
-    dut : component counter
-        generic map (
-            G_BITS => C_BITS
-        )
+    dut : counter
+        generic map ( G_BITS => C_BITS )
         port map (
             clk => clk,
             rst => rst,
