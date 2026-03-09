@@ -1,6 +1,20 @@
+-----------------------------------------------------------
+--! @brief Display driver top-level
+--! @version 1.2
+--! @copyright (c) 2020-2026 Tomas Fryza, MIT license
+--!
+--! Drives a 2-digit 7-segment display using multiplexing.
+--! Input data is split into high and low nibbles for each digit.
+--
+-- Notes:
+-- - Supports 2-digit display
+-- - Uses clock enable and counter for digit multiplexing
+-- - Anode logic is active-low for common-anode displays
+-----------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
------------------------------------------------
+
 entity display_driver is
     port (
         clk   : in  std_logic;
@@ -10,7 +24,7 @@ entity display_driver is
         anode : out std_logic_vector(1 downto 0)
     );
 end entity display_driver;
------------------------------------------------
+
 architecture Behavioral of display_driver is
 
         -- Component declaration for clock enable
