@@ -11,7 +11,7 @@ entity display_driver is
     );
 end entity display_driver;
 -----------------------------------------------
-architecture behavioral of display_driver is
+architecture Behavioral of display_driver is
 
         -- Component declaration for clock enable
         component clk_en is
@@ -102,4 +102,4 @@ begin
         end case;
     end process;
 
-end architecture behavioral;
+end Behavioral;

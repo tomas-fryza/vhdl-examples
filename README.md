@@ -23,6 +23,7 @@ This repository contains VHDL examples for the bachelor-level course [*Digital E
 2. [Binary comparator](lab2-comparator)
 3. [Seven-segment display decoder](lab3-segment)
 4. [Binary counter](lab4-counter)
+5. [Multiple seven-segment displays](lab5-display)
 
 <!--
 6. [LFSR counter](lab6-lfsr)
