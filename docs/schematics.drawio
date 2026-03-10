@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.1">
   <diagram id="j7nF-TVUxBw4xUQn4cIl" name="Page-1">
-    <mxGraphModel dx="2622" dy="2706" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="2336" math="0" shadow="0">
+    <mxGraphModel dx="2218" dy="2591" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="2336" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -6646,7 +6646,7 @@
             <mxPoint x="2110" y="-1020" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Oav7KE-8Havnv-vvGIT9-16" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Courier New;fontSize=10;fillOpacity=100;spacing=0;spacingLeft=5;connectable=0;" value="led(7:0)" vertex="1">
+        <mxCell id="Oav7KE-8Havnv-vvGIT9-16" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Courier New;fontSize=10;fillOpacity=100;spacing=0;spacingLeft=5;connectable=0;" value="led[7:0]" vertex="1">
           <mxGeometry height="20" width="60.64" x="2109.27" y="-1030" as="geometry" />
         </mxCell>
         <mxCell id="Oav7KE-8Havnv-vvGIT9-17" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;endFill=1;endSize=5;startSize=5;" value="">
@@ -6685,7 +6685,7 @@
             <mxPoint x="1947.25" y="-1060" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Oav7KE-8Havnv-vvGIT9-25" parent="1" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Courier New;fontSize=10;fillOpacity=100;spacing=0;spacingRight=5;connectable=0;" value="o_cnt(N-1:0)" vertex="1">
+        <mxCell id="Oav7KE-8Havnv-vvGIT9-25" parent="1" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Courier New;fontSize=10;fillOpacity=100;spacing=0;spacingRight=5;connectable=0;" value="o_cnt[N-1:0]" vertex="1">
           <mxGeometry height="20" width="80" x="1980" y="-1030" as="geometry" />
         </mxCell>
         <mxCell id="Oav7KE-8Havnv-vvGIT9-26" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Courier New;fontSize=10;fillOpacity=100;spacingLeft=5;connectable=0;spacing=0;" value="i_en" vertex="1">
