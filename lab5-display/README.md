@@ -72,17 +72,16 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
            );
        end component counter;
     
-       -- Component declaration for bin2seg
        component bin2seg is
 
-           -- TODO: Add declaration of `bin2seg`
+           -- TODO: Add component declaration of `bin2seg`
 
        end component bin2seg;
     
        -- Internal signals
        signal sig_en : std_logic;
 
-       -- TODO: Add needed signals
+       -- TODO: Add other needed signals
 
    begin
 
@@ -121,7 +120,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
        decoder_0 : bin2seg
            port map (
 
-               -- TODO: Complete the instantiation of `bin2seg`
+               -- TODO: Add component instantiation of `bin2seg`
 
            );
 
@@ -134,7 +133,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
                when "0" =>
                    anode <= "10";  -- Right digit active
 
-               -- TODO: Complete the anode selection
+               -- TODO: Add another anode selection(s)
 
                when others =>
                    anode <= "11";  -- All off
@@ -208,20 +207,18 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
    ```vhdl
    architecture Behavioral of display_top is
 
-       -- Display driver omponent declaration
        component display_driver is
 
-           -- TODO: Complete declaration of `display_driver`
+           -- TODO: Add component declaration of `display_driver`
 
        end component display_driver;
 
    begin
 
-       -- Display driver instantiation
        display_0 : display_driver
        port map (
 
-           -- TODO: Complete the instantiation of `display_driver`
+           -- TODO: Add component instantiation of `display_driver`
 
        );
 

@@ -17,12 +17,12 @@ library ieee;
 
 entity counter_top is
     port (
-        clk  : in  std_logic;                      --! Main clock
-        btnu : in  std_logic;                      --! Synchronous reset
-        led  : out std_logic_vector(15 downto 0);  --! Show 16-bit counter value
-        seg  : out std_logic_vector(6 downto 0);   --! Seven-segment cathodes CA..CG (active-low)
-        dp   : out std_logic;                      --! Decimal point
-        an   : out std_logic_vector(7 downto 0)    --! Seven-segment anodes AN7..AN0 (active-low)
+        clk  : in  std_logic;                     --! Main clock
+        btnu : in  std_logic;                     --! Synchronous reset
+        led  : out std_logic_vector(9 downto 0);  --! Show 10-bit counter value
+        seg  : out std_logic_vector(6 downto 0);  --! Seven-segment cathodes CA..CG (active-low)
+        dp   : out std_logic;                     --! Decimal point
+        an   : out std_logic_vector(7 downto 0)   --! Seven-segment anodes AN7..AN0 (active-low)
     );
 end entity counter_top;
 
@@ -59,22 +59,22 @@ architecture Behavioral of counter_top is
         );
     end component bin2seg;
 
-    -- Internal signals for first counter: 4-bit @ 250 ms
-    signal sig_en_250ms : std_logic;                     --! Clock enable signal for 4-bit counter
-    signal sig_cnt_4bit : std_logic_vector(3 downto 0);  --! 4-bit counter value
+    -- Internal signals for the first counter: 4-bit @ 500 ms
+    signal sig_en_0 : std_logic;                     --! Clock enable signal for 4-bit counter
+    signal sig_cnt  : std_logic_vector(3 downto 0);  --! 4-bit counter value
 
-    -- Internal signal for second counter: 16-bit @ 2 ms
-    signal sig_en_2ms : std_logic;  --! Clock enable signal for 16-bit counter
+    -- Internal signal for the second counter: 10-bit @ 20 ms
+    signal sig_en_1 : std_logic;  --! Clock enable signal for 10-bit counter
 
 begin
 
-    -- Component instantiation of clock enable for 250 ms
+    -- Component instantiation of clock enable for 500 ms
     clock_0 : clk_en
-        generic map ( G_MAX => 25_000_000 )
+        generic map ( G_MAX => 50_000_000 )
         port map (
             clk => clk,
             rst => btnu,
-            ce  => sig_en_250ms
+            ce  => sig_en_0
         );
 
     -- Component instantiation of 4-bit binary counter
@@ -83,14 +83,14 @@ begin
         port map (
             clk => clk,
             rst => btnu,
-            en  => sig_en_250ms,
-            cnt => sig_cnt_4bit
+            en  => sig_en_0,
+            cnt => sig_cnt
         );
 
     -- Component instantiation of bin2seg
     decoder_0 : bin2seg
         port map (
-            bin => sig_cnt_4bit,
+            bin => sig_cnt,
             seg => seg
         );
 
@@ -100,22 +100,22 @@ begin
     -- Set display position
     an <= b"1111_1110";
 
-    -- Component instantiation of clock enable for 2 ms
+    -- Component instantiation of clock enable for 20 ms
     clock_1 : clk_en
-        generic map ( G_MAX => 200_000 )
+        generic map ( G_MAX => 2_000_000 )
         port map (
             clk => clk,
             rst => btnu,
-            ce  => sig_en_2ms
+            ce  => sig_en_1
         );
 
-    -- Component instantiation of 16-bit binary counter
+    -- Component instantiation of 10-bit binary counter
     counter_1 : counter
-        generic map ( G_BITS => 16 )
+        generic map ( G_BITS => 10 )
         port map (
             clk => clk,
             rst => btnu,
-            en  => sig_en_2ms,
+            en  => sig_en_1,
             cnt => led
         );
 

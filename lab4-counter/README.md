@@ -196,8 +196,6 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
 ### Variant 1: Counter and LEDs
 
-![top level ver1](images/top-level_ver1.png)
-
 1. In your project, create a new VHDL design source file named `counter_top`. Define I/O ports as follows.
 
    | **Port name** | **Direction** | **Type** | **Description** |
@@ -207,6 +205,8 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
    | `led` | out | `std_logic_vector(7 downto 0)` | Show 8-bit counter value |
 
 2. Use component declaration and instantiation of `clk_en` and `counter`, and define the top-level architecture as follows.
+
+   ![top level ver1](images/top-level_ver1.png)
 
    ```vhdl
    architecture Behavioral of counter_top is
@@ -220,15 +220,14 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
        end component clk_en;
 
-       -- Component declaration for binary counter
        component counter is
 
-           -- TODO: Add declaration of `counter`
+           -- TODO: Add component declaration of `counter`
 
        end component counter;
 
        -- Internal signal for counter
-       signal sig_en_10ms : std_logic;
+       signal sig_en : std_logic;
 
    begin
 
@@ -238,13 +237,12 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            port map (
                clk => clk,
                rst => btnu,
-               ce  => sig_en_10ms
+               ce  => sig_en
            );
 
-       -- Component instantiation of 8-bit binary counter
        counter_0 : counter
 
-           -- TODO: Add instantiation of `counter`
+           -- TODO: Add component instantiation of `counter`
 
    end Behavioral;
    ```
@@ -267,8 +265,8 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
    # -----------------------------------------------
    # LEDs
    # -----------------------------------------------
-   set_property PACKAGE_PIN H17 [get_ports {led[0] }] ;
-   set_property PACKAGE_PIN K15 [get_ports {led[1]] ;
+   set_property PACKAGE_PIN H17 [get_ports {led[0]}] ;
+   set_property PACKAGE_PIN K15 [get_ports {led[1]}] ;
    set_property PACKAGE_PIN J13 [get_ports {led[2]}] ;
    set_property PACKAGE_PIN N14 [get_ports {led[3]}] ;
    set_property PACKAGE_PIN R18 [get_ports {led[4]}] ;
@@ -291,8 +289,6 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
 ### Variant 2: Counter and 7-segment display
 
-![top level ver2](images/top-level_ver2.png)
-
 1. In your project, create a new VHDL design source file named `counter_top`. Define I/O ports as follows.
 
    | **Port name** | **Direction** | **Type** | **Description** |
@@ -309,6 +305,8 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 
 3. Use component declaration and instantiation of `clk_en`, `counter`, and `bin2seg`, and define the top-level architecture as follows.
 
+   ![top level ver2](images/top-level_ver2.png)
+
    ```vhdl
    architecture Behavioral of counter_top is
        -- Component declaration for clock enable
@@ -321,23 +319,21 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            );
        end component clk_en;
 
-       -- Component declaration for binary counter
        component counter is
 
-           -- TODO: Add declaration of `counter`
+           -- TODO: Add component declaration of `counter`
 
        end component counter;
 
-       -- Component declaration for bin2seg
        component bin2seg is
 
-           -- TODO: Add declaration of `bin2seg`
+           -- TODO: Add component declaration of `bin2seg`
 
        end component bin2seg;
 
        -- Internal signals for counter: 4-bit @ 250 ms
-       signal sig_en_250ms : std_logic;
-       signal sig_cnt      : std_logic_vector(3 downto 0);
+       signal sig_en  : std_logic;
+       signal sig_cnt : std_logic_vector(3 downto 0);
 
    begin
 
@@ -347,18 +343,16 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
            port map (
                clk => clk,
                rst => btnu,
-               ce  => sig_en_250ms
+               ce  => sig_en
            );
 
-       -- Component instantiation of 4-bit binary counter
        counter_0 : counter
 
-           -- TODO: Add instantiation of `counter`
+           -- TODO: Add component instantiation of `counter`
 
-       -- Component instantiation of bin2seg
        decoder_0 : bin2seg
 
-           -- TODO: Add instantiation of `bin2seg`
+           -- TODO: Add component instantiation of `bin2seg`
 
        dp <=  -- TODO: Turn off decimal point
 
@@ -424,8 +418,8 @@ Choose one of the following variants, implement a counter on the Nexys A7 board,
 ## Optional tasks
 
 1. Combine two independent counters:
-   * 4-bit counter with a 250 ms time base
-   * 10-bit counter with a 10 ms time base
+   * 4-bit counter with a 500 ms time base
+   * 10-bit counter with a 20 ms time base
 
    ![top level](images/top-level_ver3.png)
 
