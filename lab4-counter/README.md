@@ -152,7 +152,7 @@ To drive other logic in the design that requires a slower operation, it is bette
    end architecture tb;
    ```
 
-7. Run the simulation, test the functionality of the `rst` and `en` signals, and try several `G_MAX` values.
+7. Run the simulation, test the functionality of the `rst` signal and try several `G_MAX` values.
 
    > **Note:** To show internal signals, click to **dut** in **Scope** folder, right-click on signal name `sig_cnt` in **Object** folder, and select **Add to Wave Window**. Then use **Relaunch Simulation** icon.
    >
