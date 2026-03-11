@@ -32,7 +32,9 @@ This repository contains VHDL examples for the bachelor-level course [*Digital E
 
 [VHDL project](lab8-project)
 
+<!--
    ![vhdl_course](examples/_archive/_07-display_driver/images/nexys-lab.jpg)
+-->
 
 ## Installation(s)
 
