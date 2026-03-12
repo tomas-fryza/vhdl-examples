@@ -89,9 +89,9 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
        -- Clock enable generator for refresh timing
        ------------------------------------------------------------------------
        clock_0 : clk_en
-           generic map ( G_MAX => 16 )  -- Adjust for flicker-free multiplexing
-           port map (                   -- For simulation: 16
-               clk => clk,              -- For implementation: 1_600_000
+           generic map ( G_MAX => 32 )  -- Adjust for flicker-free multiplexing
+           port map (                   -- For simulation: 32
+               clk => clk,              -- For implementation: 3_200_000
                rst => rst,
                ce  => sig_en
            );
@@ -156,9 +156,8 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
 
        -- Reset generation
        rst <= '1';
-       wait for 100 ns;
+       wait for 50 ns;
        rst <= '0';
-       wait for 100 ns;
 
        data <= x"18";
        wait for 50 * TbPeriod;
@@ -198,7 +197,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
    | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
    | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
 
-2. **Important:** Change the `G_MAX` parameter in the `clk_en` instantiation of the driver architecture to **1_600_000**!
+2. **Important:** Change the `G_MAX` parameter in the `clk_en` instantiation of the driver architecture to **3_200_000**!
 
 3. Provide an instantiation of the `display_driver` circuit and complete the top-level architecture according to the following schematic and template.
 
