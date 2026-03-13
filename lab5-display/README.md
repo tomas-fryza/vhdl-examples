@@ -89,9 +89,9 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
        -- Clock enable generator for refresh timing
        ------------------------------------------------------------------------
        clock_0 : clk_en
-           generic map ( G_MAX => 32 )  -- Adjust for flicker-free multiplexing
-           port map (                   -- For simulation: 32
-               clk => clk,              -- For implementation: 3_200_000
+           generic map ( G_MAX => 8 )  -- Adjust for flicker-free multiplexing
+           port map (                  -- For simulation: 8
+               clk => clk,             -- For implementation: 80_000_000
                rst => rst,
                ce  => sig_en
            );
@@ -186,7 +186,9 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
 
 ## Task 2: Top-level design and FPGA implementation
 
-1. In your project, create a new VHDL design source file named `display_top`. Define I/O ports as follows.
+1. **Important:** Change the `G_MAX` parameter in the `clk_en` instantiation in the driver architecture to `80_000_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+
+2. In your project, create a new VHDL design source file named `display_top`. Define I/O ports as follows.
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
@@ -196,8 +198,6 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
    | `seg` | out | `std_logic_vector(6 downto 0)` | Seven-segment cathodes CA..CG (active-low) |
    | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
    | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
-
-2. **Important:** Change the `G_MAX` parameter in the `clk_en` instantiation of the driver architecture to **3_200_000**!
 
 3. Provide an instantiation of the `display_driver` circuit and complete the top-level architecture according to the following schematic and template.
 
@@ -236,7 +236,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
    3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
    4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/display.runs/impl_1/display_top.bit`.
 
-6. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink.
+6. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink. What refresh period is sufficient for the human eye?
 
 7. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 

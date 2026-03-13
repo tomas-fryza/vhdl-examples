@@ -67,9 +67,9 @@ begin
     -- Clock enable generator for refresh timing
     ------------------------------------------------------------------------
     clock_0 : clk_en
-        generic map ( G_MAX => 16 ) -- Adjust for flicker-free multiplexing
-        port map (                  -- For simulation: 16
-            clk => clk,             -- For implementation: 1_600_000
+        generic map ( G_MAX => 8 ) -- Adjust for flicker-free multiplexing
+        port map (                 -- For simulation: 8
+            clk => clk,            -- For implementation: 80_000_000
             rst => rst,
             ce  => sig_en
         );
