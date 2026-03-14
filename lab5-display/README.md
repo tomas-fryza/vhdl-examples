@@ -96,9 +96,6 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
                ce  => sig_en
            );
 
-       ------------------------------------------------------------------------
-       -- N-bit counter for digit selection
-       ------------------------------------------------------------------------
        counter_0 : counter
            generic map ( G_BITS => 1 )
            port map (
@@ -186,9 +183,13 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
 
 ## Task 2: Top-level design and FPGA implementation
 
-1. **Important:** Change the `G_MAX` parameter in the `clk_en` instantiation in the driver architecture to `80_000_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+Choose one of the following variants and implement a display driver on the Nexys A7 board with switches (variant 1) or with 8-bit counter (variant 2).
 
-2. In your project, create a new VHDL design source file named `display_top`. Define I/O ports as follows.
+### Variant 1: Switches
+
+**Important:** Change the `G_MAX` parameter in the `clk_en` instantiation in the driver architecture to `80_000_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+
+1. In your project, create a new VHDL design source file named `display_top`. Define I/O ports as follows.
 
    | **Port name** | **Direction** | **Type** | **Description** |
    | :-: | :-: | :-- | :-- |
@@ -199,7 +200,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
    | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
    | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
 
-3. Provide an instantiation of the `display_driver` circuit and complete the top-level architecture according to the following schematic and template.
+2. Provide an instantiation of the `display_driver` circuit and complete the top-level architecture according to the following schematic and template.
 
    ![top level ver1](images/top-level_ver1.png)
 
@@ -214,12 +215,15 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
 
    begin
 
+       ------------------------------------------------------------------------
+       -- 7-segment display driver
+       ------------------------------------------------------------------------
        display_0 : display_driver
-       port map (
+           port map (
 
-           -- TODO: Add component instantiation of `display_driver`
+               -- TODO: Add component instantiation of `display_driver`
 
-       );
+           );
 
        an(7 downto 2) <= b"11_1111";
        dp <= '1';
@@ -227,18 +231,120 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
    end Behavioral;
    ```
 
-4. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+3. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
 
-5. Implement your design to Nexys A7 board:
+4. Implement your design to Nexys A7 board:
 
    1. Click **Generate Bitstream** (the process is time consuming and may take some time).
    2. Open **Hardware Manager**.
    3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
    4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/display.runs/impl_1/display_top.bit`.
 
-6. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink. What refresh period is sufficient for the human eye?
+5. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink. What refresh period is sufficient for the human eye?
 
-7. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+6. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+
+### Variant 2: Counter
+
+**Important:** Change the `G_MAX` parameter in the `clk_en` instantiation in the driver architecture to `80_000_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+
+1. In your project, create a new VHDL design source file named `display_top`. Define I/O ports as follows.
+
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `clk` | in | `std_logic` | Main clock |
+   | `btnu` | in | `std_logic` | High-active synchronous reset |
+   | `seg` | out | `std_logic_vector(6 downto 0)` | Seven-segment cathodes CA..CG (active-low) |
+   | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
+   | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
+
+2. Provide an instantiation of the `display_driver` circuit, independent `clock_en` and 8-bit binary `counter`, and complete the top-level architecture according to the following schematic and template.
+
+   ![top level ver1](images/top-level_ver2.png)
+
+   ```vhdl
+   architecture Behavioral of display_top is
+
+       -- Component declaration for clock enable
+       component clk_en is
+           generic ( G_MAX : positive );
+           port (
+               clk : in  std_logic;
+               rst : in  std_logic;
+               ce  : out std_logic
+           );
+       end component clk_en;
+    
+       -- Component declaration for binary counter
+       component counter is
+           generic ( G_BITS : positive );
+           port (
+               clk : in  std_logic;
+               rst : in  std_logic;
+               en  : in  std_logic;
+               cnt : out std_logic_vector(G_BITS - 1 downto 0)
+           );
+       end component counter;
+
+       component display_driver is
+
+           -- TODO: Add component declaration of `display_driver`
+
+       end component display_driver;
+
+       -- Internal signals
+       signal sig_cnt_en  : std_logic;
+       signal sig_cnt_val : std_logic_vector(7 downto 0);
+
+   begin
+
+       ------------------------------------------------------------------------
+       -- 8-bit counter
+       ------------------------------------------------------------------------
+       clock_1 : clk_en
+           generic map ( G_MAX => 25_000_000 )  -- Adjust counter speed
+           port map (
+               clk => clk,
+               rst => rst,
+               ce  => sig_cnt_en
+           );
+
+       counter_1 : counter
+           generic map ( G_BITS => 8 )
+           port map (
+
+               -- TODO: Add component instantiation of `counter`
+
+           );
+
+       ------------------------------------------------------------------------
+       -- 7-segment display driver
+       ------------------------------------------------------------------------
+       display_0 : display_driver
+           port map (
+
+               -- TODO: Add component instantiation of `display_driver`
+
+           );
+
+       an(7 downto 2) <= b"11_1111";
+       dp <= '1';
+
+   end Behavioral;
+   ```
+
+3. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+
+4. Implement your design to Nexys A7 board:
+
+   1. Click **Generate Bitstream** (the process is time consuming and may take some time).
+   2. Open **Hardware Manager**.
+   3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
+   4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/display.runs/impl_1/display_top.bit`.
+
+5. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink. What refresh period is sufficient for the human eye?
+
+6. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
 <a name="tasks"></a>
 
@@ -250,7 +356,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
 
 1. Modify the top-level design to use Pmod ports, and verify the period of the anode signals using an external logic analyzer.
 
-   ![top level ver2](images/top-level_ver2.png)
+   ![top level ver2](images/top-level_ver3.png)
 
 2. Extend the `display_driver` design to control four or even eight 7-segment displays.
 
