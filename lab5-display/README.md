@@ -16,7 +16,7 @@ After completing this laboratory, students will be able to:
 
 ### Background
 
-The Nexys A7 board provides two four-digit common anode seven-segment LED displays (configured to behave like a single eight-digit display). Refer to the [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board to determine how the 7-segment displays and push-buttons are conected. Here, the common anodes are switched to 3.3 V using **PNP-type transistors**, while the individual segments and decimal points are connected directly to eight output pins.
+The Nexys A7 board provides two four-digit common anode **seven-segment LED displays** (configured to behave like a single eight-digit display). Refer to the [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board to determine how the 7-segment displays are connected. Here, the common anodes are switched to 3.3 V using **PNP-type transistors**, while the individual segments and decimal points are connected directly to eight output pins.
 
 Additionally, recall from the electronics course the differences between NPN and PNP types of bipolar junction transistors (BJTs).
 
