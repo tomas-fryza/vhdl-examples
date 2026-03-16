@@ -1,0 +1,31 @@
+{
+    "signal": [
+      {
+        "name": "clk",
+        "wave": "P..................."
+      },
+      {
+        "name": "debounced",
+        "wave": "l...h.......l......."
+      },
+      {
+        "name": "delayed",
+        "wave": "l....h.......l......"
+      },
+      {},
+      {
+        "name": "btn_press",
+        "wave": "l...hl.............."
+      },
+      {
+        "name": "btn_release",
+        "wave": "l...........hl......"
+      }
+    ],
+    "config": {
+      "wavepaint": {
+        "skin": "black"
+      }
+    }
+  }
+  

@@ -215,25 +215,9 @@ The main methods to debounce a bouncy button are:
 
 8. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
 
-9. (Optional:) Add also an edge detector when the input transitions from high to low.
+9. (Optional:) Extend the edge detector also to the situation when the input transitions from high to low: add output signal `btn_release` to entity and architecture.
 
-   ![edge detector](images/wavedrom_edge-detector.png)
-
-<!--
-> **Note:** Listing of [Wavedrom](https://wavedrom.com/) code for the figure above:
-> ```javascript
-> {
->   signal: [
->     {name: "clk",     wave: 'P.................'},
->     {name: "clean",   wave: 'l...h.......l.....'},
->     {name: "delayed", wave: 'l....h.......l....'},
->     {},
->     {name: "pos_edge", wave: 'l...hl............'},
->     {name: "neg_edge", wave: 'l...........hl....'},
->   ],
-> }
-> ```
--->
+   ![edge detector](images/waveform_edge_detect.png)
 
 <a name="task2"></a>
 
@@ -321,11 +305,11 @@ Choose one of the following variants and implement a button-triggered binary cou
 
 1. In your project, create a new VHDL design source file named `debounce_counter_top`. Define I/O ports as follows.
 
-TBD
+   TBD
 
+   ![top level ver2](images/top-level_ver2.png)
 
-
-
+   TBD
 
 
 

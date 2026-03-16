@@ -6,7 +6,6 @@ entity debounce is
         clk         : in  std_logic;
         rst         : in  std_logic;
         btn_in      : in  std_logic;  -- Bouncey button input
-
         btn_state   : out std_logic;  -- Debounced level
         btn_press   : out std_logic;  -- 1-clock press pulse
         btn_release : out std_logic   -- 1-clock release pulse
@@ -27,16 +26,15 @@ architecture Behavioral of debounce is
     -- Internal signals
     ----------------------------------------------------------------
     signal ce_sample : std_logic;
-
-    signal sync0 : std_logic;
-    signal sync1 : std_logic;
-
+    signal sync0     : std_logic;
+    signal sync1     : std_logic;
     signal shift_reg : std_logic_vector(C_SHIFT_LEN-1 downto 0);
+    signal debounced : std_logic;
+    signal delayed   : std_logic;
 
-    signal debounced      : std_logic;
-    signal debounced_prev : std_logic;
-
+    ----------------------------------------------------------------
     -- Component declaration for clock enable
+    ----------------------------------------------------------------
     component clk_en is
         generic ( G_MAX : positive );
         port (
@@ -71,7 +69,7 @@ begin
                 sync1 <= '0';
                 shift_reg <= (others => '0');
                 debounced <= '0';
-                debounced_prev <= '0';
+                delayed   <= '0';
 
             else
                 -- Input synchronizer
@@ -94,8 +92,8 @@ begin
 
                 end if;
 
-                debounced_prev <= debounced;
-
+                -- One clock delayed output
+                delayed <= debounced;
             end if;
 
         end if;
@@ -107,7 +105,7 @@ begin
     btn_state <= debounced;
 
     -- One-clock pulse when button pressed and released
-    btn_press <= not(debounced_prev) and debounced;
-    btn_release <= debounced_prev and not(debounced);
+    btn_press   <= debounced and not(delayed);
+    btn_release <= not(debounced) and delayed;
 
 end architecture Behavioral;
