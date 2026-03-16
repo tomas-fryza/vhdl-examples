@@ -10,59 +10,59 @@
 
 After completing this laboratory, students will be able to:
 
-* Understand the button bounce effect and how to debounce it
+* Understand mechanical switch bounce
+* Implement a digital debouncer in VHDL
 * Use edge detectors
-* TBD
-
-
 
 ### Background
 
-The Nexys A7 board provides five **push buttons**. Refer to the [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) of the Nexys A7 board to determine how the push-buttons are conected and what is their active level.
+The Nexys A7 FPGA board provides five **push buttons**. Refer to the [schematic](https://github.com/tomas-fryza/vhdl-examples/blob/master/docs/nexys-a7-sch.pdf) or the board [reference manual](https://reference.digilentinc.com/reference/programmable-logic/nexys-a7/reference-manual) to determine how the push-buttons are conected and what is their active level.
 
    ![nexys A7 led and segment](images/nexys-a7_leds-display.png)
 
-A **bouncy button**, also known as a "bouncing switch" or "switch bounce," refers to the phenomenon where the electrical contacts in a mechanical switch make multiple, rapid transitions between open and closed states when pressed or released. This can lead to multiple erroneous signals being sent to a circuit. Examples of real push buttons can be seen below. (Note that, the active level of the button here is low.)
+A **bouncy button**, also known as a **switch bounce**, refers to the phenomenon where the electrical contacts in a mechanical switch make multiple rapid transitions between open and closed states when pressed or released. These transitions typically occur over a period of **1–20 ms**.
+
+As a result, a single press may be interpreted by digital logic as **multiple presses**, which can cause incorrect behavior in digital circuits. Examples of real push buttons are shown below. (Note that the active level of the buttons in these examples is low, while the buttons on the Nexys A7 board may use a different active level.)
 
    ![bouncey button](images/bouncey4.png)
 
    ![bouncey button](images/bouncey6.png)
 
-The main methods to debounce a bouncy button are:
+The main methods to eliminate switch bounce are:
 
-   1. **[Hardware Debouncing](https://www.digikey.ee/en/articles/how-to-implement-hardware-debounce-for-switches-and-relays)**: Hardware debouncing involves adding additional circuitry or components to the switch or input signal path to eliminate or reduce the effects of bouncing, such as capacitors, resistors, and Schmitt triggers.
+   1. **[Hardware debouncing](https://www.digikey.ee/en/articles/how-to-implement-hardware-debounce-for-switches-and-relays)** uses additional analog or digital circuitry to filter the bouncing signal before it reaches the digital logic. Typical components include: resistors, capacitors, Schmitt triggers.
 
       ![hardware debouncer](images/debouncer_hardware.png)
 
-   2. **Software Debouncing**: This method involves using software algorithms to filter out the noise and ensure that only a single, stable signal transition is recognized. Common techniques include implementing delay-based algorithms, state machines, or using timers.
+   2. In FPGA designs, debouncing is typically implemented using **synchronous digital logic** described in HDL. Common techniques include: shift-register filters, counters, finite state machines, timer-based filters.
 
-   3. **Combination Approach**: Often, a combination of software and hardware debouncing methods is employed to achieve robust debouncing.
+   3. **Combination approach**. In many practical systems, a combination of **hardware filtering** and **digital debouncing logic** is used to achieve robust signal conditioning.
 
 <a name="task1"></a>
 
 ## Task 1: Debounce button
 
-1. Run Vivado, create a new RTL project named `debounce` and add a VHDL source file `debounce`. Use the following I/O ports:
+1. Run Vivado, create a new RTL project named `debounce` and add a VHDL source file named `debounce`. Use the following I/O ports:
 
       | **Port name** | **Direction** | **Type** | **Description** |
       | :-: | :-: | :-- | :-- |
       | `clk` | in  | `std_logic` | Main clock |
       | `rst` | in  | `std_logic` | High-active synchronous reset |
-      | `btn_in` | in  | `std_logic` | Bouncey button input |
-      | `btn_state` | out | `std_logic` | Debounced level |
-      | `btn_press` | out | `std_logic` | 1-clock press pulse |
+      | `btn_in` | in  | `std_logic` | Raw push-button input (may contain bounce) |
+      | `btn_state` | out | `std_logic` | Debounced button level |
+      | `btn_press` | out | `std_logic` | One-clock pulse generated when the button is pressed |
 
-2. In your project, add the design source files `clk_en.vhd` from the previous lab(s) and check the **Copy sources into project** option. The selected file will be copied into the corresponding Vivado project folders, ensuring that the project contains local copies of all source files.
+2. In your project, add the design source file `clk_en.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
 
    ![vivado_copy-sources](images/vivado_copy-sources.png)
 
-3. Use component declarations and instantiations of `clk_en` and define the button debouncer architecture using the following sections:
+3. Instantiate the `clk_en` module and implement the button debouncer architecture using the following sections:
 
-   1. The **synchronizer** consists of two flip-flops (`sync0` and `sync1`) used to eliminate metastability when handling asynchronous inputs. The input signal `btn_in` is first passed through `sync0` and then through `sync1` on each clock cycle. This ensures that any glitches or inconsistencies in the input are filtered out, producing a stable signal to be processed in subsequent stages.
+   1. The **synchronizer** consists of two flip-flops (`sync0` and `sync1`) used to safely synchronize the asynchronous input signal to the system clock. The input signal `btn_in` is first registered by `sync0` and then by `sync1` on consecutive clock cycles. This reduces the risk of metastability when processing the push-button input.
 
-   2. The **shift register**, defined by `shift_reg`, is a series of flip-flops (a vector) that stores the history of the synchronized input signal. Each clock cycle, the new value of `sync1` is shifted into the register, and the oldest value is discarded. This allows the debounce logic to track a series of past values and determine if the button has been in a stable state (either high or low) for a defined number of clock cycles, effectively filtering out noise from button bouncing.
+   2. The **shift register**, defined by `shift_reg`, is a vector of flip-flops that stores the recent history of the synchronized input signal. Each time the clock-enable signal is asserted, the value of `sync1` is shifted into the register while the oldest value is discarded. By evaluating the contents of this register, the debounce logic can determine whether the button input has remained stable (either high or low) for several samples, effectively filtering out bounce.
 
-   3. Generate **output signals**. The final debounced signal `btn_state` represents the stable state of the button after filtering out noise and bouncing. A one-clock pulse signal `btn_press` is asserted when the button transitions from released (0) to pressed (1).
+   3. Generate the **output signals**. The debounced signal `btn_state` represents the stable state of the button after filtering out bouncing. The signal `btn_press` is a one-clock pulse generated when the button transitions from released (`0`) to pressed (`1`).
 
    ```vhdl
    architecture Behavioral of debounce is
@@ -78,16 +78,15 @@ The main methods to debounce a bouncy button are:
        -- Internal signals
        ----------------------------------------------------------------
        signal ce_sample : std_logic;
-
-       signal sync0 : std_logic;
-       signal sync1 : std_logic;
-
+       signal sync0     : std_logic;
+       signal sync1     : std_logic;
        signal shift_reg : std_logic_vector(C_SHIFT_LEN-1 downto 0);
+       signal debounced : std_logic;
+       signal delayed   : std_logic;
 
-       signal debounced      : std_logic;
-       signal debounced_prev : std_logic;
-
+       ----------------------------------------------------------------
        -- Component declaration for clock enable
+       ----------------------------------------------------------------
        component clk_en is
            generic ( G_MAX : positive );
            port (
@@ -116,11 +115,11 @@ The main methods to debounce a bouncy button are:
        begin
            if rising_edge(clk) then
                if rst = '1' then
-                   sync0 <= '0';
-                   sync1 <= '0';
+                   sync0     <= '0';
+                   sync1     <= '0';
                    shift_reg <= (others => '0');
                    debounced <= '0';
-                   debounced_prev <= '0';
+                   delayed   <= '0';
 
                else
                    -- Input synchronizer
@@ -143,8 +142,8 @@ The main methods to debounce a bouncy button are:
 
                    end if;
 
-                   debounced_prev <= debounced;
-
+                   -- One clock delayed output
+                   delayed <= debounced;
                end if;
            end if;
        end process;
@@ -155,7 +154,7 @@ The main methods to debounce a bouncy button are:
        btn_state <= debounced;
 
        -- One-clock pulse when button pressed
-       btn_press <= not(debounced_prev) and debounced;
+       btn_press   <= debounced and not(delayed);
 
    end architecture Behavioral;
    ```
@@ -207,7 +206,7 @@ The main methods to debounce a bouncy button are:
     end process;
    ```
 
-6. Display the internal shift register signal during the simulation.
+6. Display the internal signal `shift_reg` in the waveform during the simulation.
 
    ![Vivado: add internal signal](images/vivado_add-wave.png)
 
@@ -215,7 +214,7 @@ The main methods to debounce a bouncy button are:
 
 8. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
 
-9. (Optional:) Extend the edge detector also to the situation when the input transitions from high to low: add output signal `btn_release` to entity and architecture.
+9. (Optional) Extend the edge detector to detect the transition from high to low. Add an output signal `btn_release` to the entity and architecture.
 
    ![edge detector](images/waveform_edge_detect.png)
 
@@ -239,9 +238,9 @@ Choose one of the following variants and implement a button-triggered binary cou
    | `led` | out | `std_logic_vector(7 downto 0)` | Counter value |
    | `led16_b` | out | `std_logic` | Button indicator |
 
-2. In your project, add the design source files `counter.vhd` from the previous lab(s) and check the **Copy sources into project** option. The selected file will be copied into the corresponding Vivado project folders, ensuring that the project contains local copies of all source files.
+2. In your project, add the design source file `counter.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
 
-2. Provide an instantiation of the `debounce` and `counter` circuits and complete the top-level architecture according to the following schematic and template.
+3. Provide an instantiation of the `debounce` and `counter` circuits and complete the top-level architecture according to the following schematic and template.
 
    ![top level ver1](images/top-level_ver1.png)
 
@@ -288,16 +287,16 @@ Choose one of the following variants and implement a button-triggered binary cou
    end Behavioral;
    ```
 
-3. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+4. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
 
-4. Implement your design to Nexys A7 board:
+5. Implement your design to Nexys A7 board:
 
    1. Click **Generate Bitstream** (the process is time consuming and may take some time).
    2. Open **Hardware Manager**.
    3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
    4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/debounce.runs/impl_1/debounce_counter_top.bit`.
 
-5. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+6. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
 ### Variant 2: Display driver
 
@@ -305,25 +304,95 @@ Choose one of the following variants and implement a button-triggered binary cou
 
 1. In your project, create a new VHDL design source file named `debounce_counter_top`. Define I/O ports as follows.
 
-   TBD
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `clk` | in | `std_logic` | Main clock |
+   | `btnu` | in | `std_logic` | High-active synchronous reset |
+   | `btnd` | in | `std_logic` | Increment counter |
+   | `seg` | out | `std_logic_vector(6 downto 0)` | Seven-segment cathodes CA..CG (active-low) |
+   | `an` | out | `std_logic_vector(7 downto 0)` | Seven-segment anodes AN7..AN0 (active-low) |
+   | `dp` | out | `std_logic` | Seven-segment decimal point (active-low, not used) |
+   | `led16_b` | out | `std_logic` | Button indicator |
+
+2. In your project, add the design source files `display_driver.vhd`, `counter.vhd`, and `bin2seg.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
+
+3. Provide an instantiation of the `debounce`, `counter`, and `display_driver` circuits and complete the top-level architecture according to the following schematic and template.
 
    ![top level ver2](images/top-level_ver2.png)
 
-   TBD
+   ```vhdl
+   architecture Behavioral of debounce_counter_top is
+
+       component debounce is
+
+           -- TODO: Add component declaration of `debounce`
+
+       end component debounce;
+
+       component counter is
+
+           -- TODO: Add component declaration of `counter`
+
+       end component counter;
+
+       -- Internal signals
+       -- TODO: Ass needed signals
 
 
 
 
+
+   begin
+
+       ------------------------------------------------------------------------
+       -- Button debouncer
+       ------------------------------------------------------------------------
+       debounce_0 : debounce
+           port map (
+
+               -- TODO: Add component instantiation of `debounce`
+
+           );
+
+       ------------------------------------------------------------------------
+       -- Counter
+       ------------------------------------------------------------------------
+       counter_0 : counter
+           generic map ( G_BITS = 8 )
+           port map (
+
+               -- TODO: Add component instantiation of `counter`
+
+           );
+
+
+
+
+
+   end Behavioral;
+   ```
+
+4. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+
+5. Implement your design to Nexys A7 board:
+
+   1. Click **Generate Bitstream** (the process is time consuming and may take some time).
+   2. Open **Hardware Manager**.
+   3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
+   4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/debounce.runs/impl_1/debounce_counter_top.bit`.
+
+6. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
 <a name="tasks"></a>
 
 ## Optional tasks
 
-TBD
+1. Extend the debouncer to detect when the button is held down for a **longer period** of time. If the button remains pressed for a predefined duration (for example 500 ms), generate a new output signal btn_long. Use a counter driven by the system clock to measure the press duration.
 
-<!--
-3. Use iterative `generate` statement from the [previous lab](https://github.com/tomas-fryza/vhdl-course/tree/master/lab6-lfsr#part3) and extend the instantiation of `debounce` component to several buttons.
--->
+2. Modify the design so that the debouncer can handle multiple push buttons. Change the input and output signals to `std_logic_vector` and use a **`generate` statement** to instantiate one debouncer for each button. This approach allows the same module to be replicated automatically for all buttons while keeping the design scalable and easy to maintain.
+
+> **Optional technical note:** You can use a `for-generate` loop to create multiple instances of the debouncer module, one per button input.
+
 
 
 
@@ -333,6 +402,7 @@ TBD
 ## Questions
 
 TBD
+
 
 
 

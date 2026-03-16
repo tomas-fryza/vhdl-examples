@@ -65,8 +65,8 @@ begin
         if rising_edge(clk) then
 
             if rst = '1' then
-                sync0 <= '0';
-                sync1 <= '0';
+                sync0     <= '0';
+                sync1     <= '0';
                 shift_reg <= (others => '0');
                 debounced <= '0';
                 delayed   <= '0';
