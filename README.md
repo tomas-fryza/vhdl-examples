@@ -24,9 +24,9 @@ This repository contains VHDL examples for the bachelor-level course [*Digital E
 3. [Seven-segment display decoder](lab3-segment)
 4. [Binary counter](lab4-counter)
 5. [Multiple seven-segment displays](lab5-display)
+6. [Button debounce](lab6-debounce)
 
 <!--
-6. [LFSR counter](lab6-lfsr)
 7. [UART transmitter](lab7-uart)
 -->
 
