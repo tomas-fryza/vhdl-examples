@@ -1,5 +1,5 @@
 # =================================================
-# Nexys A7-50T – General Constraints File
+# Nexys A7-50T - General Constraints File
 # Based on https://github.com/Digilent/digilent-xdc
 # =================================================
 

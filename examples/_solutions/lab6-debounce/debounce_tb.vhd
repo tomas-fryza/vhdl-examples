@@ -17,10 +17,9 @@ architecture tb of debounce_tb is
     signal clk         : std_logic := '1';
     signal rst         : std_logic;
     signal btn_in      : std_logic;
-
     signal btn_state   : std_logic;
     signal btn_press   : std_logic;
-    signal btn_release : std_logic;
+    -- signal btn_release : std_logic;
 
     signal TbSimEnded  : std_logic := '0';
 
@@ -31,8 +30,8 @@ architecture tb of debounce_tb is
         btn_in      : in  std_logic;
 
         btn_state   : out std_logic;  -- debounced level
-        btn_press   : out std_logic;  -- 1-clock press pulse
-        btn_release : out std_logic   -- 1-clock release pulse
+        btn_press   : out std_logic   -- 1-clock press pulse
+        -- btn_release : out std_logic   -- 1-clock release pulse
     );
     end component;
 
@@ -47,8 +46,8 @@ begin
         rst         => rst,
         btn_in      => btn_in,
         btn_state   => btn_state,
-        btn_press   => btn_press,
-        btn_release => btn_release
+        btn_press   => btn_press
+        -- btn_release => btn_release
     );
 
     ------------------------------------------------

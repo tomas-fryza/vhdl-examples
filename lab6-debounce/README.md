@@ -156,57 +156,57 @@ The main methods to eliminate switch bounce are:
        -- One-clock pulse when button pressed
        btn_press   <= debounced and not(delayed);
 
-   end architecture Behavioral;
+   end Behavioral;
    ```
 
 4. Create a VHDL simulation source file named `debounce_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
 
-5. Set the clock period to `10 ns` and verify the functionality of the debouncer.
+5. Set the clock period to `constant TbPeriod : time := 10 ns;` and verify the functionality of the debouncer.
 
    ```vhdl
-   p_stim : process
-   begin
-       btn_in <= '0';
+       stimuli : process
+       begin
+           btn_in <= '0';
 
-       -- Reset generation
-       rst <= '1';
-       wait for 50 ns;
-       rst <= '0';
+           -- Reset generation
+           rst <= '1';
+           wait for 50 ns;
+           rst <= '0';
 
-       -- Simulate button bounce on press
-       report "Simulating button press with bounce";
+           -- Simulate button bounce on press
+           report "Simulating button press with bounce";
 
-       wait for 100 ns;
-       btn_in <= '1';
-       wait for 50 ns;
-       btn_in <= '0';
-       wait for 50 ns;
-       btn_in <= '1';
-       wait for 250 ns;
-       btn_in <= '0';  -- final stable press
+           wait for 100 ns;
+           btn_in <= '1';
+           wait for 50 ns;
+           btn_in <= '0';
+           wait for 50 ns;
+           btn_in <= '1';
+           wait for 250 ns;
+           btn_in <= '0';  -- Final stable press
 
-       -- Simulate button bounce on release
-       report "Simulating button release with bounce";
+           -- Simulate button bounce on release
+           report "Simulating button release with bounce";
 
-       wait for 20 ns;
-       btn_in <= '1';
-       wait for 60 ns;
-       btn_in <= '0';
-       wait for 30 ns;
-       btn_in <= '1';
-       wait for 50 ns;
-       btn_in <= '0';  -- final release
-       wait for 300 ns;
+           wait for 20 ns;
+           btn_in <= '1';
+           wait for 60 ns;
+           btn_in <= '0';
+           wait for 30 ns;
+           btn_in <= '1';
+           wait for 50 ns;
+           btn_in <= '0';  -- Final release
+           wait for 300 ns;
 
-       -- Stop the clock and hence terminate the simulation
-       report "Simulation finished";
-       TbSimEnded <= '1';
-       wait;
+           -- Stop the clock and hence terminate the simulation
+           report "Simulation finished";
+           TbSimEnded <= '1';
+           wait;
 
-    end process;
+       end process;
    ```
 
-6. Display the internal signal `shift_reg` in the waveform during the simulation.
+6. Display the internal signals `shift_reg`, `debounced`, and `delayed` in the waveform during the simulation.
 
    ![Vivado: add internal signal](images/vivado_add-wave.png)
 
@@ -248,9 +248,11 @@ Choose one of the following variants and implement a button-triggered binary cou
    architecture Behavioral of debounce_counter_top is
 
        component debounce is
-
-           -- TODO: Add component declaration of `debounce`
-
+           Port ( clk       : in  STD_LOGIC;
+                  rst       : in  STD_LOGIC;
+                  btn_in    : in  STD_LOGIC;
+                  btn_state : out STD_LOGIC;
+                  btn_press : out STD_LOGIC);
        end component debounce;
 
        component counter is
@@ -260,7 +262,7 @@ Choose one of the following variants and implement a button-triggered binary cou
        end component counter;
 
        -- Internal signals
-       -- TODO: Ass needed signals
+       signal sig_en : std_logic;
    begin
 
        ------------------------------------------------------------------------
@@ -268,16 +270,18 @@ Choose one of the following variants and implement a button-triggered binary cou
        ------------------------------------------------------------------------
        debounce_0 : debounce
            port map (
-
-               -- TODO: Add component instantiation of `debounce`
-
+               clk       => clk,
+               rst       => btnu,
+               btn_in    => btnd,
+               btn_press => sig_en,
+               btn_state => led16_b
            );
 
        ------------------------------------------------------------------------
        -- Counter
        ------------------------------------------------------------------------
        counter_0 : counter
-           generic map ( G_BITS = 8 )
+           generic map ( G_BITS => 8 )
            port map (
 
                -- TODO: Add component instantiation of `counter`
@@ -287,16 +291,18 @@ Choose one of the following variants and implement a button-triggered binary cou
    end Behavioral;
    ```
 
-4. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+4. Complete all **TODO** items in the architecture.
 
-5. Implement your design to Nexys A7 board:
+5. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+
+6. Implement your design to Nexys A7 board:
 
    1. Click **Generate Bitstream** (the process is time consuming and may take some time).
    2. Open **Hardware Manager**.
    3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
    4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/debounce.runs/impl_1/debounce_counter_top.bit`.
 
-6. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+7. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
 ### Variant 2: Display driver
 
@@ -323,10 +329,13 @@ Choose one of the following variants and implement a button-triggered binary cou
    ```vhdl
    architecture Behavioral of debounce_counter_top is
 
+       -- Component declaration of `debounce`
        component debounce is
-
-           -- TODO: Add component declaration of `debounce`
-
+           Port ( clk       : in  STD_LOGIC;
+                  rst       : in  STD_LOGIC;
+                  btn_in    : in  STD_LOGIC;
+                  btn_state : out STD_LOGIC;
+                  btn_press : out STD_LOGIC);
        end component debounce;
 
        component counter is
@@ -335,12 +344,16 @@ Choose one of the following variants and implement a button-triggered binary cou
 
        end component counter;
 
+       component display_driver is
+
+           -- TODO: Add component declaration of `display_driver`
+
+       end component display_driver;
+
        -- Internal signals
-       -- TODO: Ass needed signals
+       signal sig_cnt_en : std_logic;
 
-
-
-
+       -- TODO: Add needed signal(s)
 
    begin
 
@@ -349,32 +362,46 @@ Choose one of the following variants and implement a button-triggered binary cou
        ------------------------------------------------------------------------
        debounce_0 : debounce
            port map (
-
-               -- TODO: Add component instantiation of `debounce`
-
+               clk       => clk,
+               rst       => btnu,
+               btn_in    => btnd,
+               btn_press => sig_cnt_en,
+               btn_state => led16_b
            );
 
        ------------------------------------------------------------------------
        -- Counter
        ------------------------------------------------------------------------
        counter_0 : counter
-           generic map ( G_BITS = 8 )
+           generic map ( G_BITS => 8 )
            port map (
 
                -- TODO: Add component instantiation of `counter`
 
            );
 
+       ------------------------------------------------------------------------
+       -- Display driver
+       ------------------------------------------------------------------------
+       display_0 : display_driver
+           port map (
 
+               -- TODO: Add component instantiation of `display_driver`
 
+           );
 
+       -- Disable other digits and decimal point
+       an(7 downto 2) <= b"11_1111";
+       dp             <= '1';
 
    end Behavioral;
    ```
 
-4. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+4. Complete all **TODO** items in the architecture.
 
-5. Implement your design to Nexys A7 board:
+5. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+
+6. Implement your design to Nexys A7 board:
 
    1. Click **Generate Bitstream** (the process is time consuming and may take some time).
    2. Open **Hardware Manager**.
@@ -392,10 +419,6 @@ Choose one of the following variants and implement a button-triggered binary cou
 2. Modify the design so that the debouncer can handle multiple push buttons. Change the input and output signals to `std_logic_vector` and use a **`generate` statement** to instantiate one debouncer for each button. This approach allows the same module to be replicated automatically for all buttons while keeping the design scalable and easy to maintain.
 
 > **Optional technical note:** You can use a `for-generate` loop to create multiple instances of the debouncer module, one per button input.
-
-
-
-
 
 <a name="questions"></a>
 
