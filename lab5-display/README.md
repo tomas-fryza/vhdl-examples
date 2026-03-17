@@ -11,8 +11,8 @@
 After completing this laboratory, students will be able to:
 
 * Understand the hardware of 7-segment displays and the principles of multiplexing for multiple digits
-* Use previously created VHDL modules (`clk_en`, `counter`, `bin2seg`) in new designs.
-* Design and implement modular VHDL components for combinational and sequential logic.
+* Use previously created VHDL modules (`clk_en`, `counter`, `bin2seg`) in new designs
+* Design and implement modular VHDL components for combinational and sequential logic
 
 ### Background
 
@@ -40,7 +40,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
    | `seg` | out | `std_logic_vector(6 downto 0)` | {a,b,c,d,e,f,g} active-low outputs |
    | `anode` | out | `std_logic_vector(1 downto 0)` | Anodes AN1..AN0 (active-low) |
 
-2. In your project, add the design source files `clk_en.vhd`, `counter.vhd`, and `bin2seg.vhd` from the previous labs and check the **Copy sources into project** option. The selected files will be copied into the corresponding Vivado project folders, ensuring that the project contains local copies of all source files.
+2. In your project, add the design source files `clk_en.vhd`, `counter.vhd`, and `bin2seg.vhd` from the previous lab(s) and check the **Copy sources into project** option. The selected files will be copied into the corresponding Vivado project folders, ensuring that the project contains local copies of all source files.
 
    ![vivado_copy-sources](images/vivado_copy-sources.png)
 
@@ -308,7 +308,7 @@ Choose one of the following variants and implement a display driver on the Nexys
            generic map ( G_MAX => 25_000_000 )  -- Adjust counter speed
            port map (
                clk => clk,
-               rst => rst,
+               rst => btnu,
                ce  => sig_cnt_en
            );
 
