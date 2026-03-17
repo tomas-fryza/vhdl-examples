@@ -140,7 +140,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
    end Behavioral;
    ```
 
-4. Complete all **TODO** items in the architecture.
+4. Complete all **TODO** items in the architecture section.
 
 5. Create a VHDL simulation source file named `display_driver_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
 
@@ -225,24 +225,27 @@ Choose one of the following variants and implement a display driver on the Nexys
 
            );
 
+       -- Disable other digits and decimal points
        an(7 downto 2) <= b"11_1111";
        dp <= '1';
 
    end Behavioral;
    ```
 
-3. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+3. Complete all **TODO** items in the architecture section.
 
-4. Implement your design to Nexys A7 board:
+4. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+
+5. Implement your design to Nexys A7 board:
 
    1. Click **Generate Bitstream** (the process is time consuming and may take some time).
    2. Open **Hardware Manager**.
    3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
    4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/display.runs/impl_1/display_top.bit`.
 
-5. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink. What refresh period is sufficient for the human eye?
+6. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink. What refresh period is sufficient for the human eye?
 
-6. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+7. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
 ### Variant 2: Counter
 
@@ -327,24 +330,27 @@ Choose one of the following variants and implement a display driver on the Nexys
 
            );
 
+       -- Disable other digits and decimal points
        an(7 downto 2) <= b"11_1111";
        dp <= '1';
 
    end Behavioral;
    ```
 
-3. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+3. Complete all **TODO** items in the architecture section.
 
-4. Implement your design to Nexys A7 board:
+4. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
+
+5. Implement your design to Nexys A7 board:
 
    1. Click **Generate Bitstream** (the process is time consuming and may take some time).
    2. Open **Hardware Manager**.
    3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
    4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/display.runs/impl_1/display_top.bit`.
 
-5. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink. What refresh period is sufficient for the human eye?
+6. Modify the `G_MAX` parameter in the `display_driver.vhd` file so that the display does not appear to blink. What refresh period is sufficient for the human eye?
 
-6. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+7. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
 <a name="tasks"></a>
 

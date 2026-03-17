@@ -12,7 +12,10 @@ After completing this laboratory, students will be able to:
 
 * Understand mechanical switch bounce
 * Implement a digital debouncer in VHDL
+* Design and use a two flip-flop synchronizer for asynchronous inputs
 * Use edge detectors
+* Integrate multiple components into a top-level VHDL design
+* Apply debouncing and edge detection in a real FPGA application
 
 ### Background
 
@@ -20,7 +23,7 @@ The Nexys A7 FPGA board provides five **push buttons**. Refer to the [schematic]
 
    ![nexys A7 led and segment](images/nexys-a7_leds-display.png)
 
-A **bouncy button**, also known as a **switch bounce**, refers to the phenomenon where the electrical contacts in a mechanical switch make multiple rapid transitions between open and closed states when pressed or released. These transitions typically occur over a period of **1–20 ms**.
+A **bouncy button**, also known as a **switch bounce**, refers to the phenomenon where the electrical contacts in a mechanical switch make multiple rapid transitions between open and closed states when pressed or released. These transitions typically occur over a period of **1–25 ms**.
 
 As a result, a single press may be interpreted by digital logic as **multiple presses**, which can cause incorrect behavior in digital circuits. Examples of real push buttons are shown below. (Note that the active level of the buttons in these examples is low, while the buttons on the Nexys A7 board may use a different active level.)
 
@@ -69,7 +72,7 @@ The main methods to eliminate switch bounce are:
        ----------------------------------------------------------------
        -- Constants
        ----------------------------------------------------------------
-       constant C_SHIFT_LEN : positive := 8;  -- Debounce history
+       constant C_SHIFT_LEN : positive := 4;  -- Debounce history
        constant C_MAX       : positive := 2;  -- Sampling period
                                               -- 2 for simulation
                                               -- 100_000 (1 ms) for implementation !!!
@@ -154,10 +157,21 @@ The main methods to eliminate switch bounce are:
        btn_state <= debounced;
 
        -- One-clock pulse when button pressed
-       btn_press   <= debounced and not(delayed);
+       btn_press <= debounced and not(delayed);
 
    end Behavioral;
    ```
+
+   > **Note:** The `&` operator is used to **join (concatenate)** two or more arrays or elements into a single, larger array. It does not perform a logical AND (that's done with the keyword `and`). Instead, it simply places bits (or elements) side by side.
+   >
+   > **Example:** It combines operands from left to right and the result is a new vector whose length is the sum of the operand lengths.
+   >
+   >    ```vhdl
+   >    signal vect   : std_logic_vector(3 downto 0) := b"1010";
+   >    signal result : std_logic_vector(4 downto 0);
+   >
+   >    result <= '1' & vect;  -- result = b"1_1010"
+   >    ```
 
 4. Create a VHDL simulation source file named `debounce_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
 
@@ -206,15 +220,17 @@ The main methods to eliminate switch bounce are:
        end process;
    ```
 
-6. Display the internal signals `shift_reg`, `debounced`, and `delayed` in the waveform during the simulation.
+6. Display the internal signals named `shift_reg`, `debounced`, and `delayed` in the waveform during the simulation.
 
+   <!--
    ![Vivado: add internal signal](images/vivado_add-wave.png)
+   -->
 
 7. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
 8. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
 
-9. (Optional) Extend the edge detector to detect the transition from high to low. Add an output signal `btn_release` to the entity and architecture.
+9. (Optional) Extend the edge detector to also detect transitions from high to low. Add an output signal `btn_release` to the entity and architecture. Which logic operation did you use to generate this signal (see figure below)?
 
    ![edge detector](images/waveform_edge_detect.png)
 
@@ -222,11 +238,11 @@ The main methods to eliminate switch bounce are:
 
 ## Task 2: Top-level design and FPGA implementation
 
-Choose one of the following variants and implement a button-triggered binary counter on the Nexys A7 board with LEDs (variant 1) or with 7-segment display driver (variant 2).
+Choose one of the following variants and implement a button-triggered binary counter on the Nexys A7 board using LEDs (variant 1) or a 7-segment display driver (variant 2).
 
 ### Variant 1: LEDs
 
-**Important:** Change the `C_MAX` constant in the debouncer architecture to `100_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+**Important:** Change the `C_MAX` constant in the `debounce` architecture to `100_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
 
 1. In your project, create a new VHDL design source file named `debounce_counter_top`. Define I/O ports as follows.
 
@@ -238,9 +254,11 @@ Choose one of the following variants and implement a button-triggered binary cou
    | `led` | out | `std_logic_vector(7 downto 0)` | Counter value |
    | `led16_b` | out | `std_logic` | Button indicator |
 
+
+
 2. In your project, add the design source file `counter.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
 
-3. Provide an instantiation of the `debounce` and `counter` circuits and complete the top-level architecture according to the following schematic and template.
+3. Instantiate the `debounce` and `counter` circuits, and complete the top-level architecture according to the following schematic and template.
 
    ![top level ver1](images/top-level_ver1.png)
 
@@ -263,6 +281,7 @@ Choose one of the following variants and implement a button-triggered binary cou
 
        -- Internal signals
        signal sig_en : std_logic;
+
    begin
 
        ------------------------------------------------------------------------
@@ -291,7 +310,7 @@ Choose one of the following variants and implement a button-triggered binary cou
    end Behavioral;
    ```
 
-4. Complete all **TODO** items in the architecture.
+4. Complete all **TODO** items in the architecture section.
 
 5. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
 
@@ -390,7 +409,7 @@ Choose one of the following variants and implement a button-triggered binary cou
 
            );
 
-       -- Disable other digits and decimal point
+       -- Disable other digits and decimal points
        an(7 downto 2) <= b"11_1111";
        dp             <= '1';
 
@@ -424,14 +443,30 @@ Choose one of the following variants and implement a button-triggered binary cou
 
 ## Questions
 
-TBD
+1. What is switch bounce, and why is it a problem in digital circuits?
 
+2. What is the purpose of the two flip-flop synchronizer (`sync0`, `sync1`)?
 
+3. Explain how the shift register is used for debouncing.
 
+4. In the expression below, what is the purpose of the `&` operator?
 
+   ```vhdl
+   shift_reg <= shift_reg(C_SHIFT_LEN-2 downto 0) & sync1;
+   ```
+
+5. For a 100 MHz clock and `C_MAX = 100_000`, what is the clock enable period? Show your calculation.
+
+6. What is the difference between an edge detector and a level detector?
+
+7. Explain how a rising-edge (or falling-edge) detector works using two signals (current and delayed). What condition must be met to generate a pulse?
 
 <a name="references"></a>
 
 ## References
 
 1. Clive Maxfield. [How to Implement Hardware Debounce for Switches and Relays When Software Debounce Isn’t Appropriate](https://www.digikey.ee/en/articles/how-to-implement-hardware-debounce-for-switches-and-relays)
+
+2. Jacob Chisholm. [VHDL: Debouncer](https://jchisholm204.github.io/posts/vhdl_debouncer/)
+
+3. DigiKey TechForum. [Debounce Logic Circuit (VHDL)](https://forum.digikey.com/t/debounce-logic-circuit-vhdl/12573)
