@@ -78,7 +78,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
 
        end component bin2seg;
     
-       -- Internal signals
+       -- Internal signal(s)
        signal sig_en : std_logic;
 
        -- TODO: Add other needed signals
@@ -144,7 +144,7 @@ A common way to control multiple 7-segment displays is **multiplexing**, where t
 
 5. Create a VHDL simulation source file named `display_driver_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
 
-6. Set the clock period to `10 ns` and verify the functionality of the display driver with several input data values.
+6. Set the clock period to `constant TbPeriod : time := 10 ns;` and verify the functionality of the display driver with several input data values.
 
    ```vhdl
    stimuli : process
@@ -187,7 +187,7 @@ Choose one of the following variants and implement a display driver on the Nexys
 
 ### Variant 1: Switches
 
-**Important:** Change the `G_MAX` parameter in the `clk_en` instantiation in the driver architecture to `8_000_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+**Important:** Change the `G_MAX` parameter of the clock enabler instantiation in `driver_driver` architecture to `8_000_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
 
 1. In your project, create a new VHDL design source file named `display_top`. Define I/O ports as follows.
 
@@ -249,7 +249,7 @@ Choose one of the following variants and implement a display driver on the Nexys
 
 ### Variant 2: Counter
 
-**Important:** Change the `G_MAX` parameter in the `clk_en` instantiation in the driver architecture to `8_000_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+**Important:** Change the `G_MAX` parameter of the clock enabler instantiation in `driver_driver` architecture to `8_000_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
 
 1. In your project, create a new VHDL design source file named `display_top`. Define I/O ports as follows.
 
