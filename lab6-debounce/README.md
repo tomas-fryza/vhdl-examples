@@ -45,7 +45,7 @@ The main methods to eliminate switch bounce are:
 
 ## Task 1: Debounce button
 
-1. Run Vivado, create a new RTL project named `debounce` and add a VHDL source file named `debounce`. Use the following I/O ports:
+1. Run Vivado, create a new RTL project named `debounce`, and create a VHDL design source file named `debounce`. Use the following I/O ports:
 
       | **Port name** | **Direction** | **Type** | **Description** |
       | :-: | :-: | :-- | :-- |
@@ -370,7 +370,7 @@ Choose one of the following variants and implement a button-triggered binary cou
        -- Internal signal(s)
        signal sig_cnt_en : std_logic;
 
-       -- TODO: Add needed signal(s)
+       -- TODO: Add other needed signal(s)
 
    begin
 
