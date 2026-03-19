@@ -279,8 +279,8 @@ Choose one of the following variants and implement a button-triggered binary cou
 
        end component counter;
 
-       -- Internal signals
-       signal sig_en : std_logic;
+       -- Internal signal(s)
+       signal sig_cnt_en : std_logic;
 
    begin
 
@@ -292,7 +292,7 @@ Choose one of the following variants and implement a button-triggered binary cou
                clk       => clk,
                rst       => btnu,
                btn_in    => btnd,
-               btn_press => sig_en,
+               btn_press => sig_cnt_en,
                btn_state => led16_b
            );
 
