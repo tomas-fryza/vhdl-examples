@@ -5,9 +5,7 @@ entity debounce_counter_top is
     Port ( clk     : in  STD_LOGIC;
            btnu    : in  STD_LOGIC;
            btnd    : in  STD_LOGIC;
-           seg     : out STD_LOGIC_VECTOR (6 downto 0);
-           an      : out STD_LOGIC_VECTOR (7 downto 0);
-           dp      : out std_logic;
+           led     : out STD_LOGIC_VECTOR(7 downto 0);
            led16_b : out STD_LOGIC);
 end debounce_counter_top;
 ----------------------------------------------
@@ -33,19 +31,8 @@ architecture Behavioral of debounce_counter_top is
         );
     end component counter;
 
-    component display_driver is
-        -- TODO: Add component declaration of `display_driver`
-        Port ( clk   : in  STD_LOGIC;
-               rst   : in  STD_LOGIC;
-               data  : in  STD_LOGIC_VECTOR(7 downto 0);
-               seg   : out STD_LOGIC_VECTOR(6 downto 0);
-               anode : out STD_LOGIC_VECTOR(1 downto 0));
-    end component display_driver;
-
     -- Internal signal(s)
     signal sig_cnt_en : std_logic;
-    -- TODO: Add needed signals
-    signal sig_cnt_val : std_logic_vector(7 downto 0);
 
 begin
 
@@ -71,24 +58,7 @@ begin
             clk => clk,
             rst => btnu,
             en  => sig_cnt_en,
-            cnt => sig_cnt_val
+            cnt => led
         );
-
-    ------------------------------------------------------------------------
-    -- Display driver
-    ------------------------------------------------------------------------
-    display_0 : display_driver
-        port map (
-            -- TODO: Add component instantiation of `display_driver`
-            clk   => clk,
-            rst   => btnu,
-            data  => sig_cnt_val,
-            seg   => seg,
-            anode => an(1 downto 0)
-        );
-
-    -- Disable other digits and decimal point
-    an(7 downto 2) <= b"11_1111";
-    dp             <= '1';
 
 end Behavioral;

@@ -26,7 +26,7 @@ begin
     -- Display driver instantiation
     display_1 : display_driver
     port map (
-       clk  => clk,
+       clk   => clk,
        rst   => btnu,
        data  => sw,
        seg   => seg,

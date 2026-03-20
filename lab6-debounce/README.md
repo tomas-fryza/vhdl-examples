@@ -45,7 +45,7 @@ The main methods to eliminate switch bounce are:
 
 ## Task 1: Debounce button
 
-1. Run Vivado, create a new RTL project named `debounce` and add a VHDL source file named `debounce`. Use the following I/O ports:
+1. Run Vivado, create a new RTL project named `debounce`, and create a VHDL design source file named `debounce`. Use the following I/O ports:
 
       | **Port name** | **Direction** | **Type** | **Description** |
       | :-: | :-: | :-- | :-- |
@@ -75,7 +75,7 @@ The main methods to eliminate switch bounce are:
        constant C_SHIFT_LEN : positive := 4;  -- Debounce history
        constant C_MAX       : positive := 2;  -- Sampling period
                                               -- 2 for simulation
-                                              -- 100_000 (1 ms) for implementation !!!
+                                              -- 200_000 (2 ms) for implementation !!!
 
        ----------------------------------------------------------------
        -- Internal signals
@@ -101,7 +101,7 @@ The main methods to eliminate switch bounce are:
 
    begin
        ----------------------------------------------------------------
-       -- Clock enable instance (your module)
+       -- Clock enable instance
        ----------------------------------------------------------------
        clock_0 : clk_en
            generic map ( G_MAX => C_MAX )
@@ -242,7 +242,7 @@ Choose one of the following variants and implement a button-triggered binary cou
 
 ### Variant 1: LEDs
 
-**Important:** Change the `C_MAX` constant in the `debounce` architecture to `100_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+**Important:** Change the `C_MAX` constant in the `debounce` architecture to `200_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
 
 1. In your project, create a new VHDL design source file named `debounce_counter_top`. Define I/O ports as follows.
 
@@ -253,8 +253,6 @@ Choose one of the following variants and implement a button-triggered binary cou
    | `btnd` | in | `std_logic` | Increment counter |
    | `led` | out | `std_logic_vector(7 downto 0)` | Counter value |
    | `led16_b` | out | `std_logic` | Button indicator |
-
-
 
 2. In your project, add the design source file `counter.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
 
@@ -279,8 +277,8 @@ Choose one of the following variants and implement a button-triggered binary cou
 
        end component counter;
 
-       -- Internal signals
-       signal sig_en : std_logic;
+       -- Internal signal(s)
+       signal sig_cnt_en : std_logic;
 
    begin
 
@@ -292,7 +290,7 @@ Choose one of the following variants and implement a button-triggered binary cou
                clk       => clk,
                rst       => btnu,
                btn_in    => btnd,
-               btn_press => sig_en,
+               btn_press => sig_cnt_en,
                btn_state => led16_b
            );
 
@@ -325,7 +323,7 @@ Choose one of the following variants and implement a button-triggered binary cou
 
 ### Variant 2: Display driver
 
-**Important:** Change the `C_MAX` constant in the debouncer architecture to `100_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
+**Important:** Change the `C_MAX` constant in the debouncer architecture to `200_000`. What is the resulting clock enable period for a 100&nbsp;MHz clock (10&nbsp;ns period)?
 
 1. In your project, create a new VHDL design source file named `debounce_counter_top`. Define I/O ports as follows.
 
@@ -369,10 +367,10 @@ Choose one of the following variants and implement a button-triggered binary cou
 
        end component display_driver;
 
-       -- Internal signals
+       -- Internal signal(s)
        signal sig_cnt_en : std_logic;
 
-       -- TODO: Add needed signal(s)
+       -- TODO: Add other needed signal(s)
 
    begin
 
@@ -457,7 +455,7 @@ Choose one of the following variants and implement a button-triggered binary cou
    shift_reg <= shift_reg(C_SHIFT_LEN-2 downto 0) & sync1;
    ```
 
-5. For a 100 MHz clock and `C_MAX = 100_000`, what is the clock enable period? Show your calculation.
+5. For a 100 MHz clock and `C_MAX = 200_000`, what is the clock enable period? Show your calculation.
 
 6. What is the difference between an edge detector and a level detector?
 
