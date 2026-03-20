@@ -431,13 +431,15 @@ Choose one of the following variants and implement a button-triggered binary cou
 
 ## Optional tasks
 
-1. Combine both veriants from Task 2 and implement a button-triggered binary counter on the Nexys A7 board using LEDs and 7-segment display driver.
+1. Combine both variants from Task 2 and implement a button-triggered binary counter on the Nexys A7 board using LEDs and 7-segment display driver.
 
-2. Extend the debouncer to detect when the button is held down for a **longer period** of time. If the button remains pressed for a predefined duration (for example 500 ms), generate a new output signal btn_long. Use a counter driven by the system clock to measure the press duration.
+2. Extend the debouncer to detect when the button is held down for a **longer period** of time. If the button remains pressed for a predefined duration (for example 500 ms), generate a new output signal `btn_long`. Use a counter driven by the system clock to measure the press duration.
 
+<!--
 3. Modify the design so that the debouncer can handle multiple push buttons. Change the input and output signals to `std_logic_vector` and use a **`generate` statement** to instantiate one debouncer for each button. This approach allows the same module to be replicated automatically for all buttons while keeping the design scalable and easy to maintain.
 
 > **Optional technical note:** You can use a `for-generate` loop to create multiple instances of the debouncer module, one per button input.
+-->
 
 <a name="questions"></a>
 
