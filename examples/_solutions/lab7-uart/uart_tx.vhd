@@ -41,8 +41,8 @@ architecture Behavioral of uart_tx is
     constant BAUDRATE : integer := 9_600;        -- Baud rate (9600 Bd)
 
     -- Number of clock cycles per bit period for baud rate timing
-    -- constant N_PERIODS : integer := CLK_FREQ / BAUDRATE;  -- For implementation
-    constant N_PERIODS : integer := 2;  -- For simulation
+    constant N_PERIODS : integer := CLK_FREQ / BAUDRATE;  -- For implementation
+    -- constant N_PERIODS : integer := 2;  -- For simulation
 
     -- Internal signals
     signal current_bit_index : integer range 0 to 7;            -- Index for current bit being transmitted
