@@ -26,8 +26,9 @@ This repository contains VHDL examples for the bachelor-level course [*Digital E
 5. [Multiple seven-segment displays](lab5-display)
 6. [Button debounce](lab6-debounce)
 7. [UART transmitter](lab7-uart)
-
-[VHDL project 2025](lab8-project/README_2025.md)
+8. Project
+   - VHDL project 2026
+   - [VHDL project 2025](lab8-project/README_2025.md)
 
 <!--
    ![vhdl_course](examples/_archive/_07-display_driver/images/nexys-lab.jpg)

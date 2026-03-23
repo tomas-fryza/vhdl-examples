@@ -295,7 +295,7 @@ Choose one of the following variants and implement a button-triggered binary cou
            );
 
        ------------------------------------------------------------------------
-       -- Counter
+       -- Binary counter
        ------------------------------------------------------------------------
        counter_0 : counter
            generic map ( G_BITS => 8 )

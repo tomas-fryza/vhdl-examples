@@ -1,7 +1,8 @@
 # Lab 8: UART transmitter
 
 * [Task 1: UART transmitter](#task1)
-* [Task 2: Top-level design and FPGA implementation](#task2)
+* [Task 2: Hardware resource usage](#task2)
+* [Task 3: Top-level design and FPGA implementation](#task3)
 * [Optional tasks](#tasks)
 * [Questions](#questions)
 * [References](#references)
@@ -270,13 +271,31 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
 7. Display the internal signals named `shift_reg`, `current_state` etc. in the waveform during the simulation.
 
-8. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
 
-9. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
+
+
+
+
+
 
 <a name="task2"></a>
 
-## Task 2: Top-level design and FPGA implementation
+## Task 2: Hardware resource usage
+
+1. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+
+2. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
+
+TBD
+
+
+
+
+
+
+<a name="task3"></a>
+
+## Task 3: Top-level design and FPGA implementation
 
 Choose one of the following variants and implement an UART transmitter on the Nexys A7 board using switches (variant 1) or a counter (variant 2).
 
@@ -353,7 +372,7 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 5. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
 
    > **Note:**
-   > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
+   > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `uart_rxd_out` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
 
 6. Implement your design to Nexys A7 board:
 
@@ -383,31 +402,79 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 3. Instantiate the circuits and complete the top-level architecture according to the following schematic and template.
 
-
-
-
-
-
-
-
-
-
    ![top level ver2](images/top-level_ver2.png)
 
    ```vhdl
-   TBD
+   architecture Behavioral of uart_top is
+
+       component debounce is
+           Port ( clk       : in  STD_LOGIC;
+                  rst       : in  STD_LOGIC;
+                  btn_in    : in  STD_LOGIC;
+                  btn_state : out STD_LOGIC;
+                  btn_press : out STD_LOGIC);
+       end component debounce;
+
+       component counter is
+
+           -- TODO: Add component declaration of `counter`
+
+       end component counter;
+
+       component uart_tx is
+
+           -- TODO: Add component declaration of `uart_tx`
+
+       end component uart_tx;
+
+       -- Internal signal(s)
+       signal sig_cnt_en  : std_logic;
+       signal sig_cnt_val : std_logic_vector(7 downto 0);
+
+   begin
+
+       ------------------------------------------------------------------------
+       -- Button debouncer
+       ------------------------------------------------------------------------
+       debounce_inst : debounce
+           port map (
+               clk       => clk,
+               rst       => btnu,
+               btn_in    => btnd,
+               btn_press => sig_cnt_en,
+               btn_state => open
+           );
+
+       ------------------------------------------------------------------------
+       -- Binary counter
+       ------------------------------------------------------------------------
+       counter_inst : counter
+           generic map ( G_BITS => 8 )
+           port map (
+
+               -- TODO: Add component instantiation of `counter`
+
+           );
+
+       ------------------------------------------------------------------------
+       -- UART transmitter
+       ------------------------------------------------------------------------
+       uart_inst : uart_tx
+           port map (
+
+               -- TODO: Add component instantiation of `uart_tx`
+
+           );
+
+   end Behavioral;
    ```
-
-
-
-
 
 4. Complete all **TODO** items in the architecture section.
 
 5. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
 
    > **Note:**
-   > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
+   > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `uart_rxd_out` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
 
 6. Implement your design to Nexys A7 board:
 
@@ -420,18 +487,13 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 8. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
-
-
 <a name="tasks"></a>
 
 ## Optional tasks
 
-1. Extend the previous task by a `display_driver` and display the transmitted ASCII code of the 7-segment display.
+1. Extend the previous task by a `display_driver` and display the transmitted ASCII code of the 7-segment display. What ASCII code is display at any time?
 
    ![top level ver3](images/top-level_ver3.png)
-
-
-
 
 2. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
 
