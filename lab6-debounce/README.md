@@ -47,13 +47,13 @@ The main methods to eliminate switch bounce are:
 
 1. Run Vivado, create a new RTL project named `debounce`, and create a VHDL design source file named `debounce`. Use the following I/O ports:
 
-      | **Port name** | **Direction** | **Type** | **Description** |
-      | :-: | :-: | :-- | :-- |
-      | `clk` | in  | `std_logic` | Main clock |
-      | `rst` | in  | `std_logic` | High-active synchronous reset |
-      | `btn_in` | in  | `std_logic` | Raw push-button input (may contain bounce) |
-      | `btn_state` | out | `std_logic` | Debounced button level |
-      | `btn_press` | out | `std_logic` | One-clock pulse generated when the button is pressed |
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `clk` | in  | `std_logic` | Main clock |
+   | `rst` | in  | `std_logic` | High-active synchronous reset |
+   | `btn_in` | in  | `std_logic` | Raw push-button input (may contain bounce) |
+   | `btn_state` | out | `std_logic` | Debounced button level |
+   | `btn_press` | out | `std_logic` | One-clock pulse generated when the button is pressed |
 
 2. In your project, add the design source file `clk_en.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
 

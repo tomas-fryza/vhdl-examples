@@ -38,7 +38,7 @@ architecture Behavioral of uart_top is
     end component;
 
     -- Internal signal(s)
-    signal sig_tx_en : std_logic;
+    signal sig_start : std_logic;
 
 begin
 
@@ -48,7 +48,7 @@ begin
             rst       => btnu,
             btn_in    => btnd,
             btn_state => led16_b,
-            btn_press => sig_tx_en
+            btn_press => sig_start
         );
 
     uart_tx_inst : uart_tx
@@ -56,7 +56,7 @@ begin
             clk         => clk,
             rst         => btnu,
             data        => sw,
-            tx_start    => sig_tx_en,
+            tx_start    => sig_start,
             tx          => uart_rxd_out,
             tx_complete => led17_g
         );

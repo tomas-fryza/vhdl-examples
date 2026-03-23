@@ -1,35 +1,31 @@
-# Lab 8: UART Transmitter
+# Lab 8: UART transmitter
 
-* [Pre-Lab preparation](#preparation)
-* [Part 1: Finite State Machine (FSM)](#part1)
-* [Part 2: Basics of UART communication](#part2)
-* [Part 3: UART Transmitter in VHDL](#part3)
-* [Part 4: Top level VHDL code](#part4)
-* [Challenges](#challenges)
+* [Task 1: UART transmitter](#task1)
+* [Task 2: Top-level design and FPGA implementation](#task2)
+* [Optional tasks](#tasks)
+* [Questions](#questions)
 * [References](#references)
 
-### Learning objectives
+### Objectives
+
+After completing this laboratory, students will be able to:
 
 * Understand the philosophy and use of finite state machines
 * Use state diagrams
 * Understand the difference between Mealy and Moore type of FSM in VHDL
 * Understand the UART interface
-* Use edge detectors
 
-<a name="preparation"></a>
+### Background
 
-## Pre-Lab preparation
-
+<!--
 1. Calculate how many clock periods with frequency of 100&nbsp;MHz contain bit periods representing serial communication with specific baudrates.
 
    &nbsp;
    ![number of periods](images/baudrate.png)
    &nbsp;
 
-<!--
 https://editor.codecogs.com/
 N\text{\_}PERIODS=\frac{1}{baudrate}\cdot f_{clk}=
--->
 
    | **Baudrate** | **Number of clk periods** | **Common usage** |
    | :-: | :-: | :-- |
@@ -37,12 +33,9 @@ N\text{\_}PERIODS=\frac{1}{baudrate}\cdot f_{clk}=
    | **9600** | 10_417 | Default for many microcontrollers |
    | 57600 |  | Mid-speed serial communications |
    | **115200** |  | High-speed UART, default for many modern devices |
+-->
 
-2. Optional: See video tutorial [Implementing the candy-lock FSM in VHDL](https://www.youtube.com/watch?v=5kC1XEWhIFQ)
-
-<a name="part1"></a>
-
-## Part 1: Finite State Machine (FSM)
+#### Finite State Machine
 
 A **Finite State Machine (FSM)** is a mathematical model used to describe and represent the behavior of systems that can be in a finite number of states at any given time. It consists of a set of states, transitions between these states, and actions associated with these transitions.
 
@@ -56,25 +49,29 @@ The main properties of using FSMs include:
 
    4. **Parallelism**: FSMs can represent parallelism by having multiple state machines working concurrently, each handling different aspects of the system.
 
+<!--
 The main types of FSMs include Moore Machine and Mealy Machine. In a **Moore machine**, outputs are associated with states (see [figure](https://www.allaboutcircuits.com/technical-articles/implementing-a-finite-state-machine-in-vhdl/) bellow), while in a **Mealy machine**, outputs are associated with transitions between states. This means that Moore machines produce outputs only after transitioning to a new state, while Mealy machines can produce outputs immediately upon receiving an input.
 
    ![Moore-type FSM](images/diagram_moore_structure.png)
+-->
 
 One widely used method to illustrate a finite state machine is through a **state diagram**, comprising circles connected by directed arcs. Each circle denotes a machine state labeled with its name, and, in the case of a Moore machine, an [output value](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c6/c6s1/) associated with the state.
 
    ![State diagrams](images/diagram_circle.png)
 
-Directed arcs signify the transitions between states in a finite state machine (FSM). For a Mealy machine, these arcs are labeled with input/output pairs, while for a Moore machine, they are labeled solely with inputs.
+Directed arcs signify the transitions between states in a finite state machine (FSM). For a Mealy machine, these arcs are labeled with input/output pairs, while for a Moore machine, they are labeled solely with inputs. Make sure, arcs leaving a state must be:
+
+   * **mutually exclusive**: can not have two choices for a given input value and
+
+   * **collectively exhaustive**: every state must specify what happens for each possible input combination; "nothing happens" means arc back to itself.
 
    ![State diagrams](images/diagram_structure.png)
 
-<a name="part2"></a>
+#### UART communication
 
-## Part 2: Basics of UART communication
+The **UART (Universal Asynchronous Receiver-Transmitter)** is not a communication protocol like SPI and I2C, but a physical circuit in a microcontroller, or a stand-alone integrated circuit, that translates communicated data between serial and parallel forms. It is one of the simplest and easiest method for implement and understanding.
 
-The UART (Universal Asynchronous Receiver-Transmitter) is not a communication protocol like SPI and I2C, but a physical circuit in a microcontroller, or a stand-alone integrated circuit, that translates communicated data between serial and parallel forms. It is one of the simplest and easiest method for implement and understanding.
-
-In UART communication, two UARTs communicate directly with each other. The transmitting UART converts parallel data from a CPU into serial form, transmits it in serial to the receiving UART, which then converts the serial data back into parallel data for the receiving device. Only two wires are needed to transmit data between two UARTs. Data flows from the Tx pin of the transmitting UART to the Rx pin of the receiving UART: [link](https://www.circuitbasics.com/basics-uart-communication/), [link](https://www.analog.com/en/analog-dialogue/articles/uart-a-hardware-communication-protocol.html).
+In [UART communication](https://www.analog.com/en/analog-dialogue/articles/uart-a-hardware-communication-protocol.html), two UARTs communicate directly with each other. The transmitting UART converts parallel data from a CPU into serial form, transmits it in serial to the receiving UART, which then converts the serial data back into parallel data for the receiving device. Only two wires are needed to transmit data between two UARTs. Data flows from the Tx pin of the transmitting UART to the Rx pin of the [receiving UART](https://www.circuitbasics.com/basics-uart-communication/).
 
 UARTs transmit data asynchronously, which means there is no external clock signal to synchronize the output of bits from the transmitting UART. Instead, timing is agreed upon in advance between both units, and special **Start** (log. 0) and 1 or 2 **Stop** (log. 1) bits are added to each data package. These bits define the beginning and end of the data packet so the receiving UART knows when to start reading the bits. In addition to the start and stop bits, the packet/frame also contains data bits and optional parity.
 
@@ -86,177 +83,355 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
 ![UART frame 8N1](images/uart_frame_8n1.png)
 
-<a name="part3"></a>
+<a name="task1"></a>
 
-## Part 3: UART Transmitter in VHDL
+## Task 1: UART transmitter
 
-1. Run Vivado, create a new project and implement an FSM version of UART transmitter 8N1 with clock enable and reset:
+1. Run Vivado, create a new RTL project named `uart`, and create a VHDL design source file named `uart_tx`. Use the following I/O ports and implement an FSM version of UART transmitter 8N1 on Nexys A7-50T:
 
-   1. Project name: `uart`
-   2. Project location: your working folder, such as `Documents`
-   3. Project type: **RTL Project**
-   4. Create a VHDL source file: `uart_tx`
-   5. Do not add any constraints now
-   6. Choose a default board: `Nexys A7-50T`
-   7. Click **Finish** to create the project
-   8. Define I/O ports of new module:
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `clk` | in  | `std_logic` | Main clock |
+   | `rst` | in  | `std_logic` | High-active synchronous reset |
+   | `data` | in | `std_logic_vector(7 downto 0)` | Data to transmit |
+   | `tx_start` | in | `std_logic` | Start transmission signal |
+   | `tx` | out | `std_logic` | UART transmit line |
+   | `tx_complete` | out | `std_logic` | Transmission completion signal |
 
-      | **Port name** | **Direction** | **Type** | **Description** |
-      | :-: | :-: | :-- | :-- |
-      | `clk`      | input  | `std_logic` | Main clock |
-      | `rst`      | input  | `std_logic` | High-active synchronous reset |
-      | `tx_data`  | input  | `std_logic_vector(7 downto 0)` | Data to transmit |
-      | `tx_start` | input  | `std_logic` | Start transmission |
-      | `tx` | output | `std_logic` | UART Tx line |
-      | `done` | output | `std_logic` | Transmission completed |
-
-2. Add two generics:
+2. In architecture declaration section, define constants for proper UART timing, four states for the FSM, and internal signals to count a sequence of data bits and clock periods.
 
    ```vhdl
-   entity uart_tx is
-       generic (
-           CLK_FREQ : integer := 100_000_000;
-           BAUDRATE : integer := 9_600
-       );
-       ...
+   architecture Behavioral of uart_tx is
+
+       -- Constants for baud rate and clock frequency
+       constant CLK_FREQ : integer := 100_000_000;  -- System clock frequency (100 MHz)
+       constant BAUDRATE : integer := 9_600;        -- Baud rate (9600 Bd)
+
+       -- Number of clock cycles per bit period for baud rate timing
+       constant MAX : integer := 2;  -- For simulation
+       -- constant MAX : integer := CLK_FREQ / BAUDRATE;  -- For implementation
+
+       -- FSM State definitions
+       type state_type is (IDLE, TRANSMIT_START_BIT, TRANSMIT_DATA, TRANSMIT_STOP_BIT);
+       signal current_state : state_type;
+
+       -- Internal signals
+       signal current_bit_index : integer range 0 to 7;          -- Index for current bit being transmitted
+       signal shift_reg         : std_logic_vector(7 downto 0);  -- Data shift register
+       signal baud_count        : integer range 0 to MAX-1;      -- Clock cycles for one bit period
    ```
 
-3. Define four states for the FSM and an internal counters in the architecture declaration section to count a sequence of data bits and clock periods.
+3. Complete the architecture body section according to the following template.
 
-    ```vhdl
-    architecture Behavioral of uart_tx is
-        type   state_type is (IDLE, START_BIT, DATA_BITS, STOP_BIT);
-        signal state : state_type;
+   ```vhdl
+   begin
+       -- UART Transmitter FSM process driven by the main clock (clk)
+       p_transmitter : process (clk)
+       begin
+           if rising_edge(clk) then
+               if rst = '1' then
+                   -- Reset state, outputs, and all internal signals
+                   current_state     <= IDLE;             -- Start in IDLE state
+                   tx                <= '1';              -- UART line idle (high)
+                   tx_complete       <= '0';              -- Transmission not completed
+                   current_bit_index <= 0;                -- Reset bit index
+                   shift_reg         <= (others => '0');  -- Clear shift register
+                   baud_count        <= 0;                -- Reset the baud rate counter
 
-        constant N_PERIODS : integer := (CLK_FREQ / BAUDRATE);
+               else
+                   case current_state is
 
-        signal bit_idx : integer range 0 to 7;
-        signal periods : integer range 0 to N_PERIODS - 1;
-        signal reg     : std_logic_vector(7 downto 0);
+                       -- IDLE: Wait for the start signal to begin transmission
+                       when IDLE =>
+                           -- TODO: Keep Tx line to high
 
-    begin
-        ...
-    ```
+                           -- TODO: Clear done to 0
 
-4. Complete the architecture body section according to the following template.
+                           if tx_start = '1' then
+                               current_state <= TRANSMIT_START_BIT;
+                               current_bit_index <= 0;  -- Start transmitting the least significant bit
+                               shift_reg <= data;       -- Load data into shift register
+                               baud_count <= 0;         -- Reset baud count for the new transmission
+                           end if;
 
-    ```vhdl
-    begin
-        -- UART Transmitter FSM
-        p_transmitter : process (clk) is
-        begin
-            if rising_edge(clk) then
-                if (rst = '1') then
-                    -- Reset state to IDLE
+                       -- TRANSMIT_START_BIT: Transmit the start bit (low)
+                       when TRANSMIT_START_BIT =>
+                           -- TODO: Start bit is always '0'
 
-                else
-                    case state is
+                           -- Wait for the baud period to complete
+                           if baud_count = MAX - 1 then
+                               current_state <= TRANSMIT_DATA;
+                               baud_count <= 0;
+                           else
+                               baud_count <= baud_count + 1;
+                           end if;
 
-                        when IDLE =>
-                            -- Keep Tx line to high
+                       -- TRANSMIT_DATA: Transmit the 8 data bits, LSB first
+                       when TRANSMIT_DATA =>
+                           -- TODO: Transmit the least significant bit (LSB) from shift reg.
 
-                            -- Clear done to 0
+                           -- Wait for the baud period to complete
+                           if baud_count = MAX - 1 then
+                               shift_reg <= '0' & shift_reg(7 downto 1);  -- Shift the data right by one bit
 
-                            if (tx_start = '1') then
-                                periods <= 0;
-                                state   <= START_BIT;
-                            end if;
+                               -- Check if all 8 data bits have been transmitted
+                               if current_bit_index = 7 then
+                                   current_state <= TRANSMIT_STOP_BIT;
+                               else
+                                   current_bit_index <= current_bit_index + 1;  -- Move to next bit
+                               end if;
 
-                        when START_BIT =>
-                            -- Start bit (LOW), Load data to transmit register
+                               baud_count <= 0;  -- Reset baud counter for the next bit
+                           else
+                               baud_count <= baud_count + 1;  -- Increment the baud counter
+                           end if;
 
-                            -- Reset number of transmitted bits
+                       -- TRANSMIT_STOP_BIT: Transmit the stop bit (high)
+                       when TRANSMIT_STOP_BIT =>
+                           -- TODO: Stop bit is always '1'
+                           
+                           -- TODO: Indicate transmission is complete
 
-                            -- Wait for bit period according to baudrate
-                            if (periods = N_PERIODS - 1) then
-                                state   <= DATA_BITS;
-                                periods <= 0;
-                            else
-                                periods <= periods + 1;
-                            end if;
+                           -- Wait for the baud period to complete
+                           if baud_count = MAX - 1 then
+                               current_state <= IDLE;
+                           else
+                               baud_count <= baud_count + 1;  -- Increment the baud counter
+                           end if;
 
-                        when DATA_BITS =>
-                            -- Transmit LSB
+                       -- Default: In case of an unexpected state, return to IDLE
+                       when others =>
+                           current_state <= IDLE;
 
-                            -- Wait for bit period according to baudrate
-                            if (periods = N_PERIODS - 1) then
-                                -- Shift data register
-                                reg     <= '0' & reg(7 downto 1);
-                                periods <= 0;
+                   end case;
+               end if;
+           end if;
+       end process p_transmitter;
 
-                                -- Send all data bits
-                                if (bit_idx = 7) then
-                                    state <= STOP_BIT;
-                                else
-                                    bit_idx <= bit_idx + 1;
-                                end if;
-                            else
-                                periods <= periods + 1;
-                            end if;
+   end Behavioral;
+   ```
 
-                        when STOP_BIT =>
-                            -- Set Tx stop bit (HIGH)
+4. Complete all **TODO** items in the architecture section.
 
-                            -- Set done to 1
+5. Create a VHDL simulation source file named `uart_tx_tb` and [generate a testbench template](https://vhdl.lapinoo.net/testbench/).
 
-                            -- Wait for bit period according to baudrate
-                            if (periods = N_PERIODS - 1) then
-                                state <= IDLE;
-                            else
-                                periods <= periods + 1;
-                            end if;
+6. Set the clock period to `constant TbPeriod : time := 10 ns;` and verify the functionality of the transmitter.
 
-                        when others =>
-                            state <= IDLE;
+   ```vhdl
+   stimuli : process
+   begin
+       -- Initialization
+       data <= (others => '0');
+       tx_start <= '0';
 
-                    end case;
-                end if;
-            end if;
-        end process p_transmitter;
-    end Behavioral;
-    ```
+       report "Reset generation";
+       rst <= '1';
+       wait for 50 ns;
+       rst <= '0';
+       wait for 50 ns;
 
-5. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+       -------------------------------------------------
+       report "Send first byte: 0x44";
+       data <= x"44";
+       tx_start <= '1';
+       wait for TbPeriod;
+       tx_start <= '0';
 
-6. Generate a [simulation source](https://vhdl.lapinoo.net/testbench/) named `uart_tx_tb`, add generics to testbench, and simulate the UART frames for data bytes `0x41` and `0x43` with baudrate of 9600.
+       -- Wait until transmission is complete
+       wait until tx_complete = '1';
+       wait for 10 * TbPeriod;  -- Small gap
 
-   > **Note:** To display internal signal values, follow these steps:
-   > 1. Select `dut` in the **Scope** folder.
-   > 2. Right-click on the `state` signal name in the **Objects** folder.
-   > 3. Add this signal by selecting the **Add to Wave Window** command.
-   > 4. Click on the **Relaunch Simulation** icon.
-   >
-   >    ![Internal signals simulation](images/vivado_signals.png)
+       -------------------------------------------------
+       report "Send next byte: 0x45";
+       data <= x"45";
+       tx_start <= '1';
+       wait for TbPeriod;
+       tx_start <= '0';
 
-<a name="part4"></a>
+       wait until tx_complete = '1';
+       wait for 10 * TbPeriod;
 
-## Part 4: Top level VHDL code
+       -------------------------------------------------
+       report "Send next byte: 0x31";
+       data <= x"31";
+       tx_start <= '1';
+       wait for TbPeriod;
+       tx_start <= '0';
 
-1. Create a VHDL design source named `top_level`. Implement a button-triggered UART transmitter on the Nexys A7 board to send data to your computer via the serial line. The transmitted data will be specified using the 8 switches `SW[7:0]` to input ASCII codes, which you can look up on this [ASCII code chart](https://www.ascii-code.com/).
+       wait until tx_complete = '1';
+       wait for 10 * TbPeriod;
 
-   ![top level](images/top-level_ver1.png)
+       -------------------------------------------------
+       report "Stop the clock and hence terminate the simulation";
+       TbSimEnded <= '1';
+       wait;
+   end process;
+   ```
+
+7. Display the internal signals named `shift_reg`, `current_state` etc. in the waveform during the simulation.
+
+8. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
+
+9. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
+
+<a name="task2"></a>
+
+## Task 2: Top-level design and FPGA implementation
+
+Choose one of the following variants and implement an UART transmitter on the Nexys A7 board using switches (variant 1) or a counter (variant 2).
+
+### Variant 1: Switches
+
+**Important:** Change the `MAX` constant in the `uart_tx` architecture to `integer := CLK_FREQ / BAUDRATE;`.
+
+1. In your project, create a new VHDL design source file named `uart_top`. Define I/O ports as follows.
+
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `clk` | in | `std_logic` | Main clock |
+   | `btnu` | in | `std_logic` | High-active synchronous reset |
+   | `sw` | in | `std_logic_vector(7 downto 0)` | Data to trřansmit |
+   | `btnd` | in | `std_logic` | Start transmission |
+   | `uart_rxd_out` | out | `std_logic` | UART transmit line |
+   | `led17_g` | out | `std_logic` | Transmission completed |
+
+2. In your project, add the design source files `debounce.vhd` and `clk_en.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
+
+3. Instantiate the `debounce` and `uart_tx` circuits, and complete the top-level architecture according to the following schematic and template.
+
+   ![top level ver1](images/top-level_ver1.png)
+
+   ```vhdl
+   architecture Behavioral of uart_top is
+
+       component debounce is
+           Port ( clk       : in  STD_LOGIC;
+                  rst       : in  STD_LOGIC;
+                  btn_in    : in  STD_LOGIC;
+                  btn_state : out STD_LOGIC;
+                  btn_press : out STD_LOGIC);
+       end component debounce;
+
+       component uart_tx is
+
+           -- TODO: Add component declaration of `uart_tx`
+
+       end component uart_tx;
+
+       -- Internal signal(s)
+       signal sig_start : std_logic;
+
+   begin
+
+       ------------------------------------------------------------------------
+       -- Button debouncer
+       ------------------------------------------------------------------------
+       debounce_inst : debounce
+           port map (
+               clk       => clk,
+               rst       => btnu,
+               btn_in    => btnd,
+               btn_press => sig_start,
+               btn_state => open
+           );
+
+       ------------------------------------------------------------------------
+       -- UART transmitter
+       ------------------------------------------------------------------------
+       uart_inst : uart_tx
+           port map (
+
+               -- TODO: Add component instantiation of `uart_tx`
+
+           );
+
+   end Behavioral;
+   ```
+
+4. Complete all **TODO** items in the architecture section.
+
+5. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
 
    > **Note:**
    > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
-   
-2. Use online template for your [constraints XDC](https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc) file `nexys` and uncomment the used pins according to the `top_level` entity.
 
-3. Run Putty or [online serial monitor](https://hhdsoftware.com/online-serial-port-monitor). Set the **Connection type** to `Serial`, specify your **Serial line** (e.g., COM3), set the **Speed** (or Baud Rate), and then click the **Open** button to initiate the communication. Clicking the Left button on the board will transmit the user data selected by the switches.
+6. Implement your design to Nexys A7 board:
 
-   ![putty1](images/screenshot_putty_type.png)
-<!--   ![putty2](images/screenshot_putty_config.png)-->
+   1. Click **Generate Bitstream** (the process is time consuming and may take some time).
+   2. Open **Hardware Manager**.
+   3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
+   4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/uart.runs/impl_1/uart_top.bit`.
 
-<a name="challenges"></a>
+7. Use [online serial monitor](https://hhdsoftware.com/online-serial-port-monitor) or Putty and receive the serial data transmitted from the FPGA board as ASCII codes, which you can look up on this [ASCII code chart](https://www.ascii-code.com/).
 
-## Challenges
+8. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
-1. Modify the UART transmitter according to the following top level schematic:
+### Variant 2: Counter
 
-   ![top level](images/top-level_ver2.png)
+1. In your project, create a new VHDL design source file named `uart_top`. Define I/O ports as follows.
+
+   | **Port name** | **Direction** | **Type** | **Description** |
+   | :-: | :-: | :-- | :-- |
+   | `clk` | in | `std_logic` | Main clock |
+   | `btnu` | in | `std_logic` | High-active synchronous reset |
+   | `btnd` | in | `std_logic` | Start transmission |
+   | `uart_rxd_out` | in | `std_logic` | UART transmit line |
+   | `led16_b` | out | `std_logic` | Button press indicator |
+   | `led17_g` | out | `std_logic` | Transmission completed |
+
+2. In your project, add the design source files `debounce.vhd`, `clk_en.vhd`, and `counter.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
+
+3. Instantiate the circuits and complete the top-level architecture according to the following schematic and template.
+
+
+
+
+
+
+
+
+
+
+   ![top level ver2](images/top-level_ver2.png)
+
+   ```vhdl
+   TBD
+   ```
+
+
+
+
+
+4. Complete all **TODO** items in the architecture section.
+
+5. Create a new constraints file named `nexys` (XDC file) and copy relevant pin assignments from the [Nexys A7-50T](../examples/nexys.xdc) template.
 
    > **Note:**
-   > * The `counter` component from the previous lab(s) is required. You can copy the `counter.vhd` file to `YOUR-PROJECT-FOLDER/uart.srcs/sources_1/new/` folder and add it to the project or use **Copy scripts to project** checkbox while adding design source file in Vivado.
-   > * The source code of component `debounce` is defined [here](https://raw.githubusercontent.com/tomas-fryza/vhdl-examples/refs/heads/master/examples/_debounce/debounce.vhd).
+   > * Your transmitter signal `tx` must be connected to onboard FTDI FT2232HQ USB-UART bridge receiver, ie. use pin number `D4` which is maped in XDC template to `UART_RXD_OUT` (see [Nexys A7 reference manual, section 6](https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual?redirect=1)).
+
+6. Implement your design to Nexys A7 board:
+
+   1. Click **Generate Bitstream** (the process is time consuming and may take some time).
+   2. Open **Hardware Manager**.
+   3. Select **Open Target > Auto Connect** (make sure Nexys A7 board is connected and switched on).
+   4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/uart.runs/impl_1/uart_top.bit`.
+
+7. Use [online serial monitor](https://hhdsoftware.com/online-serial-port-monitor) or Putty and receive the serial data transmitted from the FPGA board as ASCII codes, which you can look up on this [ASCII code chart](https://www.ascii-code.com/).
+
+8. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+
+
+
+<a name="tasks"></a>
+
+## Optional tasks
+
+1. Extend the previous task by a `display_driver` and display the transmitted ASCII code of the 7-segment display.
+
+   ![top level ver3](images/top-level_ver3.png)
+
+
+
 
 2. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
 
@@ -270,6 +445,19 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
       >
       > You can find a comprehensive tutorial on utilizing logic analyzer in this [video](https://www.youtube.com/watch?v=CE4-T53Bhu0).
 
+<a name="questions"></a>
+
+## Questions
+
+TBD
+
+
+
+
+
+
+
+
 <a name="references"></a>
 
 ## References
@@ -279,3 +467,5 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 2. MIT OpenCourseWare. [L06: Finite State Machines](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c6/c6s1/)
 
 3. VHDLwhiz. [One-process vs two-process vs three-process state machine](https://vhdlwhiz.com/n-process-state-machine/)
+
+4. Steven Bell. [Implementing the candy-lock FSM in VHDL](https://www.youtube.com/watch?v=5kC1XEWhIFQ)

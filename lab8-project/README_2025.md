@@ -1,6 +1,4 @@
-# VHDL project
-
-### Topics 2024/25
+# VHDL project 2025
 
 1. Digital clock with alarm and stopwatch or Digital scoreboard with timer for your preferred sport
 2. Complete UART Tx/Rx controller with configurable frame structure and baudrate and FIFO buffer

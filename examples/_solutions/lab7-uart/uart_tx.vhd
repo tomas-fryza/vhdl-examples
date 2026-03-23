@@ -32,22 +32,22 @@ end entity uart_tx;
 -- UART Transmitter Architecture
 architecture Behavioral of uart_tx is
 
-    -- FSM State definitions
-    type state_type is (IDLE, TRANSMIT_START_BIT, TRANSMIT_DATA, TRANSMIT_STOP_BIT);
-    signal current_state : state_type;
-    
     -- Constants for baud rate and clock frequency
     constant CLK_FREQ : integer := 100_000_000;  -- System clock frequency (100 MHz)
     constant BAUDRATE : integer := 9_600;        -- Baud rate (9600 Bd)
 
     -- Number of clock cycles per bit period for baud rate timing
-    constant N_PERIODS : integer := CLK_FREQ / BAUDRATE;  -- For implementation
-    -- constant N_PERIODS : integer := 2;  -- For simulation
+    constant MAX : integer := CLK_FREQ / BAUDRATE;  -- For implementation
+    -- constant MAX : integer := 2;  -- For simulation
+
+    -- FSM State definitions
+    type state_type is (IDLE, TRANSMIT_START_BIT, TRANSMIT_DATA, TRANSMIT_STOP_BIT);
+    signal current_state : state_type;
 
     -- Internal signals
-    signal current_bit_index : integer range 0 to 7;            -- Index for current bit being transmitted
-    signal shift_reg         : std_logic_vector(7 downto 0);    -- Data shift register
-    signal baud_count        : integer range 0 to N_PERIODS-1;  -- Clock cycles for one bit period
+    signal current_bit_index : integer range 0 to 7;          -- Index for current bit being transmitted
+    signal shift_reg         : std_logic_vector(7 downto 0);  -- Data shift register
+    signal baud_count        : integer range 0 to MAX-1;      -- Clock cycles for one bit period
 
 begin
     --! UART Transmitter FSM process driven by the main clock (clk)
@@ -56,9 +56,9 @@ begin
         if rising_edge(clk) then
             if rst = '1' then
                 -- Reset state and outputs
+                current_state     <= IDLE;  -- Start in IDLE state
                 tx                <= '1';   -- UART line idle (high)
                 tx_complete       <= '0';   -- Transmission not completed
-                current_state     <= IDLE;  -- Start in IDLE state
                 current_bit_index <= 0;     -- Reset bit index
                 shift_reg         <= (others => '0');  -- Clear shift register
                 baud_count        <= 0;     -- Reset the baud rate counter
@@ -84,7 +84,7 @@ begin
                         tx <= '0';  -- Start bit is always '0'
 
                         -- Wait for the baud period to complete
-                        if baud_count = N_PERIODS - 1 then
+                        if baud_count = MAX - 1 then
                             current_state <= TRANSMIT_DATA;  -- Move to transmit data state
                             baud_count <= 0;                 -- Reset baud counter for the data bits
                         else
@@ -96,7 +96,7 @@ begin
                         tx <= shift_reg(0);  -- Transmit the least significant bit (LSB)
 
                         -- Wait for the baud period to complete
-                        if baud_count = N_PERIODS - 1 then
+                        if baud_count = MAX - 1 then
                             shift_reg <= '0' & shift_reg(7 downto 1);  -- Shift the data right by one bit
 
                             -- Check if all 8 data bits have been transmitted
@@ -117,7 +117,7 @@ begin
                         tx_complete <= '1';  -- Indicate transmission is complete
 
                         -- Wait for the baud period to complete before going back to IDLE
-                        if baud_count = N_PERIODS - 1 then
+                        if baud_count = MAX - 1 then
                             current_state <= IDLE;
                         else
                             baud_count <= baud_count + 1;  -- Increment the baud counter
