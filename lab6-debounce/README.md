@@ -145,7 +145,7 @@ The main methods to eliminate switch bounce are:
 
                    end if;
 
-                   -- One clock delayed output
+                   -- One clock delayed output for edge detector
                    delayed <= debounced;
                end if;
            end if;
