@@ -1,8 +1,8 @@
 # Lab 8: UART transmitter
 
 * [Task 1: UART transmitter](#task1)
-* [Task 2: Hardware resource usage](#task2)
-* [Task 3: Top-level design and FPGA implementation](#task3)
+* [Task 2: Top-level design and FPGA implementation](#task2)
+* [Task 3: Hardware resource usage](#task3)
 * [Optional tasks](#tasks)
 * [Questions](#questions)
 * [References](#references)
@@ -112,7 +112,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
        constant MAX : integer := 2;  -- For simulation
        -- constant MAX : integer := CLK_FREQ / BAUDRATE;  -- For implementation
 
-       -- FSM State definitions
+       -- FSM state definitions
        type state_type is (IDLE, TRANSMIT_START_BIT, TRANSMIT_DATA, TRANSMIT_STOP_BIT);
        signal current_state : state_type;
 
@@ -271,31 +271,9 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
 7. Display the internal signals named `shift_reg`, `current_state` etc. in the waveform during the simulation.
 
-
-
-
-
-
-
-
 <a name="task2"></a>
 
-## Task 2: Hardware resource usage
-
-1. Use **Flow > Open Elaborated design** and see the schematic after RTL analysis.
-
-2. Use **Flow > Synthesis > Run Synthesis** and then see the schematic at the gate level.
-
-TBD
-
-
-
-
-
-
-<a name="task3"></a>
-
-## Task 3: Top-level design and FPGA implementation
+## Task 2: Top-level design and FPGA implementation
 
 Choose one of the following variants and implement an UART transmitter on the Nexys A7 board using switches (variant 1) or a counter (variant 2).
 
@@ -382,8 +360,6 @@ Choose one of the following variants and implement an UART transmitter on the Ne
    4. Click **Program device** and select the generated file `YOUR-PROJECT-FOLDER/uart.runs/impl_1/uart_top.bit`.
 
 7. Use [online serial monitor](https://hhdsoftware.com/online-serial-port-monitor) or Putty and receive the serial data transmitted from the FPGA board as ASCII codes, which you can look up on this [ASCII code chart](https://www.ascii-code.com/).
-
-8. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
 ### Variant 2: Counter
 
@@ -485,7 +461,17 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 7. Use [online serial monitor](https://hhdsoftware.com/online-serial-port-monitor) or Putty and receive the serial data transmitted from the FPGA board as ASCII codes, which you can look up on this [ASCII code chart](https://www.ascii-code.com/).
 
-8. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+<a name="task3"></a>
+
+## Task 3: Hardware resource usage
+
+1. Use **Flow > RTL Analysis > Open Elaborated design** and see the **Schematic** after RTL analysis.
+
+2. Use **Flow > Synthesis > Run Synthesis** and then see the **Schematic** at the gate level.
+
+3. Use the **Report Utilization** after the **Synthesis** and see the number of LUT (Look-Up Table), FF (Flip-Flop), and IO ports used in the implementation.
+
+4. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
 
 <a name="tasks"></a>
 
