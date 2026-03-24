@@ -13,7 +13,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+-- use ieee.numeric_std.all;
 
 -------------------------------------------------
 -- UART Transmitter Entity
@@ -37,8 +37,8 @@ architecture Behavioral of uart_tx is
     constant BAUDRATE : integer := 9_600;        -- Baud rate (9600 Bd)
 
     -- Number of clock cycles per bit period for baud rate timing
-    constant MAX : integer := CLK_FREQ / BAUDRATE;  -- For implementation
-    -- constant MAX : integer := 2;  -- For simulation
+    constant MAX : integer := 2;  -- For simulation
+    -- constant MAX : integer := CLK_FREQ / BAUDRATE;  -- For implementation
 
     -- FSM State definitions
     type state_type is (IDLE, TRANSMIT_START_BIT, TRANSMIT_DATA, TRANSMIT_STOP_BIT);
@@ -73,10 +73,10 @@ begin
 
                         if tx_start = '1' then
                             -- When start signal received, prepare to send start bit
+                            current_state <= TRANSMIT_START_BIT;  -- Transition to start bit state
                             shift_reg <= data;       -- Load data into shift register
                             current_bit_index <= 0;  -- Start transmitting the least significant bit
                             baud_count <= 0;         -- Reset baud count for the new transmission
-                            current_state <= TRANSMIT_START_BIT;  -- Transition to start bit state
                         end if;
 
                     -- TRANSMIT_START_BIT: Transmit the start bit (low)
