@@ -27,7 +27,7 @@ This repository contains VHDL examples for the bachelor-level course [*Digital E
 6. [Button debounce](lab6-debounce)
 7. [UART transmitter](lab7-uart)
 8. Project
-   - VHDL project 2026
+   - [VHDL project 2026](lab8-project/README_2026.md)
    - [VHDL project 2025](lab8-project/README_2025.md)
 
 <!--

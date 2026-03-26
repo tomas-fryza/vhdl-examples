@@ -2,10 +2,10 @@
 
 The projects are designed for groups of **2–4 students** with a total time allocation of **10 hours** (5 lab sessions of 2 hours each).
 
-## Project rules
+## 1. Project rules
 
 - **Group Work:**  
-  Work on your assigned topic within your exercise group. No switching groups is allowed. *(Exception: Friday 9:00 group moved to Thursday 8:00.)*
+  Work on your assigned topic within your computer exercise group. No switching groups is allowed. *(Exception: Friday 9:00 group moved to Thursday 8:00.)*
 
 - **Attendance & Weekly Checks:**  
   Attendance is mandatory. Weekly graded progress checks will take place.
@@ -14,7 +14,7 @@ The projects are designed for groups of **2–4 students** with a total time all
   Points will be awarded or deducted weekly based on your project repository updates (GitHub, GitLab, Bitbucket, etc.), including:
   - Public repository creation
   - Top-level schematic
-  - Defined inputs/outputs
+  - Defined inputs/outputs, constraints
   - Description and simulation of new components
   - Complete Vivado project
   - VHDL coding style
@@ -38,21 +38,32 @@ The projects are designed for groups of **2–4 students** with a total time all
   - Maximum points: **10**
   - Minimum points required to pass: **5**
 
-## Proposed schedule (5x 2 hours)
+### Proposed schedule (5x 2 hours)
 
 - **Lab 1: Architecture.** Block diagram design, role assignment, Git initialization, `.xdc` file preparation.
 
 - **Lab 2: Unit Design.** Development of individual modules, testbench simulation, Git updates.
 
-- **Lab 3: Integration.** Merging modules into the Top-level entity, synthesis, and initial HW testing.
+- **Lab 3: Integration.** Merging modules into the Top-level entity, synthesis, and initial HW testing, Git updates.
 
-- **Lab 4: Tuning.** Debugging, code optimization, and documentation.
+- **Lab 4: Tuning.** Debugging, code optimization, and Git documentation.
 
-- **Lab 5: Defense.** Poster presentation, video demonstration of the functional device and code review.
+- **Lab 5: Defense.** Completion, video demonstration of the functional device, poster presentation, and code review.
+
+### Documentation requirements (README.md)
+
+Each project repository must include:
+*   **Problem Description:** Brief overview of the project content in Czech, Slovak, or English.
+*   **Block Diagram:** Graphical representation of module hierarchy and signal flows.
+*   **Git Flow:** Commit history demonstrating the activity of team members.
+*   **Simulations:** Screenshots from the Vivado simulator (Waveforms) proving new module functionality.
+*   **Resource Report:** A table of resource utilization (LUTs, FFs) after synthesis.
+*   **Vivado Project:** A complete Vivado 2025.2 project.
+*   **Other Outputs:** A3 poster, link to short video, list of used references and tools.
 
 ---
 
-## 1. Project summary table (2025/26)
+## 2. Project summary table (2025/26)
 
 | Project | Students | VHDL | Time | Peripherals (Nexys A7) | Required Module(s) |
 | :--- | :---: | :---: | :---: | :--- | :--- |
@@ -145,20 +156,7 @@ Send and receive Ethernet packets using an external PHY. Implement packet framin
 
 ---
 
-## 4. Documentation requirements (README.md)
-
-Each project repository must include:
-*   **Problem Description:** Brief overview of the project content in Czech, Slovak, or English.
-*   **Block Diagram:** Graphical representation of module hierarchy and signal flows.
-*   **Git Flow:** Commit history demonstrating the activity of team members.
-*   **Simulations:** Screenshots from the Vivado simulator (Waveforms) proving new module functionality.
-*   **Resource Report:** A table of resource utilization (LUTs, FFs) after synthesis.
-*   **Vivado Project:** A complete Vivado 2025.2 project.
-*   **Other Outputs:** A3 poster, link to short video, list of used references and tools.
-
----
-
-## 5. Help
+## 4. Help
 
 * **Never, ever** use `rising_edge` or `falling_edge` to test edges of non-clock signals under any circumstances!
 
