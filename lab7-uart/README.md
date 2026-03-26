@@ -1,4 +1,4 @@
-# Lab 8: UART transmitter
+# Lab 7: UART transmitter
 
 * [Task 1: UART transmitter](#task1)
 * [Task 2: Top-level design and FPGA implementation](#task2)
@@ -361,6 +361,8 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 7. Use [online serial monitor](https://hhdsoftware.com/online-serial-port-monitor) or Putty and receive the serial data transmitted from the FPGA board as ASCII codes, which you can look up on this [ASCII code chart](https://www.ascii-code.com/).
 
+8. Use 7-segment display and/or 8 LEDs to show the input data value.
+
 ### Variant 2: Counter
 
 1. In your project, create a new VHDL design source file named `uart_top`. Define I/O ports as follows.
@@ -370,8 +372,7 @@ Choose one of the following variants and implement an UART transmitter on the Ne
    | `clk` | in | `std_logic` | Main clock |
    | `btnu` | in | `std_logic` | High-active synchronous reset |
    | `btnd` | in | `std_logic` | Start transmission |
-   | `uart_rxd_out` | in | `std_logic` | UART transmit line |
-   | `led16_b` | out | `std_logic` | Button press indicator |
+   | `uart_rxd_out` | out | `std_logic` | UART transmit line |
    | `led17_g` | out | `std_logic` | Transmission completed |
 
 2. In your project, add the design source files `debounce.vhd`, `clk_en.vhd`, and `counter.vhd` from the previous lab(s). When adding the file in Vivado, enable the **Copy sources into project** option so that the file is copied into the current project directory.
