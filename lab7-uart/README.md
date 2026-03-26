@@ -18,24 +18,6 @@ After completing this laboratory, students will be able to:
 
 ### Background
 
-<!--
-1. Calculate how many clock periods with frequency of 100&nbsp;MHz contain bit periods representing serial communication with specific baudrates.
-
-   &nbsp;
-   ![number of periods](images/baudrate.png)
-   &nbsp;
-
-https://editor.codecogs.com/
-N\text{\_}PERIODS=\frac{1}{baudrate}\cdot f_{clk}=
-
-   | **Baudrate** | **Number of clk periods** | **Common usage** |
-   | :-: | :-: | :-- |
-   | 2400 |  | Low-speed serial devices |
-   | **9600** | 10_417 | Default for many microcontrollers |
-   | 57600 |  | Mid-speed serial communications |
-   | **115200** |  | High-speed UART, default for many modern devices |
--->
-
 #### Finite State Machine
 
 A **Finite State Machine (FSM)** is a mathematical model used to describe and represent the behavior of systems that can be in a finite number of states at any given time. It consists of a set of states, transitions between these states, and actions associated with these transitions.
@@ -49,12 +31,6 @@ The main properties of using FSMs include:
    3. **Simplicity**: FSMs are relatively simple and intuitive to understand, making them useful for modeling and designing systems with discrete and sequential behavior.
 
    4. **Parallelism**: FSMs can represent parallelism by having multiple state machines working concurrently, each handling different aspects of the system.
-
-<!--
-The main types of FSMs include Moore Machine and Mealy Machine. In a **Moore machine**, outputs are associated with states (see [figure](https://www.allaboutcircuits.com/technical-articles/implementing-a-finite-state-machine-in-vhdl/) bellow), while in a **Mealy machine**, outputs are associated with transitions between states. This means that Moore machines produce outputs only after transitioning to a new state, while Mealy machines can produce outputs immediately upon receiving an input.
-
-   ![Moore-type FSM](images/diagram_moore_structure.png)
--->
 
 One widely used method to illustrate a finite state machine is through a **state diagram**, comprising circles connected by directed arcs. Each circle denotes a machine state labeled with its name, and, in the case of a Moore machine, an [output value](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c6/c6s1/) associated with the state.
 
@@ -109,8 +85,8 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
        constant BAUDRATE : integer := 9_600;        -- Baud rate (9600 Bd)
 
        -- Number of clock cycles per bit period for baud rate timing
-       constant MAX : integer := 2;  -- For simulation
-       -- constant MAX : integer := CLK_FREQ / BAUDRATE;  -- For implementation
+       constant MAX : integer := 2;  -- 2 for simulation
+                                     -- CLK_FREQ / BAUDRATE for implementation
 
        -- FSM state definitions
        type state_type is (IDLE, TRANSMIT_START_BIT, TRANSMIT_DATA, TRANSMIT_STOP_BIT);
@@ -150,8 +126,8 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
                            if tx_start = '1' then
                                current_state <= TRANSMIT_START_BIT;
-                               current_bit_index <= 0;  -- Start transmitting the least significant bit
                                shift_reg <= data;       -- Load data into shift register
+                               current_bit_index <= 0;  -- Start transmitting the least significant bit
                                baud_count <= 0;         -- Reset baud count for the new transmission
                            end if;
 
@@ -478,11 +454,13 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 ## Optional tasks
 
-1. Extend the previous task by a `display_driver` and display the transmitted ASCII code of the 7-segment display. What ASCII code is display at any time?
+1. Extend the previous task by adding a `display_driver` and display the transmitted ASCII code on a 7-segment display. What ASCII code is displayed at any given time?
 
    ![top level ver3](images/top-level_ver3.png)
 
-2. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
+2. Extend the design to support parity bits.
+
+3. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
 
    ![pmods](images/pmod_table.png)
 
@@ -498,14 +476,19 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 ## Questions
 
-TBD
+1. List all states used in your UART transmitter FSM and describe their purpose.
 
+2. What does it mean that FSM transitions must be mutually exclusive and collectively exhaustive?
 
+3. What is the difference between Mealy and Moore FSM? Is your UART transmitter closer to a Mealy or Moore machine? Explain why.
 
+4. Explain the structure of a UART frame in the 8N1 format. Why is a start bit necessary in UART communication?
 
+5. What is ASCII, and why is it used in digital communication systems?
 
+6. What is the ASCII code (in hex or binary) for a selected character (e.g., ‘A’, ‘0’, or ‘a’)?
 
-
+7. What hardware resources (LUTs, FFs, IOs) were used by your design?
 
 <a name="references"></a>
 
