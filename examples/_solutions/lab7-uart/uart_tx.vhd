@@ -1,11 +1,20 @@
 -----------------------------------------------------------
---! @brief UART Transmitter
+--! @brief UART transmitter (8N1, FSM-based)
 --! @version 1.2
 --! @copyright (c) 2025-2026 Tomas Fryza, MIT license
 --!
 --! This module implements a UART (Universal Asynchronous
---! Receiver Transmitter) transmitter using a Finite State
---! Machine (FSM) in 8N1 mode with variable baudrate.
+--! Receiver/Transmitter) transmitter using a Finite State
+--! Machine (FSM). The design operates in standard 8N1 mode
+--! (8 data bits, no parity, 1 stop bit) and transmits data
+--! asynchronously with a configurable baud rate.
+--
+-- Notes:
+-- - Synchronous design (rising edge of clk)
+-- - High-active synchronous reset
+-- - Baud rate generated using clock counter
+-- - Transmission controlled by tx_start signal
+-- - tx_complete indicates end of frame
 --
 -- See also:
 --   https://nandland.com/uart-serial-port-module/
@@ -13,7 +22,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
--- use ieee.numeric_std.all;
 
 -------------------------------------------------
 -- UART Transmitter Entity
@@ -37,8 +45,8 @@ architecture Behavioral of uart_tx is
     constant BAUDRATE : integer := 9_600;        -- Baud rate (9600 Bd)
 
     -- Number of clock cycles per bit period for baud rate timing
-    constant MAX : integer := 2;  -- For simulation
-    -- constant MAX : integer := CLK_FREQ / BAUDRATE;  -- For implementation
+    constant MAX : integer := 2;  -- 2 for simulation
+                                  -- CLK_FREQ / BAUDRATE for implementation
 
     -- FSM State definitions
     type state_type is (IDLE, TRANSMIT_START_BIT, TRANSMIT_DATA, TRANSMIT_STOP_BIT);

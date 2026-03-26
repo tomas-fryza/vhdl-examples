@@ -1,3 +1,23 @@
+-------------------------------------------------
+--! @brief Button debouncer
+--! @version 1.1
+--! @copyright (c) 2023-2026 Tomas Fryza, MIT license
+--!
+--! This design implements a debouncer for mechanical
+--! push-buttons using a sampling technique with a
+--! shift register. The circuit provides a stable 
+--! debounced output and generates a one-clock-cycle
+--! pulse when a button press is detected.
+--
+-- Notes:
+-- - Synchronous design (rising edge of clk)
+-- - High-active synchronous reset
+-- - Input synchronization using two flip-flops
+-- - Debouncing via shift register and sampling
+-- - Configurable debounce time via clock enable
+-- - One-clock pulse output for button press
+-------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 
