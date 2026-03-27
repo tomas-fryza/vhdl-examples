@@ -341,6 +341,8 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 ### Variant 2: Counter
 
+**Important:** Change the `MAX` constant in the `uart_tx` architecture to `integer := CLK_FREQ / BAUDRATE;`.
+
 1. In your project, create a new VHDL design source file named `uart_top`. Define I/O ports as follows.
 
    | **Port name** | **Direction** | **Type** | **Description** |

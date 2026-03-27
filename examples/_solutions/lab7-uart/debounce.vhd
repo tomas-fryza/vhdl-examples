@@ -27,7 +27,7 @@ entity debounce is
         rst         : in  std_logic;
         btn_in      : in  std_logic;  -- Bouncey button input
         btn_state   : out std_logic;  -- Debounced level
-        btn_press   : out std_logic;  -- 1-clock press pulse
+        btn_press   : out std_logic   -- 1-clock press pulse
         -- btn_release : out std_logic   -- 1-clock release pulse
     );
 end entity debounce;
