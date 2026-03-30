@@ -1,4 +1,4 @@
-# Lab 7: UART transmitter
+# Laboratory 7: UART transmitter
 
 * [Task 1: UART transmitter](#task1)
 * [Task 2: Top-level design and FPGA implementation](#task2)
@@ -59,6 +59,8 @@ The amount of **data** in each packet can be set from 5 to 9 bits. If it is not 
 One of the most common UART formats is called **9600 8N1**, which means 8 data bits, no parity, 1 stop bit and a symbol rate of 9600&nbsp;Bd.
 
 ![UART frame 8N1](images/uart_frame_8n1.png)
+
+---
 
 <a name="task1"></a>
 
@@ -122,7 +124,7 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
                        when IDLE =>
                            -- TODO: Keep Tx line to high
 
-                           -- TODO: Clear done to 0
+                           -- TODO: Clear completed to 0
 
                            if tx_start = '1' then
                                current_state <= TRANSMIT_START_BIT;
@@ -247,6 +249,8 @@ One of the most common UART formats is called **9600 8N1**, which means 8 data b
 
 7. Display the internal signals named `shift_reg`, `current_state` etc. in the waveform during the simulation.
 
+---
+
 <a name="task2"></a>
 
 ## Task 2: Top-level design and FPGA implementation
@@ -255,7 +259,7 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 ### Variant 1: Switches
 
-**Important:** Change the `MAX` constant in the `uart_tx` architecture to `integer := CLK_FREQ / BAUDRATE;`.
+**Important:** Change the `MAX` constant in the `uart_tx` architecture to `constant MAX : integer := CLK_FREQ / BAUDRATE;`.
 
 1. In your project, create a new VHDL design source file named `uart_top`. Define I/O ports as follows.
 
@@ -263,7 +267,7 @@ Choose one of the following variants and implement an UART transmitter on the Ne
    | :-: | :-: | :-- | :-- |
    | `clk` | in | `std_logic` | Main clock |
    | `btnu` | in | `std_logic` | High-active synchronous reset |
-   | `sw` | in | `std_logic_vector(7 downto 0)` | Data to trřansmit |
+   | `sw` | in | `std_logic_vector(7 downto 0)` | Data to transmit |
    | `btnd` | in | `std_logic` | Start transmission |
    | `uart_rxd_out` | out | `std_logic` | UART transmit line |
    | `led17_g` | out | `std_logic` | Transmission completed |
@@ -341,7 +345,7 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 ### Variant 2: Counter
 
-**Important:** Change the `MAX` constant in the `uart_tx` architecture to `integer := CLK_FREQ / BAUDRATE;`.
+**Important:** Change the `MAX` constant in the `uart_tx` architecture to `constant MAX : integer := CLK_FREQ / BAUDRATE;`.
 
 1. In your project, create a new VHDL design source file named `uart_top`. Define I/O ports as follows.
 
@@ -440,6 +444,8 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 7. Use [online serial monitor](https://hhdsoftware.com/online-serial-port-monitor) or Putty and receive the serial data transmitted from the FPGA board as ASCII codes, which you can look up on this [ASCII code chart](https://www.ascii-code.com/).
 
+---
+
 <a name="task3"></a>
 
 ## Task 3: Hardware resource usage
@@ -448,9 +454,13 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 2. Use **Flow > Synthesis > Run Synthesis** and then see the **Schematic** at the gate level.
 
+   ![lut in vivado](images/vivado_lut.png)
+
 3. Use the **Report Utilization** after the **Synthesis** and see the number of LUT (Look-Up Table), FF (Flip-Flop), and IO ports used in the implementation.
 
 4. Use **Implementation > Open Implemented Design > Schematic** to see the generated structure.
+
+---
 
 <a name="tasks"></a>
 
@@ -464,7 +474,26 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 
 3. In the `*.xdc` constraints file, remap the UART outputs to any Pmod port on the Nexys A7 board, and display the UART values on an oscilloscope or logic analyzer.
 
-   ![pmods](images/pmod_table.png)
+   ### JA Pmod connector (Nexys A7)
+
+   ![pmods](images/pmod_connector.png)
+
+   | Pin | Signal | FPGA Pin | Description  |
+   | :--: | :---- | :------- | :----------- |
+   | 1   | JA1    | C17      | Data / IO    |
+   | 2   | JA2    | D18      | Data / IO    |
+   | 3   | JA3    | E18      | Data / IO    |
+   | 4   | JA4    | G17      | Data / IO    |
+   | 5   | GND    | —        | Ground       |
+   | 6   | VCC    | —        | 3.3 V supply |
+   | 7   | JA7    | D17      | Data / IO    |
+   | 8   | JA8    | E17      | Data / IO    |
+   | 9   | JA9    | F18      | Data / IO    |
+   | 10  | JA10   | G18      | Data / IO    |
+   | 11  | GND    | —        | Ground       |
+   | 12  | VCC    | —        | 3.3 V supply |
+
+   <span style="color:red">**Warning:** Since the Pmod pins are connected to Artix-7 FPGA pins using a 3.3V logic standard, care should be taken not to drive these pins over 3.4V.</span>
 
    Connect the logic analyzer to your Pmod pins, including GND. Launch the **Logic** analyzer software and start the capture. The Saleae Logic software offers a decoding feature to transform the captured signals into meaningful UART messages. Click the **+ button** in the **Analyzers** section and set up the **Async Serial** decoder.
 
@@ -473,6 +502,8 @@ Choose one of the following variants and implement an UART transmitter on the Ne
       > **Note:** To perform this analysis, you will need a logic analyzer such as [Saleae](https://www.saleae.com/) or [similar](https://www.amazon.com/KeeYees-Analyzer-Device-Channel-Arduino/dp/B07K6HXDH1/ref=sr_1_6?keywords=saleae+logic+analyzer&qid=1667214875&qu=eyJxc2MiOiI0LjIyIiwicXNhIjoiMy45NSIsInFzcCI6IjMuMDMifQ%3D%3D&sprefix=saleae+%2Caps%2C169&sr=8-6) device. Additionally, you should download and install the [Saleae Logic 1](https://support.saleae.com/logic-software/legacy-software/older-software-releases#logic-1-x-download-links) or [Saleae Logic 2](https://www.saleae.com/downloads/) software on your computer.
       >
       > You can find a comprehensive tutorial on utilizing logic analyzer in this [video](https://www.youtube.com/watch?v=CE4-T53Bhu0).
+
+---
 
 <a name="questions"></a>
 
@@ -491,6 +522,8 @@ Choose one of the following variants and implement an UART transmitter on the Ne
 6. What is the ASCII code (in hex or binary) for a selected character (e.g., ‘A’, ‘0’, or ‘a’)?
 
 7. What hardware resources (LUTs, FFs, IOs) were used by your design?
+
+---
 
 <a name="references"></a>
 
