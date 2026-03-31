@@ -7,19 +7,20 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity i2c_controller is
-    port (    clock : in STD_LOGIC;                            -- Master clock
-        reset : in STD_LOGIC;                            -- Master reset
-        trigger : in STD_LOGIC;                            -- Continue on after pause
-        restart : in STD_LOGIC;                            -- Generates a new START
-        last_byte : in STD_LOGIC;                        -- This is the last byte to read/write
-        address : in STD_LOGIC_VECTOR (6 downto 0);        -- Slave address
-        read_write : in STD_LOGIC;                        -- 0=write, 1=read
-        write_data : in STD_LOGIC_VECTOR (7 downto 0);    -- Data to write
-        read_data : out STD_LOGIC_VECTOR (7 downto 0);    -- Data we have read
-        ack_error : out STD_LOGIC;                        -- 0=ACK, 1=NAK
-        busy : out STD_LOGIC;                            -- Controller is processing
-        scl : inout STD_LOGIC;                            -- Tri-state
-        sda : inout STD_LOGIC);                            -- Ditto
+    port (
+        clock      : in  STD_LOGIC;                      -- Master clock
+        reset      : in  STD_LOGIC;                      -- Master reset
+        trigger    : in  STD_LOGIC;                      -- Continue on after pause
+        restart    : in  STD_LOGIC;                      -- Generates a new START
+        last_byte  : in  STD_LOGIC;                      -- This is the last byte to read/write
+        address    : in  STD_LOGIC_VECTOR (6 downto 0);  -- Slave address
+        read_write : in  STD_LOGIC;                      -- 0=write, 1=read
+        write_data : in  STD_LOGIC_VECTOR (7 downto 0);  -- Data to write
+        read_data  : out STD_LOGIC_VECTOR (7 downto 0);  -- Data we have read
+        ack_error  : out STD_LOGIC;                      -- 0=ACK, 1=NAK
+        busy       : out STD_LOGIC;                      -- Controller is processing
+        scl        : inout STD_LOGIC;                    -- Tri-state
+        sda        : inout STD_LOGIC);                   -- Ditto
 end entity;
 
 architecture behavioral of i2c_controller is

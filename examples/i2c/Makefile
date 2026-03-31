@@ -1,13 +1,40 @@
-GHDL_FLAGS = --std=08 --work=work
+# ===============================================
+# Simple Makefile for GHDL + GTKWave
+# ===============================================
 
-make:
-	ghdl -a $(GHDL_FLAGS) i2c.vhd tb/i2c_tb.vhd
-	ghdl -e $(GHDL_FLAGS) i2c_tb
+# Simulator and tools
+GHDL    = /opt/homebrew/bin/ghdl
+GTKWAVE = gtkwave
 
-output.vcd: make
-	ghdl -r $(GHDL_FLAGS) i2c_tb --vcd=$@
+# Top-level testbench entity
+TOP     = simple_i2c_master_tb
 
-sim: output.vcd
+# Waveform file
+VCD     = simple_i2c_master.vcd
 
-gtkwave: output.vcd
-	gtkwave $<
+# VHDL source files
+SRCS    = simple_i2c_master.vhd simple_i2c_master_tb.vhd
+
+# Default target
+all: sim
+
+# Analyze, elaborate, and run simulation
+sim: $(SRCS)
+	$(GHDL) -a $(SRCS)
+	$(GHDL) -e $(TOP)
+	$(GHDL) -r $(TOP) --vcd=$(VCD)
+
+# Open waveform in GTKWave
+wave: sim
+	$(GTKWAVE) $(VCD)
+
+# Clean generated files
+clean:
+	rm -f *.o *.cf $(TOP) $(VCD)
+
+# Help
+help:
+	@echo "make        - analyze, elaborate, and run simulation"
+	@echo "make sim    - compile and run"
+	@echo "make wave   - compile, run, and view waves"
+	@echo "make clean  - remove generated files"
