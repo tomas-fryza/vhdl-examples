@@ -3,17 +3,18 @@
 # ===============================================
 
 # Simulator and tools
-GHDL    = /opt/homebrew/bin/ghdl
+# GHDL    = /opt/homebrew/bin/ghdl
+GHDL    = /usr/local/bin/ghdl
 GTKWAVE = gtkwave
 
 # Top-level testbench entity
-TOP     = simple_i2c_master_tb
+TOP     = simple_i2c_tb
 
 # Waveform file
-VCD     = simple_i2c_master.vcd
+VCD     = simple_i2c.vcd
 
 # VHDL source files
-SRCS    = simple_i2c_master.vhd simple_i2c_master_tb.vhd
+SRCS    = simple_i2c.vhd simple_i2c_tb.vhd
 
 # Default target
 all: sim
